@@ -1,6 +1,15 @@
 // Cloudflare Workers Static Assets: serves dist/ with no Worker script (static requests are free and unlimited).
+// Deployed by Cloudflare Workers Builds (Worker "stylo"): build command `npm run build`, deploy `npx wrangler deploy`.
 {
-  // ...
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "stylo",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "routes": [{ "pattern": "simplystylo.com", "custom_domain": true }],
   "observability": {
     "logs": {
       "enabled": true,
@@ -13,6 +22,5 @@
       "head_sampling_rate": 1,
       "persist": true
     }
-  },
-  // ...
+  }
 }
