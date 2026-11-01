@@ -1,0 +1,13 @@
+{
+  "name": "SimplyStylo",
+  "short_name": "SimplyStylo",
+  "description": "Free style tools for colors, sizes and outfits.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F5F1E9",
+  "theme_color": "#F5F1E9",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

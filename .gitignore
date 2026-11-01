@@ -1,0 +1,6 @@
+dist/
+node_modules/
+.wrangler/
+prev-manifest.json
+*.log
+.DS_Store
