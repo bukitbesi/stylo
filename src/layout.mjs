@@ -17,6 +17,10 @@ export const ICONS = {
   sparkle: '<circle cx="12" cy="9" r="4"/><path d="M5 21c1-4 4-6 7-6s6 2 7 6"/><path d="M19 3v4M17 5h4"/>',
   hanger: '<path d="M12 7a2 2 0 1 1 2-2"/><path d="M12 7v2L3 16a1 1 0 0 0 .6 1.8h16.8A1 1 0 0 0 21 16l-9-7"/>',
   shuffle: '<path d="M3 7h3c4 0 6 10 10 10h5"/><path d="M3 17h3c1.5 0 2.7-1.4 3.7-3.2M21 7h-5c-1.5 0-2.7 1.4-3.7 3.2"/><path d="m18 4 3 3-3 3M18 14l3 3-3 3"/>',
+  figure: '<circle cx="12" cy="4" r="2"/><path d="M8 8h8l-1.5 5 2.5 8H7l2.5-8z"/>',
+  image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.8"/><path d="m21 16-5-5-8 9"/>',
+  ring: '<circle cx="12" cy="14" r="7"/><path d="m9 4 3 3 3-3-1-2h-4z"/>',
+  coin: '<circle cx="12" cy="12" r="9"/><path d="M15 9.5c-.5-1-1.6-1.5-3-1.5-1.7 0-3 .8-3 2 0 2.8 6 1.5 6 4.2 0 1.2-1.3 2-3 2-1.5 0-2.6-.6-3.1-1.6M12 6v2M12 16v2"/>',
   swatch: '<rect x="3" y="3" width="8" height="18" rx="2"/><path d="m11 7 5-3 4 7-9 6"/><circle cx="7" cy="17" r="1"/>'
 };
 export const icon = (name, size = 24) =>

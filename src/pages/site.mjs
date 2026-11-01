@@ -9,6 +9,10 @@ const C = require('../lib/color-core.js');
 const S = require('../lib/size-core.js');
 const SE = require('../lib/season-core.js');
 const K = require('../lib/capsule-core.js');
+const B = require('../lib/body-core.js');
+const R = require('../lib/ring-core.js');
+const P = require('../lib/cpw-core.js');
+const PL = require('../lib/palette-core.js');
 const PUBLISHED = '2026-11-01';
 const M = site.dateModified;
 
@@ -88,6 +92,14 @@ function methodology() {
 <p>Each capsule size has a fixed split of tops, bottoms, dresses, layers and shoes. Pieces in our library are tagged for work, casual, smart, hot and cold use and ranked for your choices; core basics get priority. Outfits are counted as tops × bottoms + dresses; shoe and layer variations are shown separately.</p>
 <h2>Outfit generator</h2>
 <p>The occasion filters garments, five temperature bands set layers, and a seeded random pick (saved in the link) chooses between suitable pieces. Your chosen color goes on one statement piece and best-matching neutrals on the rest.</p>
+<h2>Body shape calculator</h2>
+<p>Uses ${esc(B.FACTS.method)}. Seven rules compare bust − hips, bust − waist, hips − waist and high hip ÷ waist in inches, in the published order; the first match is the result. Measurements that meet no rule are reported as between shapes.</p>
+<h2>Ring size converter</h2>
+<p>${esc(R.FACTS.us)}; ${esc(R.FACTS.iso)}. ${esc(R.FACTS.uk)}</p>
+<h2>Cost per wear calculator</h2>
+<p>${esc(P.FACTS.formula)}.</p>
+<h2>Photo color palette</h2>
+<p>${esc(PL.FACTS.method)}, run on a downscaled copy of the photo inside the browser. Colors are named after the nearest reference clothing color and matched to the closest seasonal palettes by Oklab distance.</p>
 <h2>Testing</h2>
 <p>Every engine has automated tests whose worked examples match the numbers quoted in our FAQs, and every page is checked for accessibility, mobile layout and speed before publishing.</p>
 </div>`;

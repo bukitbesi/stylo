@@ -42,6 +42,27 @@ const interactions = {
     await p.selectOption('#cw-w', 'men');
     return /60 outfits/.test(await p.textContent('[data-result]'));
   },
+  '/tools/body-shape-calculator/': async (p) => {
+    await p.fill('#bs-b', '40'); await p.fill('#bs-w', '33'); await p.fill('#bs-hh', '34'); await p.fill('#bs-h', '35');
+    const ok = /Inverted Triangle/.test(await p.textContent('[data-result]'));
+    await p.selectOption('#bs-u', 'cm');
+    return ok && (await p.inputValue('#bs-b')) === '101.5' && /Inverted Triangle/.test(await p.textContent('[data-result]'));
+  },
+  '/tools/photo-color-palette/': async (p) => {
+    await p.setInputFiles('#pp-file', path.join(root, 'static/og.png'));
+    await p.waitForFunction(() => /Your Photo/.test(document.querySelector('[data-result]').textContent), null, { timeout: 5000 });
+    return /p=[0-9A-F]{6}\.\d+/.test(p.url());
+  },
+  '/tools/ring-size-converter/': async (p) => {
+    await p.fill('#rs-v', '8');
+    const a = /EU\/ISO 57/.test(await p.textContent('[data-result]'));
+    await p.selectOption('#rs-s', 'diameter');
+    return a && (await p.inputValue('#rs-v')) === '18.1';
+  },
+  '/tools/cost-per-wear-calculator/': async (p) => {
+    await p.fill('#cpw-by', '50');
+    return /Trend top costs \$0\.80 per wear/.test(await p.textContent('[data-result]'));
+  },
   '/tools/outfit-generator/': async (p) => {
     const before = await p.textContent('[data-result]');
     await p.selectOption('#og-o', 'formal');

@@ -123,3 +123,8 @@ caption{text-align:left;padding:10px 12px;font-weight:600;caption-side:top}
 .season-grid a{text-decoration:none}.season-grid a::after{content:"";position:absolute;inset:0}
 .season-grid p{margin:6px 0 0;font-size:.92rem;color:var(--text-2)}
 .sw__t{background:#FAFAF7;color:#171717;border-radius:6px;padding:3px 7px;align-self:flex-start;display:flex;flex-direction:column;max-width:100%}
+.hint{display:block;color:var(--muted);font-size:.8rem;margin-top:4px;line-height:1.35}
+.split{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.split>div:last-child{flex:1;min-width:200px}
+.figure{background:#F5F1E9;border-radius:var(--r-md);flex:none}
+.kpi span+span{display:block;margin-top:2px}
