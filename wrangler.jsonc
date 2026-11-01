@@ -1,12 +1,18 @@
 // Cloudflare Workers Static Assets: serves dist/ with no Worker script (static requests are free and unlimited).
 {
-  "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "stylo",
-  "compatibility_date": "2026-10-01",
-  "assets": {
-    "directory": "./dist",
-    "html_handling": "auto-trailing-slash",
-    "not_found_handling": "404-page"
+  // ...
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": true,
+      "persist": true
+    },
+    "traces": {
+      "enabled": false,
+      "head_sampling_rate": 1,
+      "persist": true
+    }
   },
-  "routes": [{ "pattern": "simplystylo.com", "custom_domain": true }]
+  // ...
 }
