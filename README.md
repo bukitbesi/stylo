@@ -1,7 +1,7 @@
 # SimplyStylo.com
 
 **Find your style. Wear it better.** Free, privacy-first style tools: colors, sizes and outfits.
-Static site, zero npm dependencies, hosted on Cloudflare Workers Static Assets. © SimplyStylo. All rights reserved.
+Static site, zero npm dependencies, hosted on Cloudflare Workers Static Assets (deployed by Workers Builds). © SimplyStylo. All rights reserved.
 
 | Tool | URL | Engine | Tests |
 | --- | --- | --- | --- |
@@ -49,9 +49,10 @@ static/         favicon, icons, og.png, manifest (copied as is)
 1. **Domain:** add `simplystylo.com` to Cloudflare and switch the registrar's nameservers to Cloudflare's.
 2. **Crawlers (important for AI citations):** Security → Bots: turn **off** "Block AI bots" and Bot Fight Mode, and
    turn **off** the Cloudflare-managed robots.txt, so our own `robots.txt` (which allows everyone) is served.
-3. **API token:** My Profile → API Tokens → "Edit Cloudflare Workers" template, scoped to this account and zone.
-4. **GitHub secrets:** `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` (Account ID is on the Workers overview page).
-   The next push to `main` deploys; `wrangler.jsonc` attaches `simplystylo.com` as the Worker's custom domain.
+3. **Deploy:** Workers & Pages → the `stylo` Worker is connected to this repo (Workers Builds, build command
+   `npm run build`, deploy command `npx wrangler deploy`). Every push to `main` deploys; `wrangler.jsonc` attaches
+   `simplystylo.com` as the custom domain. No GitHub secrets are needed.
+4. **GitHub Pages:** keep it off (Settings → Pages → Source: None); Cloudflare is the only host.
 5. **www → apex:** add a DNS record `www` (proxied, AAAA `100::`) and Rules → Redirect Rules → "Redirect from WWW to
    root" template (301).
 6. **Analytics:** Web Analytics → add site (automatic setup, cookieless). Already allowed by the CSP in `_headers`.
@@ -62,8 +63,9 @@ static/         favicon, icons, og.png, manifest (copied as is)
 ## IndexNow
 
 The build writes `dist/indexnow-manifest.json` (URL → hash of title, description and main content) and the key file
-`/<indexNowKey>.txt`. On each deploy the workflow downloads the live manifest first, deploys, then
-`scripts/indexnow.mjs` sends only new or changed URLs to `api.indexnow.org` (Bing, Yandex, Seznam, Naver; Bing feeds
+`/<indexNowKey>.txt`. On each push to `main` the workflow builds both the new commit and the previous one,
+waits until Cloudflare serves the new build (live manifest = built manifest), then `scripts/indexnow.mjs` sends only
+new or changed URLs to `api.indexnow.org` (Bing, Yandex, Seznam, Naver; Bing feeds
 ChatGPT search and Copilot). Asset renames don't count as changes. Run the workflow manually with "Send every URL"
 after changing the key. Leave Cloudflare Crawler Hints off: it would duplicate these pings less precisely.
 
