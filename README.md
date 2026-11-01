@@ -14,11 +14,15 @@ Static site, zero npm dependencies, hosted on Cloudflare Workers Static Assets (
 | Photo Color Palette | `/tools/photo-color-palette/` | `src/lib/palette-core.js` | `tests/palette.test.mjs` |
 | Ring Size Converter | `/tools/ring-size-converter/` | `src/lib/ring-core.js` | `tests/ring.test.mjs` |
 | Cost Per Wear Calculator | `/tools/cost-per-wear-calculator/` | `src/lib/cpw-core.js` | `tests/cpw.test.mjs` |
+| Selfie Color Analysis | `/tools/selfie-color-analysis/` | `src/lib/selfie-core.js` | `tests/selfie.test.mjs` |
+| Wardrobe Color Checker | `/tools/wardrobe-color-checker/` | `src/lib/wardrobe-core.js` | `tests/wardrobe.test.mjs` |
+| Packing List Generator | `/tools/packing-list-generator/` | `src/lib/packing-core.js` | `tests/packing.test.mjs` |
+| Dress Code Guide | `/tools/dress-code-guide/` | `src/lib/dresscode-core.js` | `tests/dresscode.test.mjs` |
 | 14 color guides | `/colors/<color>/` | color engine + `src/data/colors.mjs` | built-in validator |
 | 12 color seasons | `/seasons/<season>/` | season engine + `src/data/seasons.mjs` | built-in validator |
 | Garment illustrations | used by outfit + capsule results | `src/lib/garments.js` | `tests/garments.test.mjs` |
 
-Plus home, tools, colors and seasons indexes, about, methodology, contact, privacy, terms and a 404 page (45 pages).
+Plus home, tools, colors and seasons indexes, about, methodology, contact, privacy, terms and a 404 page (49 pages).
 Every season and color guide has a 1000×1500 Pinterest image in `static/pins/` (shown on the page, lazy-loaded).
 
 ## Why no Astro

@@ -21,6 +21,10 @@ export const ICONS = {
   image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.8"/><path d="m21 16-5-5-8 9"/>',
   ring: '<circle cx="12" cy="14" r="7"/><path d="m9 4 3 3 3-3-1-2h-4z"/>',
   coin: '<circle cx="12" cy="12" r="9"/><path d="M15 9.5c-.5-1-1.6-1.5-3-1.5-1.7 0-3 .8-3 2 0 2.8 6 1.5 6 4.2 0 1.2-1.3 2-3 2-1.5 0-2.6-.6-3.1-1.6M12 6v2M12 16v2"/>',
+  camera: '<path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M17.5 14v7M14 17.5h7"/>',
+  suitcase: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V4h6v3M8 7v13M16 7v13"/>',
+  bowtie: '<path d="M3 7l7 4v2l-7 4zM21 7l-7 4v2l7 4z"/><rect x="10" y="10" width="4" height="4" rx="1"/>',
   swatch: '<rect x="3" y="3" width="8" height="18" rx="2"/><path d="m11 7 5-3 4 7-9 6"/><circle cx="7" cy="17" r="1"/>'
 };
 export const icon = (name, size = 24) =>

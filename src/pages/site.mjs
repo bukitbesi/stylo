@@ -13,6 +13,10 @@ const B = require('../lib/body-core.js');
 const R = require('../lib/ring-core.js');
 const P = require('../lib/cpw-core.js');
 const PL = require('../lib/palette-core.js');
+const SF = require('../lib/selfie-core.js');
+const WR = require('../lib/wardrobe-core.js');
+const PK = require('../lib/packing-core.js');
+const DC = require('../lib/dresscode-core.js');
 const PUBLISHED = '2026-11-01';
 const M = site.dateModified;
 
@@ -100,6 +104,14 @@ function methodology() {
 <p>${esc(P.FACTS.formula)}.</p>
 <h2>Photo color palette</h2>
 <p>${esc(PL.FACTS.method)}, run on a downscaled copy of the photo inside the browser. Colors are named after the nearest reference clothing color and matched to the closest seasonal palettes by Oklab distance.</p>
+<h2>Selfie color analysis</h2>
+<p>Colors tapped on the photo are averaged over a small square, optionally corrected against a white reference (gray-world white balance), and read in Oklab. ${esc(Object.values(SF.FACTS.scale).join('; '))}. These cut-offs are SimplyStylo's own guide scale. Undertone is answered by the visitor, not read from the photo.</p>
+<h2>Wardrobe color checker</h2>
+<p>${esc(WR.FACTS.rule)} Pairs are weighted by the number of pieces in each color; suggestions rank unowned colors by their weighted pairing score, neutrals first when neutrals are under 60%.</p>
+<h2>Packing list generator</h2>
+<p>${esc(PK.FACTS.rules.join(' '))} Layers follow the weather; swimwear is added for beach trips and hot weather.</p>
+<h2>Dress code guide</h2>
+<p>Garments follow the ${esc(DC.FACTS.source)}. Where British and American usage differ (white tie and black tie for women, "lounge suit"), the page notes both.</p>
 <h2>Testing</h2>
 <p>Every engine has automated tests whose worked examples match the numbers quoted in our FAQs, and every page is checked for accessibility, mobile layout and speed before publishing.</p>
 </div>`;

@@ -1,7 +1,7 @@
 /*! SimplyStylo Personal Color Analysis UI. (c) SimplyStylo. All rights reserved. */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory(require('./common.js'), require('../lib/season-core.js'));
-  else factory(root.SSUI, root.SSSeason).mount(document);
+  else { root.SSQuizUI = factory(root.SSUI, root.SSSeason); root.SSQuizUI.mount(document); }
 })(typeof self !== 'undefined' ? self : this, function (U, S) {
   'use strict';
 

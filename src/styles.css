@@ -128,3 +128,13 @@ caption{text-align:left;padding:10px 12px;font-weight:600;caption-side:top}
 .split>div:last-child{flex:1;min-width:200px}
 .figure{background:#F5F1E9;border-radius:var(--r-md);flex:none}
 .kpi span+span{display:block;margin-top:2px}
+.meter{display:flex;gap:4px;margin:4px 0 10px}
+.meter__dot{width:22px;height:8px;border-radius:4px;background:var(--sand)}
+.meter__dot.is-on{background:var(--accent)}
+.counts{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.count{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:var(--r-sm);padding:6px 8px;background:var(--bg);font-size:.9rem}
+.count span:not(.dot){flex:1;min-width:0}
+.count input{width:58px;min-height:44px;padding:4px 6px;text-align:center}
+.count .dot{width:22px;height:22px}
+.selfie{margin:12px 0}
+.selfie canvas{max-width:100%;height:auto;border-radius:var(--r-md);cursor:crosshair;display:block;touch-action:manipulation}

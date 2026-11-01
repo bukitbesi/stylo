@@ -63,6 +63,29 @@ const interactions = {
     await p.fill('#cpw-by', '50');
     return /Trend top costs \$0\.80 per wear/.test(await p.textContent('[data-result]'));
   },
+  '/tools/selfie-color-analysis/': async (p) => {
+    await p.setInputFiles('#sf-file', path.join(root, 'static/og.png'));
+    await p.waitForSelector('.selfie:not([hidden])');
+    await p.locator('.selfie canvas').scrollIntoViewIfNeeded();
+    const box = await p.locator('.selfie canvas').boundingBox();
+    for (const [fx, fy] of [[0.3, 0.9], [0.1, 0.15], [0.85, 0.2]]) await p.mouse.click(box.x + box.width * fx, box.y + box.height * fy);
+    for (const q of ['veins', 'metal', 'white', 'sun']) await p.check(`input[name=${q}][value="0"]`);
+    return /Your result/.test(await p.textContent('[data-result]')) && /a=\d{8}/.test(p.url());
+  },
+  '/tools/wardrobe-color-checker/': async (p) => {
+    await p.fill('#wc-red', '5');
+    return /17 pieces/.test(await p.textContent('[data-result]')) && /red\.5/.test(p.url());
+  },
+  '/tools/packing-list-generator/': async (p) => {
+    await p.fill('#pk-n', '3');
+    await p.selectOption('#pk-t', 'beach');
+    return /For 3 days \(beach holiday/.test(await p.textContent('[data-result]')) && /Swimsuit/.test(await p.textContent('[data-result]'));
+  },
+  '/tools/dress-code-guide/': async (p) => {
+    await p.selectOption('#dc-d', 'black-tie');
+    await p.selectOption('#dc-s', 'menswear');
+    return /Black bow tie/.test(await p.textContent('[data-result]')) && /d=black-tie/.test(p.url());
+  },
   '/tools/outfit-generator/': async (p) => {
     const before = await p.textContent('[data-result]');
     await p.selectOption('#og-o', 'formal');
