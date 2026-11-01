@@ -154,8 +154,8 @@ ${steps([
     '<b>Chroma (bright or soft)</b> comes from your eyes and the contrast between your hair, skin and eyes.',
     '<b>Your season</b> is named after your strongest trait, and your second-strongest trait picks between the two seasons that share it; for example, light and cool gives Light Summer.'])}
 <h2>The 12 color seasons at a glance</h2>
-${table('The 12 seasons, their traits and sample colors', ['Season', 'Traits', 'Sample palette'], seasons.map(([, s]) => [
-    esc(s.name), esc(s.traits), `<span class="pal" style="min-height:24px;margin:0;width:180px">${s.palette.slice(0, 6).map((h) => `<span style="background:${h}"></span>`).join('')}</span>`]))}
+${table('The 12 seasons, their traits and sample colors', ['Season', 'Traits', 'Sample palette'], seasons.map(([id, s]) => [
+    `<a href="/seasons/${id}/">${esc(s.name)}</a>`, esc(s.traits), `<span class="pal" style="min-height:24px;margin:0;width:180px">${s.palette.slice(0, 6).map((h) => `<span style="background:${h}"></span>`).join('')}</span>`]))}
 ${callout('This quiz is a self-assessment guide, not a professional color draping. Lighting, screens and makeup change how colors look; test your palette in daylight, next to your face.')}
 ${sources([
     ['Carole Jackson and Color Me Beautiful (Wikipedia)', 'https://en.wikipedia.org/wiki/Carole_Jackson', 'origin of the four-season system (1980)'],

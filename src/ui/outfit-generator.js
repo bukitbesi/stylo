@@ -1,8 +1,8 @@
 /*! SimplyStylo Outfit Generator UI. (c) SimplyStylo. All rights reserved. */
 (function (root, factory) {
-  if (typeof module === 'object' && module.exports) module.exports = factory(require('./common.js'), require('../lib/outfit-core.js'), require('../lib/color-core.js'));
-  else factory(root.SSUI, root.SSOutfit, root.SSColor).mount(document);
-})(typeof self !== 'undefined' ? self : this, function (U, O, C) {
+  if (typeof module === 'object' && module.exports) module.exports = factory(require('./common.js'), require('../lib/outfit-core.js'), require('../lib/color-core.js'), require('../lib/garments.js'));
+  else factory(root.SSUI, root.SSOutfit, root.SSColor, root.SSGarment).mount(document);
+})(typeof self !== 'undefined' ? self : this, function (U, O, C, G) {
   'use strict';
 
   var DEFAULT = { w: 'womenswear', o: 'smart', t: '20', u: 'c', c: 'burgundy', s: '7' };
@@ -56,8 +56,8 @@
   function result(st) {
     var r = outfit(st);
     return '<p class="summary" data-summary>' + U.esc(summary(st)) + '</p>' +
-      '<ul class="outfit">' + r.pieces.map(function (p) {
-        return '<li>' + U.dot(p.color.hex, p.color.name) + '<span><small>' + U.esc(p.slot) + '</small>' + U.esc(p.color.name) + ' ' +
+      '<ul class="board" aria-label="Outfit flat lay">' + r.pieces.map(function (p) {
+        return '<li>' + G.svg(p.name, p.color.hex, 76, true) + '<span><small>' + U.esc(p.slot) + '</small>' + U.esc(p.color.name) + ' ' +
           U.esc(p.name.charAt(0).toLowerCase() + p.name.slice(1)) + '</span></li>';
       }).join('') + '</ul>' +
       '<p><b>' + U.esc(r.band.label) + ':</b> ' + U.esc(r.tip) + '</p>' +

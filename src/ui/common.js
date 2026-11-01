@@ -25,9 +25,10 @@
     return (L + 0.05) / (0.0091 + 0.05) >= 1.05 / (L + 0.05) ? '#171717' : '#FFFFFF';
   }
 
+  // The label sits on its own light chip so it stays readable (WCAG AA) on any swatch color.
   function swatch(hex, label) {
-    return '<li class="sw" style="background:' + hex + ';color:' + inkOn(hex) + '">' +
-      (label ? '<b>' + esc(label) + '</b>' : '') + '<span>' + hex + '</span></li>';
+    return '<li class="sw" style="background:' + hex + '"><span class="sw__t">' +
+      (label ? '<b>' + esc(label) + '</b>' : '') + '<span>' + hex + '</span></span></li>';
   }
 
   function dot(hex, label) {

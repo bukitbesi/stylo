@@ -11,8 +11,11 @@ Static site, zero npm dependencies, hosted on Cloudflare Workers Static Assets (
 | Capsule Wardrobe Planner | `/tools/capsule-wardrobe/` | `src/lib/capsule-core.js` | `tests/capsule.test.mjs` |
 | Outfit Generator | `/tools/outfit-generator/` | `src/lib/outfit-core.js` | `tests/outfit.test.mjs` |
 | 14 color guides | `/colors/<color>/` | color engine + `src/data/colors.mjs` | built-in validator |
+| 12 color seasons | `/seasons/<season>/` | season engine + `src/data/seasons.mjs` | built-in validator |
+| Garment illustrations | used by outfit + capsule results | `src/lib/garments.js` | `tests/garments.test.mjs` |
 
-Plus home, tools index, colors index, about, methodology, contact, privacy, terms and a 404 page (28 pages).
+Plus home, tools, colors and seasons indexes, about, methodology, contact, privacy, terms and a 404 page (41 pages).
+Every season and color guide has a 1000×1500 Pinterest image in `static/pins/` (shown on the page, lazy-loaded).
 
 ## Why no Astro
 
@@ -30,7 +33,7 @@ npm run validate    # titles, descriptions, canonicals, JSON-LD, FAQ match, link
 npm run check       # all three
 npm run preview     # http://localhost:4321/
 node scripts/e2e.mjs [shots-dir]   # Playwright at 390 px: no overflow, no console errors, tools respond, links restore
-npm run images      # re-render static/og.png and icons (only when the brand changes)
+npm run images      # re-render favicon, icons, og.png and the 26 Pinterest images (after brand, palette or guide changes)
 ```
 
 ## Layout

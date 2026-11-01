@@ -28,6 +28,7 @@ function guide(slug) {
 <h1>What Colors Go With ${esc(Title)}?</h1>
 <p class="answer">${esc(name)} goes best with ${pairs.map((x) => x.name.toLowerCase()).join(', ')}. ${esc(g.intro)}</p>
 <ul class="swatches">${U.swatch(n.hex, name)}${pairs.map((x) => U.swatch(x.hex, x.name)).join('')}</ul>
+<figure class="pin"><img src="/pins/color-${slug}.jpg" width="1000" height="1500" loading="lazy" decoding="async" alt="What colors go with ${esc(lower)}: ${esc(pairs.map((x) => x.name.toLowerCase()).join(', '))}"><figcaption>Save this ${esc(lower)} color guide.</figcaption></figure>
 <h2>${esc(name)} outfit formulas</h2>
 <ol class="steps">${g.outfits.map((o) => `<li>${esc(o)}</li>`).join('')}</ol>
 <p class="callout">${esc(g.tip)}</p>

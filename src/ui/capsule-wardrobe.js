@@ -1,8 +1,8 @@
 /*! SimplyStylo Capsule Wardrobe Planner UI. (c) SimplyStylo. All rights reserved. */
 (function (root, factory) {
-  if (typeof module === 'object' && module.exports) module.exports = factory(require('./common.js'), require('../lib/capsule-core.js'), require('../lib/color-core.js'));
-  else factory(root.SSUI, root.SSCapsule, root.SSColor).mount(document);
-})(typeof self !== 'undefined' ? self : this, function (U, K, C) {
+  if (typeof module === 'object' && module.exports) module.exports = factory(require('./common.js'), require('../lib/capsule-core.js'), require('../lib/color-core.js'), require('../lib/garments.js'));
+  else factory(root.SSUI, root.SSCapsule, root.SSColor, root.SSGarment).mount(document);
+})(typeof self !== 'undefined' ? self : this, function (U, K, C, G) {
   'use strict';
 
   var DEFAULT = { w: 'women', n: '25', f: 'balanced', cl: 'temperate', m: 'navy', s: 'white', a: 'burgundy' };
@@ -56,8 +56,9 @@
       '<p class="meta-line">' + U.esc(C.bySlug(st.m).name) + ' 60% · ' + U.esc(C.bySlug(st.s).name) + ' 30% · ' + U.esc(C.bySlug(st.a).name) + ' 10%</p>' +
       '<div class="grid2">' + p.groups.map(function (g) {
         return '<div class="panel"><h3>' + U.esc(g.label) + ' (' + g.items.length + ')</h3><ul class="list-check">' + g.items.map(function (it) {
-          var tag = it.color ? U.dot(hex[it.role], it.color) + U.esc(it.color) : 'as named';
-          return '<li><label><input type="checkbox"> ' + U.esc(it.name) + '</label><span class="tag">' + tag + '</span></li>';
+          var h = it.color ? hex[it.role] : (G.impliedHex(it.name) || '#B8A58D');
+          var tag = it.color ? U.esc(it.color) : 'as named';
+          return '<li><label><input type="checkbox">' + G.svg(it.name, h, 40, true) + U.esc(it.name) + '</label><span class="tag">' + tag + '</span></li>';
         }).join('') + '</ul></div>';
       }).join('') + '</div>';
   }

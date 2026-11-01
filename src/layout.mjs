@@ -47,7 +47,16 @@ ${controls}
 export const cards = (items) => `<ul class="cards">${items.map((t) => `<li class="card"><span class="card__icon">${icon(t.icon)}</span><h3><a href="${t.path}">${esc(t.name)}</a></h3><p>${esc(t.blurb)}</p></li>`).join('')}</ul>`;
 
 // ---------- page shell ----------
-const NAV = [['Tools', '/tools/'], ['Colors', '/colors/'], ['Color analysis', '/tools/color-analysis/'], ['About', '/about/']];
+const NAV = [['Tools', '/tools/'], ['Colors', '/colors/'], ['Seasons', '/seasons/'], ['Color Analysis', '/tools/color-analysis/']];
+
+// Title Case for page titles and H1s: every word starts with a capital letter ("vs" stays as is).
+export function titleCase(str) {
+  return String(str).split(' ').map((w) => (w === 'vs' ? w
+    : w.split('-').map((part) => part.replace(/^([("']?)([a-z])/, (m, p1, c) => p1 + c.toUpperCase())).join('-'))).join(' ');
+}
+
+// The brand mark: an ink tile with a hand-drawn "S" stroke and the 60/30/10 palette bar the tools are built on.
+export const MARK = (size) => `<svg width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#171717"/><path d="M42 17.5c-2.6-3-6.2-4.5-10.4-4.5-6.2 0-10.6 3.4-10.6 8.6 0 11.8 22 7.4 22 19.2 0 5.6-4.8 9.2-11.4 9.2-4.6 0-8.6-1.8-11.6-5" fill="none" stroke="#F5F1E9" stroke-width="5.6" stroke-linecap="round"/><rect x="12" y="54" width="24" height="4" rx="2" fill="#B98A57"/><rect x="38" y="54" width="9" height="4" rx="2" fill="#9CAF94"/><rect x="49" y="54" width="3" height="4" rx="1.5" fill="#E8B9B0"/></svg>`;
 
 function graph(page, url, crumbs) {
   const org = {
@@ -86,7 +95,9 @@ function graph(page, url, crumbs) {
 export function render(page, scriptSrc) {
   const url = abs(page.path);
   const crumbs = page.path === '/' ? [['Home', '/']] : [['Home', '/'], ...(page.crumbs || []), [page.crumb || page.h1 || page.title, page.path]];
-  const fullTitle = page.path === '/' ? page.title : `${page.title} | ${site.brand}`;
+  const title = titleCase(page.title);
+  const fullTitle = page.path === '/' ? title : `${title} | ${site.brand}`;
+  const body = page.body.replace(/<h1([^>]*)>([^<]*)<\/h1>/, (m, a, t) => `<h1${a}>${titleCase(t)}</h1>`);
   const nav = NAV.map(([n, p]) => `<a href="${p}"${page.path === p ? ' aria-current="page"' : ''}>${n}</a>`).join('');
   const crumbHtml = crumbs.length > 1 ? `<nav class="crumbs" aria-label="Breadcrumb"><ol>${crumbs
     .map(([n, p], i) => (i === crumbs.length - 1 ? `<li aria-current="page">${esc(n)}</li>` : `<li><a href="${p}">${esc(n)}</a></li>`)).join('')}</ol></nav>` : '';
@@ -102,11 +113,12 @@ ${page.noindex ? '<meta name="robots" content="noindex">' : '<meta name="robots"
 <meta name="theme-color" content="#F5F1E9" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151514" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta property="og:site_name" content="${site.brand}">
 <meta property="og:type" content="${page.type === 'article' ? 'article' : 'website'}">
-<meta property="og:title" content="${esc(page.ogTitle || page.title)}">
+<meta property="og:title" content="${esc(page.ogTitle || title)}">
 <meta property="og:description" content="${esc(page.description)}">
 <meta property="og:url" content="${url}">
 <meta property="og:image" content="${abs(site.ogImage.url)}">
@@ -120,10 +132,10 @@ ${page.noindex ? '<meta name="robots" content="noindex">' : '<meta name="robots"
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="site-head"><div class="wrap site-head__in"><a class="logo" href="/" aria-label="${site.brand} home">simplystylo<b>.</b></a><nav class="nav" aria-label="Main">${nav}</nav></div></header>
+<header class="site-head"><div class="wrap site-head__in"><a class="logo" href="/" aria-label="${site.brand} home">${MARK(34)}<span>Simply<i>Stylo</i></span></a><nav class="nav" aria-label="Main">${nav}</nav></div></header>
 <main id="main"><div class="wrap">
 ${crumbHtml}
-${page.body}
+${body}
 </div></main>
 <footer class="site-foot"><div class="wrap">
 <p><b>${site.brand}</b>: ${esc(site.tagline)} Free tools for colors, sizes and outfits. Everything runs in your browser; no sign-up.</p>
