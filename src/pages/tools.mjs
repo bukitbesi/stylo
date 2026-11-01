@@ -15,6 +15,14 @@ const SZ = require('../ui/size-converter.js');
 const CA = require('../ui/color-analysis.js');
 const CW = require('../ui/capsule-wardrobe.js');
 const OG = require('../ui/outfit-generator.js');
+const B = require('../lib/body-core.js');
+const R = require('../lib/ring-core.js');
+const P = require('../lib/cpw-core.js');
+const PL = require('../lib/palette-core.js');
+const BS = require('../ui/body-shape.js');
+const RS = require('../ui/ring-size.js');
+const CW2 = require('../ui/cost-per-wear.js');
+const PP = require('../ui/photo-palette.js');
 
 const PUBLISHED = '2026-11-01';
 const MODIFIED = site.dateModified;
@@ -263,10 +271,188 @@ ${relatedBlock('outfit-generator')}`;
   };
 }
 
+// ---------- Body Shape Calculator ----------
+function bodyShape() {
+  const ex = BS.summary(BS.norm(BS.DEFAULT));
+  const shapes = Object.entries(B.SHAPES).filter(([id]) => id !== 'between');
+  const faq = [
+    ['How do I calculate my body shape?', 'Measure your bust, waist, high hip (about 4 in or 10 cm below the waist) and hips, then compare the differences. With the FFIT method, for example, bust 36 in, waist 27 in, high hip 34 in and hips 37 in is an hourglass: bust and hips are within 1 in and the bust is 9 in larger than the waist.'],
+    ['What are the 7 body shapes in the FFIT method?', 'FFIT sorts measurements into hourglass, bottom hourglass, top hourglass, spoon, triangle (pear), inverted triangle and rectangle. The rules are tested in that order and the first one that matches is your shape.'],
+    ['What measurements make an hourglass figure?', 'In FFIT an hourglass has bust and hips within 1 in of each other (hips no more than 3.6 in larger than the bust) and a defined waist: the bust is at least 9 in larger than the waist, or the hips at least 10 in larger.'],
+    ['What is the difference between a triangle and a spoon body shape?', 'Both have hips at least 2 to 3.6 in larger than the bust. A spoon also has a pronounced high hip (high hip at least 1.193 times the waist) and hips 7 in or more larger than the waist; a triangle has less waist definition, with hips less than 9 in larger than the waist.'],
+    ['How do I measure my high hip?', 'Stand straight and measure around the body about 4 in (10 cm) below your natural waist, across the top of the hip bones. Keep the tape level and snug but not tight. The high hip separates spoon from bottom hourglass shapes.'],
+    ['Why does my body shape change when I re-measure?', 'FFIT uses fixed cut-offs, so a difference of half an inch near a boundary can move you to the next shape. Measure twice over thin clothing and use the result as a styling guide, not a label; proportions matter more than the name.'],
+    ['Does this calculator work for men?', 'No. FFIT was developed and tested on women\'s body scans, so the cut-offs do not apply to men. For menswear, the capsule wardrobe planner and outfit generator give fit-independent guidance.']
+  ];
+  const body = `<p class="eyebrow">Free body shape tool</p>
+<h1>Body Shape Calculator: What Is My Body Shape?</h1>
+<p class="answer">Your body shape comes from comparing your bust, waist, high hip and hip measurements. ${esc(ex)} Enter your own measurements below to get your shape, a figure drawn to your proportions and styling tips, using the FFIT method from apparel research.</p>
+${verifiedLine(B.FACTS.verified)}
+${toolShell('body-shape', 'Body shape calculator', BS.controls(BS.DEFAULT), BS.result(BS.DEFAULT))}
+<h2>How the body shape calculator works</h2>
+${steps([
+    '<b>Measure four points</b> over thin clothing: bust, natural waist, high hip and hips.',
+    '<b>The differences are compared</b> in inches (centimeters are converted): bust − hips, bust − waist, hips − waist and high hip ÷ waist.',
+    '<b>Seven FFIT rules are tested in order</b>; the first that matches is your shape. If none match, you are between two shapes.',
+    '<b>The figure is drawn to your numbers</b>, so you can see your proportions, not a stock drawing.'])}
+<h2>The 7 body shapes and their rules</h2>
+${table('FFIT body shape rules (inches)', ['Shape', 'Rule'], shapes.map(([, s]) => [esc(s.name), esc(s.rule)]))}
+${callout('Body shape is a styling guide, not a health measure. Measurements vary with posture and tape placement, and many people sit between two shapes.')}
+${sources([
+    ['Female body shape: FFIT formulas (Wikipedia)', 'https://en.wikipedia.org/wiki/Female_body_shape', 'rules from Lee, Istook, Nam & Park (2007)'],
+    ['Female Figure Identification Technique (FFIT) for apparel, part I (Simmons, Istook & Devarajan)', 'https://www.researchgate.net/publication/286985579_Female_Figure_Identification_Technique_FFIT_for_apparel_part_I_Describing_female_shapes'],
+    ['Investigating the impact of body shape on garment fit (University of Manchester)', 'https://pure.manchester.ac.uk/ws/portalfiles/portal/229065625/Body_Shape_JFMM_Paper_Accepted.pdf'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('body-shape')}`;
+  return {
+    path: '/tools/body-shape-calculator/', type: 'tool', title: 'Body Shape Calculator: What Is My Body Shape?', crumb: 'Body Shape Calculator',
+    crumbs: [['Tools', '/tools/']],
+    description: 'Free body shape calculator for women: enter bust, waist, high hip and hips to find your shape (hourglass, pear, rectangle and more) with styling tips.',
+    bundle: 'body-shape', faq, body, datePublished: '2026-11-02', dateModified: MODIFIED,
+    app: { name: tool('body-shape').name, description: tool('body-shape').blurb, features: ['7 FFIT body shapes', 'Inches or centimeters', 'Figure drawn to your measurements', 'Styling tips'] },
+    about: { '@type': 'Thing', name: 'Female body shape' },
+    llms: `Body Shape Calculator (FFIT, Lee et al. 2007): ${shapes.map(([, s]) => `${s.name}: ${s.rule}`).join(' ')} Example: 36/27/34/37 in = Hourglass.`
+  };
+}
+
+// ---------- Photo Color Palette ----------
+function photoPalette() {
+  const demo = PP.demo();
+  const faq = [
+    ['How do I find the colors in an outfit photo?', 'Choose a photo and the tool groups similar pixels into up to 6 main colors, shows each color\'s share of the image, its hex code and nearest clothing color name. For example, a navy, camel and white outfit returns navy 50%, camel 30%, white 15% and burgundy 5%.'],
+    ['Is my photo uploaded anywhere?', 'No. The photo is decoded and scaled down inside your browser and never sent to a server. Only the resulting list of colors is kept, in the page address, so you can share the palette without the photo.'],
+    ['How does the color extraction work?', 'The tool samples up to 12,000 pixels and clusters them with k-means in the Oklab color space, which measures color differences the way eyes see them. The starting points are fixed, so the same photo always gives the same palette.'],
+    ['Why does the background color show up in my palette?', 'Every pixel counts, so walls, floors and skin appear too. Crop the photo to the outfit before choosing it for a cleaner result.'],
+    ['What does "closest color seasons" mean?', 'The palette is compared with all 12 seasonal palettes; the seasons whose colors sit closest to your photo\'s colors are listed. It tells you which season the outfit\'s colors belong to, not your own season.'],
+    ['Can I use this to copy a look I like?', 'Yes. Save an inspiration photo, extract its palette, then open the color guides or the color combination finder to see what else works with those colors.'],
+    ['Why do the colors look slightly different from the photo?', 'Each swatch is the average of many similar pixels, so highlights and shadows are blended together. Lighting and camera processing also shift colors, so treat the swatches as close references.']
+  ];
+  const body = `<p class="eyebrow">Free photo color tool</p>
+<h1>Photo Color Palette: Find the Colors in an Outfit Photo</h1>
+<p class="answer">Choose an outfit or inspiration photo and this tool finds its main colors, each color's share of the image, the nearest clothing color names and the color seasons it matches. Example: a navy, camel and white outfit gives ${esc(demo.map((c) => `${c.name.toLowerCase()} ${c.share}%`).join(', '))}. Your photo never leaves your device.</p>
+${verifiedLine(PL.FACTS.verified)}
+${toolShell('photo-palette', 'Photo color palette', PP.controls(), PP.result(demo, true), '<button type="button" class="btn btn--ghost" data-demo>Show example</button>')}
+<h2>How the photo palette tool works</h2>
+${steps([
+    '<b>Choose a photo</b> from your camera roll. It is scaled down on your device; nothing is uploaded.',
+    '<b>Pixels are clustered</b> into up to 6 colors with k-means in the Oklab color space, so similar shades merge the way your eye merges them.',
+    '<b>Each color is named</b> after the nearest clothing color and linked to its color guide.',
+    '<b>Seasons are matched</b> by comparing the palette with all 12 seasonal palettes.'])}
+${callout('Results depend on lighting, camera processing and what else is in the frame. Crop to the outfit for the clearest palette.')}
+${sources([
+    ['k-means clustering (Wikipedia)', 'https://en.wikipedia.org/wiki/K-means_clustering', 'with k-means++ seeding'],
+    ['Oklab perceptual color space (Björn Ottosson)', 'https://bottosson.github.io/posts/oklab/'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('photo-palette')}`;
+  return {
+    path: '/tools/photo-color-palette/', type: 'tool', title: 'Photo Color Palette: Find the Colors in an Outfit', crumb: 'Photo Color Palette',
+    crumbs: [['Tools', '/tools/']],
+    description: 'Find the colors in any outfit photo: main colors with hex codes and shares, nearest clothing color names and matching color seasons. Nothing is uploaded.',
+    bundle: 'photo-palette', faq, body, datePublished: '2026-11-02', dateModified: MODIFIED,
+    app: { name: tool('photo-palette').name, description: tool('photo-palette').blurb, features: ['Up to 6 main colors', 'Share of each color', 'Clothing color names', 'Season match', 'Private: runs on device'] },
+    about: { '@type': 'Thing', name: 'Color palette from a photo' },
+    llms: `Photo Color Palette: on-device k-means (Oklab) on up to 12,000 pixels; returns up to 6 colors with hex, share, nearest clothing color and the closest of 12 color seasons. Example navy/camel/white outfit: ${demo.map((c) => `${c.name} ${c.share}%`).join(', ')}. Photos are not uploaded.`
+  };
+}
+
+// ---------- Ring Size Converter ----------
+function ringSize() {
+  const us7 = R.convert('us', 7), us6 = R.convert('us', 6);
+  const faq = [
+    ['What is a US size 7 ring in mm?', `A US size 7 ring has an inner diameter of ${us7.diameter} mm and an inner circumference of ${us7.circumference} mm, which is EU/ISO size ${us7.eu}. Each full US size adds about 0.81 mm to the diameter.`],
+    ['How do I convert EU ring sizes to US?', `EU and ISO 8653 sizes are the inner circumference in millimeters. Divide by π to get the diameter, then US size = (diameter − 11.63) ÷ 0.8128. For example, EU 54 is about US 6¾ and EU 57 is about US 8.`],
+    ['How can I measure my ring size at home?', 'Measure the inside diameter of a ring that fits the right finger, edge to edge, in millimeters, and enter it as "Inner diameter". Or wrap a strip of paper around the base of the finger, mark where it overlaps, and enter that length as "Inner circumference".'],
+    ['What is the difference between ring diameter and circumference?', `Diameter is the distance straight across the inside of the ring; circumference is the distance around the inside. Circumference = π × diameter, so a ${us7.diameter} mm diameter is ${us7.circumference} mm around. EU/ISO sizes use the circumference in millimeters.`],
+    ['Should I size up for a wide band?', 'Often yes. Bands wider than about 6 mm sit more snugly, so many jewelers suggest going up a quarter to half size. Check the jeweler\'s advice for the specific ring.'],
+    ['Why are UK ring sizes not included?', 'UK and Australian letter sizes (such as N or P) are listed with different millimeter values on different published charts, by about half a letter. Rather than guess, the converter gives US, EU/ISO and exact millimeter sizes, which any jeweler can work from.'],
+    ['When is the best time to measure my finger?', 'Measure at the end of the day when your hands are warm, since fingers are smaller in the cold and swell in heat. Measure two or three times and use the larger result if you are between sizes.']
+  ];
+  const body = `<p class="eyebrow">Free ring size tool</p>
+<h1>Ring Size Converter: US, EU and Millimeter Sizes</h1>
+<p class="answer">A US size 7 ring is ${us7.diameter} mm across the inside (${us7.circumference} mm around), which is EU/ISO size ${us7.eu}; a US 6 is ${us6.diameter} mm. Enter any US size, EU size, inner diameter or circumference below to convert it.</p>
+${verifiedLine(R.FACTS.verified)}
+${toolShell('ring-size', 'Ring size converter', RS.controls(RS.DEFAULT), RS.result(RS.DEFAULT))}
+<h2>How the ring size converter works</h2>
+${steps([
+    `<b>US and Canada:</b> ${esc(R.FACTS.us)}.`,
+    `<b>EU and ISO 8653:</b> the size is the inner circumference in millimeters (circumference = π × diameter).`,
+    '<b>Any input is converted to an inner diameter first</b>, then to every other system, so all results agree.',
+    `<b>UK letters are left out:</b> ${esc(R.FACTS.uk)}`])}
+<h2>Ring size chart</h2>
+${table('US ring sizes with inner diameter, circumference and EU/ISO size', ['US / Canada', 'Diameter (mm)', 'Circumference (mm)', 'EU / ISO'],
+    R.table().map((r) => [RS.usLabel(r.us), r.diameter, r.circumference, r.eu]))}
+${callout('Sizes are approximate: ring widths, comfort-fit bands and jewelers\' sizing tools vary. For an expensive ring, have your finger sized by a jeweler.')}
+${sources([
+    ['Ring size: US, ISO 8653 and other systems (Wikipedia)', 'https://en.wikipedia.org/wiki/Ring_size'],
+    ['The complete guide to ring size conversions (Kiwi Sizing)', 'https://kiwisizing.com/blog/complete-guide-to-ring-size-conversion/', 'about 2.55 mm of circumference per US size'],
+    ['Ring size conversion guide (Check Ring Size)', 'https://checkringsize.pages.dev/conversion-guide', 'US 0 = 11.63 mm, + 0.8128 mm per size'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('ring-size')}`;
+  return {
+    path: '/tools/ring-size-converter/', type: 'tool', title: 'Ring Size Converter: US, EU and MM Sizes', crumb: 'Ring Size Converter',
+    crumbs: [['Tools', '/tools/']],
+    description: `Convert ring sizes between US, EU/ISO, inner diameter and circumference. US 7 = ${us7.diameter} mm diameter = EU ${us7.eu}. Includes a full ring size chart.`,
+    bundle: 'ring-size', faq, body, datePublished: '2026-11-02', dateModified: MODIFIED,
+    app: { name: tool('ring-size').name, description: tool('ring-size').blurb, features: ['US / Canada sizes', 'EU / ISO 8653 sizes', 'Inner diameter and circumference in mm', 'Size chart'] },
+    about: { '@type': 'Thing', name: 'Ring size' },
+    llms: `Ring Size Converter: ${R.FACTS.us}; ${R.FACTS.iso}. US 7 = ${us7.diameter} mm diameter, ${us7.circumference} mm circumference, EU ${us7.eu}. US 6 = ${us6.diameter} mm. UK letters omitted (charts disagree).`
+  };
+}
+
+// ---------- Cost Per Wear Calculator ----------
+function costPerWear() {
+  const ex = CW2.summary(CW2.norm(CW2.DEFAULT));
+  const faq = [
+    ['How do you calculate cost per wear?', 'Divide what an item costs by the number of times you wear it. A $150 coat worn 60 times a year for 5 years (300 wears) costs $0.50 per wear; a $40 top worn 10 times costs $4.00 per wear, so the coat is 8 times better value per wear.'],
+    ['What is a good cost per wear?', 'There is no fixed number, but the lower the better: many people aim for under $1 per wear for everyday basics. The most useful test is comparison: choose the item that will cost less per wear for how you actually live.'],
+    ['Should I include cleaning costs?', 'Yes, if an item needs dry cleaning or special care. Add the care cost per wear (for example, a $12 dry clean every 6 wears is $2 per wear), and the calculator adds it to the total.'],
+    ['How does resale value change cost per wear?', 'Money you get back by reselling is taken off the total cost. A $200 bag worn 40 times and resold for $60 costs $140 over 40 wears, or $3.50 per wear instead of $5.00.'],
+    ['How many times do I need to wear something to make it worth it?', 'Use the break-even line: it shows how many wears the more expensive item needs to match the cheaper one\'s cost per wear. In the example, the $150 coat matches the $4 top after 38 wears.'],
+    ['Is cost per wear only about money?', 'Mostly, but it also points to sustainability: wearing clothes for longer and more often spreads their environmental cost over more wears.'],
+    ['Does the calculator save my numbers?', 'Your numbers are saved only in the page address, so you can bookmark or share a comparison. Nothing is sent to a server.']
+  ];
+  const body = `<p class="eyebrow">Free shopping tool</p>
+<h1>Cost Per Wear Calculator: Is It Worth Buying?</h1>
+<p class="answer">Cost per wear is the price divided by the number of times you wear something. ${esc(ex)} Compare any two items below, including care costs and resale value.</p>
+${verifiedLine(P.FACTS.verified)}
+${toolShell('cost-per-wear', 'Cost per wear calculator', CW2.controls(CW2.norm(CW2.DEFAULT)), CW2.result(CW2.norm(CW2.DEFAULT)))}
+<h2>How the cost per wear calculator works</h2>
+${steps([
+    '<b>Total wears</b> = wears per year × years you will keep it.',
+    '<b>Total cost</b> = price + care cost per wear × total wears − resale value.',
+    '<b>Cost per wear</b> = total cost ÷ total wears, rounded to the cent.',
+    '<b>Break-even</b> shows how many wears the pricier item needs to match the cheaper one.'])}
+<h2>Cost per wear examples</h2>
+${table('Typical cost per wear (illustrative prices)', ['Item', 'Price', 'Wears', 'Cost per wear'], [
+    ['Wool coat, 60 wears a year for 5 years', '$150', '300', '$' + P.item({ price: 150, perYear: 60, years: 5 }).cpw.toFixed(2)],
+    ['Leather sneakers, 100 wears a year for 3 years', '$120', '300', '$' + P.item({ price: 120, perYear: 100, years: 3 }).cpw.toFixed(2)],
+    ['Party dress, 3 wears', '$90', '3', '$' + P.item({ price: 90, perYear: 3, years: 1 }).cpw.toFixed(2)],
+    ['Trend top, 10 wears', '$40', '10', '$' + P.item({ price: 40, perYear: 10, years: 1 }).cpw.toFixed(2)]])}
+${callout('Cost per wear depends on your honest estimate of how often you will wear something. Be realistic, especially for occasion wear.')}
+${sources([
+    ['Sustainable fashion (Wikipedia)', 'https://en.wikipedia.org/wiki/Sustainable_fashion', 'wearing clothes longer as a sustainability practice'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('cost-per-wear')}`;
+  return {
+    path: '/tools/cost-per-wear-calculator/', type: 'tool', title: 'Cost Per Wear Calculator: Is It Worth Buying?', crumb: 'Cost Per Wear Calculator',
+    crumbs: [['Tools', '/tools/']],
+    description: 'Compare two clothes by cost per wear: price, wears per year, years kept, care costs and resale value. A $150 coat worn 300 times costs $0.50 per wear.',
+    bundle: 'cost-per-wear', faq, body, datePublished: '2026-11-02', dateModified: MODIFIED,
+    app: { name: tool('cost-per-wear').name, description: tool('cost-per-wear').blurb, features: ['Compare two items', 'Care costs', 'Resale value', 'Break-even wears', '5 currencies'] },
+    about: { '@type': 'Thing', name: 'Cost per wear' },
+    llms: `Cost Per Wear Calculator: ${P.FACTS.formula}. Example: $150 coat, 60 wears/yr × 5 yrs = $0.50/wear vs $40 top worn 10 times = $4.00/wear (8× better); break-even 38 wears.`
+  };
+}
+
 function toolsIndex() {
   const body = `<p class="eyebrow">All tools</p>
 <h1>Free Style Tools</h1>
-<p class="answer">SimplyStylo has ${TOOLS.length} free style tools: a color combination finder, an international size converter, a personal color analysis quiz, a capsule wardrobe planner and an outfit generator. All of them run in your browser with no sign-up.</p>
+<p class="answer">SimplyStylo has ${TOOLS.length} free style tools: ${TOOLS.map((t) => t.name.toLowerCase()).join(', ')}. All of them run in your browser with no sign-up.</p>
+<h2>All tools</h2>
 ${cards(TOOLS)}
 <h2>Color guides</h2>
 <p class="prose">Looking for what goes with one specific color? Our <a href="/colors/">color guides</a> cover the most-worn clothing colors with outfit formulas.</p>`;
@@ -278,5 +464,5 @@ ${cards(TOOLS)}
   };
 }
 
-export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), toolsIndex()];
+export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), toolsIndex()];
 export { icon };
