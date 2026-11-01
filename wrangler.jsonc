@@ -1,7 +1,7 @@
 // Cloudflare Workers Static Assets: serves dist/ with no Worker script (static requests are free and unlimited).
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "simplystylo",
+  "name": "stylo",
   "compatibility_date": "2026-10-01",
   "assets": {
     "directory": "./dist",
