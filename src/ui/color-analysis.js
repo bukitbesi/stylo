@@ -52,7 +52,8 @@
       '<h3>Your best colors</h3><ul class="swatches">' + s.palette.map(function (h) { return U.swatch(h); }).join('') + '</ul>' +
       '<h3>Your neutrals</h3><ul class="swatches">' + s.neutrals.map(function (h) { return U.swatch(h); }).join('') + '</ul>' +
       '<h3>Wear away from your face</h3><ul class="swatches">' + s.avoid.map(function (h) { return U.swatch(h); }).join('') + '</ul>' +
-      '<p class="meta-line">“Away from your face” means trousers, skirts, shoes and bags are still fine in these colors.</p>';
+      '<p class="meta-line">“Away from your face” means trousers, skirts, shoes and bags are still fine in these colors.</p>' +
+      '<p><a class="btn" href="/seasons/' + r.id + '/">Full ' + U.esc(s.name) + ' guide: makeup, metals and outfits</a></p>';
   }
 
   function mount(doc) {

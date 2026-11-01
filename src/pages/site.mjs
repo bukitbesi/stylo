@@ -7,6 +7,7 @@ import { COLOR_GUIDES } from '../data/colors.mjs';
 const require = createRequire(import.meta.url);
 const C = require('../lib/color-core.js');
 const S = require('../lib/size-core.js');
+const SE = require('../lib/season-core.js');
 const K = require('../lib/capsule-core.js');
 const PUBLISHED = '2026-11-01';
 const M = site.dateModified;
@@ -32,6 +33,8 @@ ${cards(TOOLS)}
     const n = C.bySlug(s);
     return `<a class="chip" href="/colors/${s}/"><span class="dot" style="background:${n.hex}"></span>${esc(n.name)}</a>`;
   }).join('')}</div>
+<h2>The 12 color seasons</h2>
+<div class="chips">${Object.entries(SE.SEASONS).map(([id, x]) => `<a class="chip" href="/seasons/${id}/"><span class="dot" style="background:${x.palette[0]}"></span>${esc(x.name)}</a>`).join('')}</div>
 <h2>Why SimplyStylo</h2>
 <div class="grid2">
 <div class="panel"><h3>Decisions, not trends</h3><p>We do not publish fashion news. Every page answers a practical question with a clear result.</p></div>

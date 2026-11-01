@@ -17,8 +17,8 @@ export const BUNDLES = {
   'color-combination': ['src/ui/common.js', 'src/lib/color-core.js', 'src/ui/color-combination.js'],
   'size-converter': ['src/ui/common.js', 'src/lib/size-core.js', 'src/ui/size-converter.js'],
   'color-analysis': ['src/ui/common.js', 'src/lib/season-core.js', 'src/ui/color-analysis.js'],
-  'capsule-wardrobe': ['src/ui/common.js', 'src/lib/color-core.js', 'src/lib/capsule-core.js', 'src/ui/capsule-wardrobe.js'],
-  'outfit-generator': ['src/ui/common.js', 'src/lib/color-core.js', 'src/lib/outfit-core.js', 'src/ui/outfit-generator.js']
+  'capsule-wardrobe': ['src/ui/common.js', 'src/lib/color-core.js', 'src/lib/capsule-core.js', 'src/lib/garments.js', 'src/ui/capsule-wardrobe.js'],
+  'outfit-generator': ['src/ui/common.js', 'src/lib/color-core.js', 'src/lib/outfit-core.js', 'src/lib/garments.js', 'src/ui/outfit-generator.js']
 };
 
 export const related = (id, n = 3) => TOOLS.filter((t) => t.id !== id).slice(0, n);

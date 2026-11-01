@@ -11,6 +11,7 @@ import { BUNDLES } from '../src/tools.mjs';
 import toolPages from '../src/pages/tools.mjs';
 import colorPages from '../src/pages/colors.mjs';
 import sitePages from '../src/pages/site.mjs';
+import seasonPages from '../src/pages/seasons.mjs';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
@@ -32,7 +33,7 @@ for (const [name, files] of Object.entries(BUNDLES)) {
   bundleSrc[name] = file;
 }
 
-const pages = [...sitePages(), ...toolPages(), ...colorPages()];
+const pages = [...sitePages(), ...toolPages(), ...seasonPages(), ...colorPages()];
 const seen = new Set();
 const manifest = {};
 for (const page of pages) {
@@ -71,6 +72,9 @@ All tools run in the browser with published formulas; see ${abs('/methodology/')
 
 ## Tools
 ${listed.filter((p) => p.path.startsWith('/tools/') && p.path !== '/tools/').map((p) => `- [${p.title}](${abs(p.path)}): ${p.llms}`).join('\n')}
+
+## Color seasons
+${listed.filter((p) => p.path.startsWith('/seasons/') && p.path !== '/seasons/').map((p) => `- [${p.title}](${abs(p.path)}): ${p.llms}`).join('\n')}
 
 ## Color guides
 ${listed.filter((p) => p.path.startsWith('/colors/') && p.path !== '/colors/').map((p) => `- [${p.title}](${abs(p.path)}): ${p.llms}`).join('\n')}

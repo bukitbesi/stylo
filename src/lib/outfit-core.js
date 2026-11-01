@@ -44,7 +44,7 @@
         ['Pointed pumps', 'business formal', 'hwmck']],
       accessory: [['Leather tote', 'business smart', 'hwmck'], ['Crossbody bag', 'casual date', 'hwmck'], ['Clutch', 'formal date', 'hwmck'],
         ['Silk scarf', 'smart business', 'wmc'], ['Wool scarf', 'casual smart business date', 'k'], ['Sunglasses', 'casual', 'hw'],
-        ['Delicate gold or silver jewelry', 'date formal smart', 'hwmck']]
+        ['Delicate jewelry', 'date formal smart', 'hwmck']]
     },
     menswear: {
       top: [['T-shirt', 'casual', 'hwm'], ['Linen shirt', 'casual smart date', 'hw'], ['Oxford shirt', 'casual smart business', 'hwmck'],
@@ -146,6 +146,7 @@
       if (/sneakers/i.test(p.name) && /white/i.test(p.name)) { p.color = { name: 'White', hex: '#FAFAF7' }; return; }
       if (/jeans/i.test(p.name)) { p.color = { name: 'Denim blue', hex: '#4A6584' }; return; }
       if (/black/i.test(p.name)) { p.color = { name: 'Black', hex: '#1B1B1B' }; return; }
+      if (/jewelry|watch/i.test(p.name)) { p.color = { name: 'Gold', hex: '#C9A44C' }; return; }
       if (i === statement) { p.color = pal.anchor; return; }
       p.color = pal.neutrals[ni++ % pal.neutrals.length];
     });

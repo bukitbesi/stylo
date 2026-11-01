@@ -67,7 +67,12 @@ for (const file of htmlFiles) {
   }
 
   for (const m of html.matchAll(/\shref="(\/[^"]*)"/g)) if (!exists(m[1])) fail(rel, `broken internal link ${m[1]}`);
-  for (const m of html.matchAll(/<img\b[^>]*>/g)) if (!/\salt="/.test(m[0])) fail(rel, 'image without alt');
+  for (const m of html.matchAll(/<img\b[^>]*>/g)) {
+    if (!/\salt="[^"]+"/.test(m[0])) fail(rel, 'image without alt text');
+    if (!/\swidth="\d+"/.test(m[0]) || !/\sheight="\d+"/.test(m[0])) fail(rel, 'image without width/height (layout shift)');
+    const src = (m[0].match(/\ssrc="([^"]+)"/) || [])[1];
+    if (src && src.startsWith('/') && !exists(src)) fail(rel, `missing image ${src}`);
+  }
   if (/data-tool=/.test(html)) {
     const res = (html.match(/<div class="result" data-result>([\s\S]*?)<\/div>\n<\/section>/) || [])[1] || '';
     if (res.replace(/<[^>]+>/g, '').trim().length < 40) fail(rel, 'tool result is not rendered into the HTML');
