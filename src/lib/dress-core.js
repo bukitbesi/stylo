@@ -47,21 +47,47 @@
     length: {
       mini: { name: 'Mini', hem: 196 }, knee: { name: 'Knee length', hem: 236 }, midi: { name: 'Midi', hem: 272 }, maxi: { name: 'Maxi / floor length', hem: 318 }
     },
-    pattern: { solid: { name: 'Solid' }, dots: { name: 'Polka dots' }, stripes: { name: 'Stripes' }, gingham: { name: 'Gingham' }, floral: { name: 'Floral' }, photo: { name: 'My photo / fabric' } }
+    pattern: { solid: { name: 'Solid' }, dots: { name: 'Polka dots' }, stripes: { name: 'Stripes' }, gingham: { name: 'Gingham' }, floral: { name: 'Floral' },
+      lace: { name: 'Lace' }, sparkle: { name: 'Sequin / sparkle' }, photo: { name: 'My photo / fabric' } },
+    // Train and veil names in order from shortest to longest. Lengths in inches differ between designers, so only the order is used.
+    train: { none: { name: 'No train', w: 0 }, sweep: { name: 'Sweep train', w: 10 }, court: { name: 'Court train', w: 20 }, chapel: { name: 'Chapel train', w: 32 },
+      cathedral: { name: 'Cathedral train', w: 46 }, royal: { name: 'Royal train', w: 62 } },
+    veil: { none: { name: 'No veil', y: 0 }, elbow: { name: 'Elbow veil', y: 132 }, fingertip: { name: 'Fingertip veil', y: 178 }, chapel: { name: 'Chapel veil', y: 300 },
+      cathedral: { name: 'Cathedral veil', y: 336 } },
+    slit: { none: { name: 'No slit' }, side: { name: 'Side slit' } }
   };
 
   var SHAPE_NAMES = { hourglass: 'Hourglass', 'bottom-hourglass': 'Bottom Hourglass', 'top-hourglass': 'Top Hourglass', spoon: 'Spoon',
     triangle: 'Triangle (Pear)', 'inverted-triangle': 'Inverted Triangle', rectangle: 'Rectangle' };
 
-  var DEFAULT = { n: 'v', s: 'short', w: 'natural', k: 'flare', l: 'midi', p: 'dots', c: '1F2A44', a: 'FAFAF7', b: '' };
+  var DEFAULT = { n: 'v', s: 'short', w: 'natural', k: 'flare', l: 'midi', p: 'dots', c: '1F2A44', a: 'FAFAF7', b: '', t: 'none', v: 'none', x: 'none' };
+  var EXTRA = { t: 'none', v: 'none', x: 'none' };
+  function preset(id, name, d) { var o = { t: 'none', v: 'none', x: 'none' }; Object.keys(d).forEach(function (k) { o[k] = d[k]; }); return { id: id, name: name, d: o }; }
 
   var PRESETS = [
-    { id: 'wedding-guest', name: 'Wedding Guest Midi', d: { n: 'v', s: 'three', w: 'natural', k: 'aline', l: 'midi', p: 'floral', c: '9CAF94', a: 'FAFAF7', b: '' } },
-    { id: 'bridal', name: 'Bridal Gown', d: { n: 'sweetheart', s: 'none', w: 'natural', k: 'mermaid', l: 'maxi', p: 'solid', c: 'FAFAF7', a: 'FAFAF7', b: '' } },
-    { id: 'prom', name: 'Prom Ball Gown', d: { n: 'off', s: 'none', w: 'natural', k: 'flare', l: 'maxi', p: 'solid', c: '6D1F2E', a: 'C9A44C', b: 'C9A44C' } },
-    { id: 'office', name: 'Office Sheath', d: { n: 'boat', s: 'three', w: 'natural', k: 'pencil', l: 'knee', p: 'solid', c: '3C3F44', a: '1B1B1B', b: '1B1B1B' } },
-    { id: 'swing', name: '1950s Swing Dress', d: { n: 'square', s: 'cap', w: 'natural', k: 'flare', l: 'knee', p: 'dots', c: 'C1272D', a: 'FAFAF7', b: 'FAFAF7' } },
-    { id: 'boho', name: 'Boho Maxi', d: { n: 'v', s: 'bell', w: 'empire', k: 'tiered', l: 'maxi', p: 'floral', c: 'B98A57', a: 'F3EDDF', b: '' } }
+    preset('wedding-guest', 'Wedding Guest Midi', { n: 'v', s: 'three', w: 'natural', k: 'aline', l: 'midi', p: 'floral', c: '9CAF94', a: 'FAFAF7', b: '' }),
+    preset('bridal', 'Bridal Gown', { n: 'sweetheart', s: 'none', w: 'natural', k: 'mermaid', l: 'maxi', p: 'solid', c: 'FAFAF7', a: 'FAFAF7', b: '' }),
+    preset('prom', 'Prom Ball Gown', { n: 'off', s: 'none', w: 'natural', k: 'flare', l: 'maxi', p: 'solid', c: '6D1F2E', a: 'C9A44C', b: 'C9A44C' }),
+    preset('office', 'Office Sheath', { n: 'boat', s: 'three', w: 'natural', k: 'pencil', l: 'knee', p: 'solid', c: '3C3F44', a: '1B1B1B', b: '1B1B1B' }),
+    preset('swing', '1950s Swing Dress', { n: 'square', s: 'cap', w: 'natural', k: 'flare', l: 'knee', p: 'dots', c: 'C1272D', a: 'FAFAF7', b: 'FAFAF7' }),
+    preset('boho', 'Boho Maxi', { n: 'v', s: 'bell', w: 'empire', k: 'tiered', l: 'maxi', p: 'floral', c: 'B98A57', a: 'F3EDDF', b: '' })
+  ];
+
+  var WEDDING_PRESETS = [
+    preset('classic-ball-gown', 'Classic Ball Gown', { n: 'sweetheart', s: 'none', w: 'natural', k: 'flare', l: 'maxi', p: 'solid', c: 'FFFFFF', a: 'FFFFFF', b: '', t: 'chapel', v: 'cathedral' }),
+    preset('lace-mermaid', 'Lace Mermaid', { n: 'v', s: 'long', w: 'natural', k: 'mermaid', l: 'maxi', p: 'lace', c: 'F3EDDF', a: 'FFFFFF', b: '', t: 'court', v: 'fingertip' }),
+    preset('boho-lace', 'Boho Lace A-Line', { n: 'v', s: 'bell', w: 'empire', k: 'aline', l: 'maxi', p: 'lace', c: 'F3EDDF', a: 'FAFAF7', b: '', t: 'sweep', v: 'none' }),
+    preset('minimal-sheath', 'Minimalist Sheath', { n: 'square', s: 'none', w: 'natural', k: 'column', l: 'maxi', p: 'solid', c: 'FAFAF7', a: 'FAFAF7', b: '', t: 'sweep', v: 'elbow' }),
+    preset('tea-length', 'Tea-Length Retro', { n: 'boat', s: 'cap', w: 'natural', k: 'flare', l: 'midi', p: 'solid', c: 'F3EDDF', a: 'FAFAF7', b: 'E8D3B0', t: 'none', v: 'elbow' }),
+    preset('off-shoulder-princess', 'Off-Shoulder Princess', { n: 'off', s: 'none', w: 'natural', k: 'flare', l: 'maxi', p: 'sparkle', c: 'F2D4CF', a: 'FFFFFF', b: '', t: 'cathedral', v: 'chapel' })
+  ];
+  var PROM_PRESETS = [
+    preset('sequin-mermaid', 'Sequin Mermaid', { n: 'v', s: 'none', w: 'natural', k: 'mermaid', l: 'maxi', p: 'sparkle', c: '11775A', a: 'D8F3E7', b: '', x: 'none' }),
+    preset('red-carpet-slit', 'Red Carpet Slit', { n: 'halter', s: 'none', w: 'natural', k: 'column', l: 'maxi', p: 'solid', c: 'C1272D', a: 'FAFAF7', b: '', x: 'side' }),
+    preset('satin-ball-gown', 'Satin Ball Gown', { n: 'sweetheart', s: 'none', w: 'natural', k: 'flare', l: 'maxi', p: 'solid', c: '1F4FB0', a: 'FAFAF7', b: '', x: 'none' }),
+    preset('starry-night', 'Starry Night', { n: 'off', s: 'none', w: 'natural', k: 'aline', l: 'maxi', p: 'sparkle', c: '1F2A44', a: 'E8EEF7', b: 'C9A44C', x: 'side' }),
+    preset('blush-tulle', 'Blush Princess', { n: 'square', s: 'puff', w: 'natural', k: 'tiered', l: 'maxi', p: 'solid', c: 'E8B9B0', a: 'FAFAF7', b: '', x: 'none' }),
+    preset('mini-sparkle', 'Party Mini', { n: 'v', s: 'long', w: 'natural', k: 'pencil', l: 'mini', p: 'sparkle', c: 'B7A7D3', a: 'FAFAF7', b: '', x: 'none' })
   ];
 
   function hexOk(h) { return /^[0-9A-F]{6}$/i.test(h || '') ? h.toUpperCase() : null; }
@@ -76,6 +102,9 @@
     o.c = hexOk(d.c) || DEFAULT.c;
     o.a = hexOk(d.a) || DEFAULT.a;
     o.b = hexOk(d.b) || '';
+    o.t = OPTIONS.train[d.t] ? d.t : 'none';
+    o.v = OPTIONS.veil[d.v] ? d.v : 'none';
+    o.x = OPTIONS.slit[d.x] ? d.x : 'none';
     if (o.n === 'halter' || o.n === 'sweetheart') o.s = o.s === 'none' ? 'none' : o.s; // allowed; sleeves drawn as straps-free
     return o;
   }
@@ -97,8 +126,12 @@
     else if (p === 'gingham') body = '<rect width="12" height="12" fill="' + c + '"/><rect width="6" height="12" fill="' + a + '" opacity=".45"/><rect width="12" height="6" fill="' + a + '" opacity=".45"/>';
     else if (p === 'floral') body = '<rect width="24" height="24" fill="' + c + '"/><g fill="' + a + '"><circle cx="8" cy="5" r="2.2"/><circle cx="11" cy="8" r="2.2"/><circle cx="8" cy="11" r="2.2"/><circle cx="5" cy="8" r="2.2"/></g>' +
       '<circle cx="8" cy="8" r="1.6" fill="#' + shade(d.a, 0.75) + '"/><ellipse cx="19" cy="18" rx="3.2" ry="1.4" fill="' + a + '" opacity=".7" transform="rotate(-35 19 18)"/>';
+    else if (p === 'lace') body = '<rect width="16" height="16" fill="' + c + '"/><g fill="none" stroke="' + a + '" stroke-width=".8" opacity=".9"><circle cx="8" cy="8" r="4"/><circle cx="8" cy="8" r="1.4"/>' +
+      '<path d="M0 0 Q4 3 8 0 Q12 3 16 0 M0 16 Q4 13 8 16 Q12 13 16 16"/></g>';
+    else if (p === 'sparkle') body = '<rect width="20" height="20" fill="' + c + '"/><g fill="' + a + '"><circle cx="3" cy="4" r="1"/><circle cx="12" cy="2" r=".7" opacity=".7"/><circle cx="16" cy="9" r="1.1"/>' +
+      '<circle cx="7" cy="12" r=".8" opacity=".8"/><circle cx="13" cy="17" r="1"/><circle cx="2" cy="17" r=".6" opacity=".6"/><path d="M9 6 l.6 1.4 1.4.6 -1.4.6 -.6 1.4 -.6-1.4 -1.4-.6 1.4-.6z"/></g>';
     else body = '<image href="' + photo + '" width="64" height="64" preserveAspectRatio="xMidYMid slice"/>';
-    var size = p === 'dots' ? 14 : p === 'floral' ? 24 : p === 'photo' ? 64 : 12;
+    var size = p === 'dots' ? 14 : p === 'floral' ? 24 : p === 'photo' ? 64 : p === 'lace' ? 16 : p === 'sparkle' ? 20 : 12;
     return { defs: '<pattern id="' + id + '" width="' + size + '" height="' + size + '" patternUnits="userSpaceOnUse">' + body + '</pattern>', fill: 'url(#' + id + ')' };
   }
 
@@ -174,6 +207,26 @@
       var mirror = d.n === 'off' ? ' transform="translate(208 14) scale(-1 1)"' : ' transform="translate(200 0) scale(-1 1)"';
       sleeves = '<path d="' + SLEEVES[d.s] + '" fill="' + f.fill + '"' + shift + '/><path d="' + SLEEVES[d.s] + '" fill="' + f.fill + '"' + mirror + '/>';
     }
+    // Train: only a floor-length dress has one; drawn as fabric pooling behind the hem.
+    var train = '';
+    if (d.l === 'maxi' && d.t !== 'none') {
+      var tw = OPTIONS.train[d.t].w, top = g.hem - 30;
+      train = '<path d="M' + (60 - tw * 0.4) + ' ' + top + ' Q' + (40 - tw) + ' ' + (g.hem + 2) + ' ' + (36 - tw) + ' ' + (g.hem + 12) + ' Q100 ' + (g.hem + 18 + tw * 0.08) + ' ' + (164 + tw) + ' ' + (g.hem + 12) +
+        ' Q' + (160 + tw) + ' ' + (g.hem + 2) + ' ' + (140 + tw * 0.4) + ' ' + top + ' Z" fill="' + f.fill + '"/>';
+    }
+    // Side slit: a narrow opening up the right side of the skirt.
+    var slit = '';
+    if (d.x === 'side' && (d.l === 'maxi' || d.l === 'midi')) {
+      var sx = 100 + (g.wr - 100) * 0.5 + 10, sTop = g.wy + (g.hem - g.wy) * 0.38;
+      slit = '<path d="M' + (sx - 5) + ' ' + (g.hem + 2) + ' L' + sx + ' ' + sTop + ' L' + (sx + 7) + ' ' + (g.hem + 2) + ' Z" fill="#E4DACB" stroke="' + line + '" stroke-width="1"/>';
+    }
+    // Veil: sheer tulle from the crown, drawn last so the dress shows through.
+    var veil = '';
+    if (d.v !== 'none') {
+      var vy = OPTIONS.veil[d.v].y, vw = 30 + (vy - 100) * 0.22;
+      veil = '<path d="M92 18 Q100 12 108 18 Q' + (118 + vw * 0.4) + ' 60 ' + (100 + vw) + ' ' + vy + ' Q100 ' + (vy + 6) + ' ' + (100 - vw) + ' ' + vy + ' Q' + (82 - vw * 0.4) + ' 60 92 18 Z" fill="#FFFFFF" fill-opacity=".42" stroke="#B8AE9E" stroke-opacity=".85" stroke-width="1" stroke-dasharray="3 2"/>' +
+        '<path d="M90 20 Q100 14 110 20" fill="none" stroke="#C9A44C" stroke-width="2"/>';
+    }
     var belt = d.b ? '<rect x="' + (g.wl - 1) + '" y="' + (g.wy - 4) + '" width="' + (g.wr - g.wl + 2) + '" height="8" rx="2" fill="#' + d.b + '" stroke="' + line + '" stroke-width="1"/>' : '';
     var credit = o.credit ? '<text x="100" y="337" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#6B665D">Designed on SimplyStylo.com</text>' : '';
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 340" width="' + (o.width || 200) + '" height="' + Math.round((o.width || 200) * 1.7) + '"' +
@@ -183,16 +236,18 @@
       '<ellipse cx="100" cy="331" rx="34" ry="5" fill="#CFC6B6"/><rect x="98" y="150" width="4" height="181" fill="#B8A58D"/>' +
       '<ellipse cx="100" cy="24" rx="9" ry="5" fill="#B8A58D"/><rect x="92" y="26" width="16" height="30" rx="3" fill="#E4DACB"/>' +
       '<path d="M64 58 L136 58 L130 84 L122 128 L134 166 L66 166 L78 128 L70 84 Z" fill="#E4DACB"/>' +
-      '<g stroke="' + line + '" stroke-width="1.4" stroke-linejoin="round">' + sleeves +
+      '<g stroke="' + line + '" stroke-width="1.4" stroke-linejoin="round">' + train + sleeves +
       '<path d="' + sk.path + '" fill="' + f.fill + '"/><path d="' + bodice(d, g) + '" fill="' + f.fill + '"/></g>' +
       (sk.lines ? '<clipPath id="' + id + '-clip"><path d="' + sk.path + '"/></clipPath><g clip-path="url(#' + id + '-clip)">' + sk.lines + '</g>' : '') +
-      '<path d="M' + g.wl + ' ' + g.wy + ' L' + g.wr + ' ' + g.wy + '" class="ln"/>' + belt + credit + '</svg>';
+      '<path d="M' + g.wl + ' ' + g.wy + ' L' + g.wr + ' ' + g.wy + '" class="ln"/>' + slit + belt + veil + credit + '</svg>';
   }
 
   function describe(design) {
     var d = norm(design), O = OPTIONS;
     return O.length[d.l].name + ' ' + O.skirt[d.k].name.toLowerCase() + ' dress with a ' + O.neckline[d.n].name.toLowerCase() + ', ' +
-      (d.n === 'halter' || d.n === 'sweetheart' ? 'no sleeves' : O.sleeve[d.s].name.toLowerCase()) + ' and a ' + O.waist[d.w].name.toLowerCase();
+      (d.n === 'halter' || d.n === 'sweetheart' ? 'no sleeves' : O.sleeve[d.s].name.toLowerCase()) + ' and a ' + O.waist[d.w].name.toLowerCase() +
+      (d.x === 'side' && (d.l === 'maxi' || d.l === 'midi') ? ', side slit' : '') + (d.l === 'maxi' && d.t !== 'none' ? ', ' + O.train[d.t].name.toLowerCase() : '') +
+      (d.v !== 'none' ? ', ' + O.veil[d.v].name.toLowerCase() : '');
   }
 
   // Styling notes: body shapes the design suits most often, and the dress code it fits best.
@@ -204,11 +259,12 @@
     var shapes = Object.keys(score).sort(function (a, b) { return score[b] - score[a] || a.localeCompare(b); }).slice(0, 3)
       .map(function (id) { return { id: id, name: SHAPE_NAMES[id] }; });
     var formal = (d.l === 'maxi' ? 3 : d.l === 'midi' ? 2 : d.l === 'knee' ? 1 : 0) + (['sweetheart', 'off'].indexOf(d.n) >= 0 ? 2 : 0) +
-      (d.k === 'mermaid' ? 2 : d.k === 'pencil' || d.k === 'column' ? 1 : 0) + (d.p === 'solid' ? 1 : 0);
+      (d.k === 'mermaid' ? 2 : d.k === 'pencil' || d.k === 'column' ? 1 : 0) + (d.p === 'solid' || d.p === 'lace' || d.p === 'sparkle' ? 1 : 0) +
+      (d.l === 'maxi' && d.t !== 'none' ? 1 : 0) + (d.v !== 'none' ? 1 : 0);
     var code = formal >= 6 ? 'black-tie' : formal >= 4 ? 'cocktail' : d.k === 'pencil' && d.l === 'knee' ? 'business-formal' : formal >= 2 ? 'smart-casual' : 'casual';
     var codeName = { 'black-tie': 'Black tie and formal events', cocktail: 'Cocktail parties and weddings', 'business-formal': 'Office and business', 'smart-casual': 'Smart casual and day events', casual: 'Casual and weekend' }[code];
     return { shapes: shapes, code: code, codeName: codeName, tips: parts.map(function (p) { return p.tip; }) };
   }
 
-  return { FACTS: FACTS, OPTIONS: OPTIONS, DEFAULT: DEFAULT, PRESETS: PRESETS, SHAPE_NAMES: SHAPE_NAMES, norm: norm, svg: svg, describe: describe, advise: advise };
+  return { FACTS: FACTS, OPTIONS: OPTIONS, DEFAULT: DEFAULT, PRESETS: PRESETS, WEDDING_PRESETS: WEDDING_PRESETS, PROM_PRESETS: PROM_PRESETS, SHAPE_NAMES: SHAPE_NAMES, norm: norm, svg: svg, describe: describe, advise: advise };
 });

@@ -2,6 +2,14 @@
 export const TOOLS = [
   { id: 'dress-designer', name: 'Dress Designer', path: '/tools/dress-designer/', icon: 'dress',
     blurb: 'Design your own dress: neckline, sleeves, waist, skirt, length, color and print, or your own fabric photo. Download it as an image.' },
+  { id: 'wedding-guest', name: 'Wedding Guest Outfit Finder', path: '/tools/wedding-guest-outfit/', icon: 'rings',
+    blurb: 'What to wear to a wedding: pick the dress code, time, season and venue for a complete guest outfit, colors and etiquette.' },
+  { id: 'wedding-dress', name: 'Wedding Dress Designer', path: '/tools/wedding-dress-designer/', icon: 'veil',
+    blurb: 'Design your wedding dress: silhouette, neckline, lace or sparkle, bridal shade, train and veil, drawn live. Download it as an image.' },
+  { id: 'prom-dress', name: 'Prom Dress Designer', path: '/tools/prom-dress-designer/', icon: 'star',
+    blurb: 'Design your prom dress: silhouette, neckline, sequins, color and side slit, with styling advice and an image to share.' },
+  { id: 'bridesmaid-palette', name: 'Bridesmaid Color Palette', path: '/tools/bridesmaid-color-palette/', icon: 'party',
+    blurb: 'Turn one wedding color into dresses for every bridesmaid (ombre, mix-and-match or matching) plus groomsmen colors.' },
   { id: 'color-combination', name: 'Color Combination Finder', path: '/tools/color-combination/', icon: 'palette',
     blurb: 'Pick any clothing color and see the neutrals, accents and color-wheel combinations that go with it.' },
   { id: 'size-converter', name: 'International Size Converter', path: '/tools/size-converter/', icon: 'ruler',
@@ -45,6 +53,8 @@ export const BUNDLES = {
   'wardrobe-colors': ['src/ui/common.js', 'src/lib/color-core.js', 'src/lib/season-core.js', 'src/lib/palette-core.js', 'src/lib/wardrobe-core.js', 'src/ui/wardrobe-colors.js'],
   'packing-list': ['src/ui/common.js', 'src/lib/packing-core.js', 'src/lib/garments.js', 'src/ui/packing-list.js'],
   'dress-designer': ['src/ui/common.js', 'src/lib/color-core.js', 'src/lib/season-core.js', 'src/lib/palette-core.js', 'src/lib/dress-core.js', 'src/ui/dress-designer.js'],
+  'wedding-guest': ['src/ui/common.js', 'src/lib/dresscode-core.js', 'src/lib/wedguest-core.js', 'src/lib/dress-core.js', 'src/lib/garments.js', 'src/ui/wedding-guest.js'],
+  'bridesmaid-palette': ['src/ui/common.js', 'src/lib/color-core.js', 'src/lib/bridesmaid-core.js', 'src/lib/dress-core.js', 'src/lib/garments.js', 'src/ui/bridesmaid-palette.js'],
   'dress-code': ['src/ui/common.js', 'src/lib/dresscode-core.js', 'src/lib/garments.js', 'src/ui/dress-code.js']
 };
 

@@ -101,6 +101,35 @@ const interactions = {
     await p.selectOption('#dd-p', 'solid');
     return a && b && ok;
   },
+  '/tools/wedding-dress-designer/': async (p) => {
+    const start = /chapel train, cathedral veil/.test(await p.textContent('[data-result]'));
+    await p.selectOption('#dd-t', 'royal');
+    await p.selectOption('#dd-v', 'fingertip');
+    await p.selectOption('#dd-c', 'F3EDDF');
+    const after = /royal train, fingertip veil/.test(await p.textContent('[data-result]')) && /c=F3EDDF/.test(p.url());
+    await p.click('[data-preset=lace-mermaid]');
+    return start && after && /Lace|lace|mermaid/.test(await p.textContent('[data-result]'));
+  },
+  '/tools/prom-dress-designer/': async (p) => {
+    await p.click('[data-preset=red-carpet-slit]');
+    const a = /side slit/.test(await p.textContent('[data-result]'));
+    await p.selectOption('#dd-x', 'none');
+    return a && !/side slit/.test(await p.textContent('[data-result]')) && /x=none/.test(p.url());
+  },
+  '/tools/wedding-guest-outfit/': async (p) => {
+    await p.selectOption('#wg-v', 'beach');
+    await p.selectOption('#wg-g', 'menswear');
+    const a = /espadrilles/.test(await p.textContent('[data-result]'));
+    await p.click('[data-color="2"]');
+    return a && /i=2/.test(p.url());
+  },
+  '/tools/bridesmaid-color-palette/': async (p) => {
+    await p.fill('#bp-n', '8');
+    await p.selectOption('#bp-y', 'mix');
+    const a = /8 bridesmaids in mix and match/.test(await p.textContent('[data-result]'));
+    const [dl] = await Promise.all([p.waitForEvent('download', { timeout: 5000 }), p.click('[data-download]')]);
+    return a && dl.suggestedFilename() === 'simplystylo-bridesmaids.png';
+  },
   '/tools/outfit-generator/': async (p) => {
     const before = await p.textContent('[data-result]');
     await p.selectOption('#og-o', 'formal');

@@ -114,6 +114,12 @@ function methodology() {
 <p>Garments follow the ${esc(DC.FACTS.source)}. Where British and American usage differ (white tie and black tie for women, "lounge suit"), the page notes both.</p>
 <h2>Dress designer</h2>
 <p>The dress is drawn as a vector image from the chosen neckline, sleeves, waist seam, skirt shape and length. Body shape suggestions add up the shapes each chosen element is commonly recommended for (for example, A-line skirts for triangle and spoon shapes, V-necks for top hourglass and inverted triangle shapes); this is styling guidance, not a rule. The suggested dress code follows length, neckline, skirt and fabric formality. A fabric photo is cropped to a small tile in the browser and never uploaded.</p>
+<h2>Wedding and prom dress designers</h2>
+<p>The same drawing engine as the dress designer, with bridal shades, lace and sparkle fabrics, a side slit, and trains and veils. Train and veil names are shown from shortest to longest only: their lengths in inches differ between designers and bridal shops.</p>
+<h2>Wedding guest outfit finder</h2>
+<p>Garments follow the dress code guide (Emily Post Institute). Colors are chosen per season and time of day and are tested to stay clearly away from white and ivory. Etiquette notes follow wedding guides from The Knot and Zola: no white, ivory, cream or beige unless the couple asks; block heels on grass; flat shoes on sand.</p>
+<h2>Bridesmaid color palette</h2>
+<p>Colors are calculated in HSL. Ombre spreads the main hue in even lightness steps (±22 points); mix-and-match uses a five-color palette of the main color, its neighbors 25° either side on the color wheel, a light tint and a deep shade; moods clamp saturation and lightness. The groomsmen suit is the classic suit color that contrasts most with the main color.</p>
 <h2>Testing</h2>
 <p>Every engine has automated tests whose worked examples match the numbers quoted in our FAQs, and every page is checked for accessibility, mobile layout and speed before publishing.</p>
 </div>`;
