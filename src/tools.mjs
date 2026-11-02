@@ -17,7 +17,15 @@ export const TOOLS = [
   { id: 'ring-size', name: 'Ring Size Converter', path: '/tools/ring-size-converter/', icon: 'ring',
     blurb: 'Convert ring sizes between US, EU/ISO, inner diameter and circumference in millimeters.' },
   { id: 'cost-per-wear', name: 'Cost Per Wear Calculator', path: '/tools/cost-per-wear-calculator/', icon: 'coin',
-    blurb: 'Compare two clothes by what each wear really costs, including care costs and resale value.' }
+    blurb: 'Compare two clothes by what each wear really costs, including care costs and resale value.' },
+  { id: 'selfie-analysis', name: 'Selfie Color Analysis', path: '/tools/selfie-color-analysis/', icon: 'camera',
+    blurb: 'Tap your skin, hair and eyes on a selfie and answer four undertone questions to find your color season. The photo stays on your phone.' },
+  { id: 'wardrobe-colors', name: 'Wardrobe Color Checker', path: '/tools/wardrobe-color-checker/', icon: 'grid',
+    blurb: 'Count the colors in your closet to see your neutral balance, how easily they combine and the best colors to buy next.' },
+  { id: 'packing-list', name: 'Packing List Generator', path: '/tools/packing-list-generator/', icon: 'suitcase',
+    blurb: 'Get a printable packing list sized to your trip: days, trip type, weather and laundry, with outfit count.' },
+  { id: 'dress-code', name: 'Dress Code Guide', path: '/tools/dress-code-guide/', icon: 'bowtie',
+    blurb: 'See exactly what to wear for white tie, black tie, cocktail, business and casual dress codes, for women and men.' }
 ];
 
 // Bundle = UI helpers + engines + the tool's UI, in dependency order.
@@ -30,7 +38,11 @@ export const BUNDLES = {
   'body-shape': ['src/ui/common.js', 'src/lib/body-core.js', 'src/ui/body-shape.js'],
   'photo-palette': ['src/ui/common.js', 'src/lib/color-core.js', 'src/lib/season-core.js', 'src/lib/palette-core.js', 'src/ui/photo-palette.js'],
   'ring-size': ['src/ui/common.js', 'src/lib/ring-core.js', 'src/ui/ring-size.js'],
-  'cost-per-wear': ['src/ui/common.js', 'src/lib/cpw-core.js', 'src/ui/cost-per-wear.js']
+  'cost-per-wear': ['src/ui/common.js', 'src/lib/cpw-core.js', 'src/ui/cost-per-wear.js'],
+  'selfie-analysis': ['src/ui/common.js', 'src/lib/color-core.js', 'src/lib/season-core.js', 'src/lib/selfie-core.js', 'src/ui/color-analysis.js', 'src/ui/selfie-analysis.js'],
+  'wardrobe-colors': ['src/ui/common.js', 'src/lib/color-core.js', 'src/lib/season-core.js', 'src/lib/palette-core.js', 'src/lib/wardrobe-core.js', 'src/ui/wardrobe-colors.js'],
+  'packing-list': ['src/ui/common.js', 'src/lib/packing-core.js', 'src/lib/garments.js', 'src/ui/packing-list.js'],
+  'dress-code': ['src/ui/common.js', 'src/lib/dresscode-core.js', 'src/lib/garments.js', 'src/ui/dress-code.js']
 };
 
 export const related = (id, n = 3) => TOOLS.filter((t) => t.id !== id).slice(0, n);

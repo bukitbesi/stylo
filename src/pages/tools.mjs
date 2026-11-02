@@ -23,6 +23,14 @@ const BS = require('../ui/body-shape.js');
 const RS = require('../ui/ring-size.js');
 const CW2 = require('../ui/cost-per-wear.js');
 const PP = require('../ui/photo-palette.js');
+const S2 = require('../lib/selfie-core.js');
+const SF = require('../ui/selfie-analysis.js');
+const WCore = require('../lib/wardrobe-core.js');
+const WC = require('../ui/wardrobe-colors.js');
+const PKCore = require('../lib/packing-core.js');
+const PK = require('../ui/packing-list.js');
+const DCore = require('../lib/dresscode-core.js');
+const DC = require('../ui/dress-code.js');
 
 const PUBLISHED = '2026-11-01';
 const MODIFIED = site.dateModified;
@@ -448,6 +456,180 @@ ${relatedBlock('cost-per-wear')}`;
   };
 }
 
+// ---------- Selfie Color Analysis ----------
+function selfieAnalysis() {
+  const faq = [
+    ['Can a selfie tell me my color season?', 'A selfie can measure how light your hair and skin are and how much contrast there is between them, which decides whether you are light, deep, bright or soft. It cannot reliably show undertone, because lighting changes skin hue, so this tool asks four undertone questions and combines both into one of 12 seasons.'],
+    ['Is my selfie uploaded?', 'No. The photo is drawn on your screen and read by your own browser. Only the resulting quiz answers are kept in the page address so you can share your season; the photo itself is never sent anywhere.'],
+    ['How should I take the selfie?', 'Face a window in daylight, with no filter, beauty mode or heavy makeup, and pull your hair forward so it is next to your face. Hold a sheet of plain white paper in the frame and tap it as the white reference so the tool can correct the lighting.'],
+    ['What does the white paper do?', 'Indoor light makes photos look yellow and shade makes them look blue. Tapping white paper tells the tool what white looks like in your photo, and it removes that color cast from the skin, hair and eye readings before it measures them.'],
+    ['How are skin, hair and eye readings turned into answers?', `The tool measures lightness and colorfulness in the Oklab color space. ${S2.FACTS.scale.hair}. ${S2.FACTS.scale.skin}. ${S2.FACTS.scale.contrast}. These cut-offs are SimplyStylo's own guide scale.`],
+    ['Why is my result different from the quiz?', 'The quiz relies on how you see yourself; the selfie measures the photo. If they disagree, compare both seasons\' palettes in daylight next to your face. Dyed hair and photo filters are the most common causes.'],
+    ['Is selfie color analysis as good as a professional?', 'No. A trained color analyst drapes fabric under controlled light. Use this result as a starting point to test colors, not as a final answer.']
+  ];
+  const body = `<p class="eyebrow">Free photo color analysis</p>
+<h1>Selfie Color Analysis: Find Your Season from a Photo</h1>
+<p class="answer">Choose a daylight selfie, tap your skin, hair and eyes, and answer four undertone questions: the tool measures your depth and contrast from the photo and returns one of 12 color seasons with your best colors. Your photo never leaves your device.</p>
+${verifiedLine(S2.FACTS.verified)}
+${toolShell('selfie-analysis', 'Selfie color analysis', SF.controls(), SF.result({ samples: null }))}
+<h2>How selfie color analysis works</h2>
+${steps([
+    '<b>Depth from the photo:</b> hair and skin lightness decide whether your coloring is light or deep.',
+    '<b>Contrast from the photo:</b> the lightness gap between hair and skin, and how colorful your eyes are, decide bright or soft.',
+    '<b>Undertone from you:</b> four questions about veins, jewelry, whites and tanning decide warm or cool, because photos can\'t show it reliably.',
+    '<b>Season:</b> the strongest of the three traits names your season, exactly as in the 8-question quiz.'])}
+<h2>The scale used for photo readings</h2>
+${table('How photo readings become answers (Oklab lightness 0 = black, 1 = white)', ['Reading', 'Scale'], Object.entries(S2.FACTS.scale).map(([k, v]) => [esc(k.charAt(0).toUpperCase() + k.slice(1)), esc(v)]))}
+${callout('This is a styling guide based on your photo, not a professional color draping. Lighting, cameras, filters and hair dye all change results.')}
+${sources([
+    ['Oklab perceptual color space (Björn Ottosson)', 'https://bottosson.github.io/posts/oklab/', 'lightness and chroma readings'],
+    ['Munsell color system: hue, value and chroma (Wikipedia)', 'https://en.wikipedia.org/wiki/Munsell_color_system'],
+    ['Color constancy and white balance (Wikipedia)', 'https://en.wikipedia.org/wiki/Color_balance', 'why a white reference corrects lighting'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('selfie-analysis')}`;
+  return {
+    path: '/tools/selfie-color-analysis/', type: 'tool', title: 'Selfie Color Analysis: Find Your Season from a Photo', crumb: 'Selfie Color Analysis',
+    crumbs: [['Tools', '/tools/']],
+    description: 'Free selfie color analysis: tap skin, hair and eyes on your photo and answer 4 undertone questions to find your color season. Your photo is not uploaded.',
+    bundle: 'selfie-analysis', faq, body, datePublished: '2026-11-02', dateModified: MODIFIED,
+    app: { name: tool('selfie-analysis').name, description: tool('selfie-analysis').blurb, features: ['Reads depth and contrast from a selfie', 'White-paper lighting correction', '12-season result', 'Private: runs on device'] },
+    about: { '@type': 'Thing', name: 'Seasonal color analysis from a photo' },
+    llms: `Selfie Color Analysis: visitor taps skin, hair, eyes (+ optional white paper for white balance) on a selfie; Oklab readings set value and contrast answers (${Object.values(S2.FACTS.scale).join('; ')}); four undertone questions set warm/cool; result is one of 12 seasons. Photo stays on device.`
+  };
+}
+
+// ---------- Wardrobe Color Checker ----------
+function wardrobeColors() {
+  const ex = WC.summary(WC.DEFAULT), r = WCore.analyse(WC.DEFAULT);
+  const faq = [
+    ['How many neutrals should a wardrobe have?', 'A common guideline is about 60% neutrals, 30% secondary colors and 10% accents. With 60% or more neutrals, almost every piece has several partners; below 40%, outfits get harder to combine.'],
+    ['How does the checker decide which colors go together?', `${WCore.FACTS.rule} Each pair is weighted by how many pieces you own in each color.`],
+    ['What color should I buy next?', `The checker scores every color you don't own by how well it pairs with your current pieces. If under 60% of your wardrobe is neutral it suggests neutrals first; otherwise it suggests accent colors. For a wardrobe of 4 navy, 3 white, 2 gray, 2 burgundy and 1 olive piece it suggests ${r.suggestions.map((s) => s.name.toLowerCase()).join(', ')}.`],
+    ['What does "easy pairings" mean?', 'It is the share of all possible two-piece color combinations in your closet that work together: a neutral with anything, or two colors that are neighbors, opposites or evenly spaced on the color wheel.'],
+    ['Which colors are hard to combine?', 'Two strong colors that are neither close nor opposite on the color wheel, such as red and yellow, or green and purple, clash more often. Put a neutral between them or wear them on separate days.'],
+    ['Does this account for patterns and fabrics?', 'No. Count each piece by its main color. Patterns, textures and finishes change how colors combine, so use the result as a starting point.'],
+    ['Why does it show color seasons?', 'Your wardrobe colors are compared with the 12 seasonal palettes so you can see which palette your closet already leans toward and compare it with your own season.']
+  ];
+  const body = `<p class="eyebrow">Free wardrobe tool</p>
+<h1>Wardrobe Color Checker: Do Your Clothes Go Together?</h1>
+<p class="answer">Enter how many pieces you own in each color and the checker shows your neutral balance, the share of color pairings that combine easily and the 3 best colors to buy next. Example: ${esc(ex)}</p>
+${verifiedLine(WCore.FACTS.verified)}
+${toolShell('wardrobe-colors', 'Wardrobe color checker', WC.controls(WC.DEFAULT), WC.result(WC.DEFAULT))}
+<h2>How the wardrobe color checker works</h2>
+${steps([
+    '<b>Count your pieces</b> by main color: tops, bottoms, dresses, layers and shoes.',
+    '<b>Neutral share</b> is the percentage of pieces in neutrals such as navy, black, white, gray, beige and camel.',
+    `<b>Easy pairings:</b> ${esc(WCore.FACTS.rule)}`,
+    '<b>Suggestions</b> rank the colors you don\'t own by how well they pair with what you do own.'])}
+<h2>Wardrobe balance guide</h2>
+${table('What your neutral share means', ['Neutral share', 'Verdict'], [['60% or more', 'Strong base: add accents freely'], ['40–59%', 'Balanced: keep new buys mostly neutral'], ['Under 40%', 'Color-heavy: add neutrals first']])}
+${callout('Color pairing is a guide, not a rule: your own coloring, fabrics and patterns matter too.')}
+${sources([
+    ['Color wheel and color schemes (Wikipedia)', 'https://en.wikipedia.org/wiki/Color_scheme'],
+    ['Capsule wardrobe (Wikipedia)', 'https://en.wikipedia.org/wiki/Capsule_wardrobe'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('wardrobe-colors')}`;
+  return {
+    path: '/tools/wardrobe-color-checker/', type: 'tool', title: 'Wardrobe Color Checker: Do Your Clothes Go Together?', crumb: 'Wardrobe Color Checker',
+    crumbs: [['Tools', '/tools/']],
+    description: 'Check the colors in your closet: neutral balance, how easily your colors combine and the best colors to buy next. Free, private, no sign-up.',
+    bundle: 'wardrobe-colors', faq, body, datePublished: '2026-11-02', dateModified: MODIFIED,
+    app: { name: tool('wardrobe-colors').name, description: tool('wardrobe-colors').blurb, features: ['Neutral balance', 'Easy pairing score', 'Best colors to buy next', 'Hard-to-combine pairs', 'Season match'] },
+    about: { '@type': 'Thing', name: 'Wardrobe color planning' },
+    llms: `Wardrobe Color Checker: counts pieces per color; neutral share (≥60% strong, 40–59% balanced, <40% color-heavy); ${WCore.FACTS.rule} Suggests 3 colors to buy. Example: ${ex}`
+  };
+}
+
+// ---------- Packing List Generator ----------
+function packingList() {
+  const ex = PK.summary(PK.norm(PK.DEFAULT));
+  const r7 = PKCore.plan({ days: 7, trip: 'city', weather: 'mild', wardrobe: 'women' });
+  const faq = [
+    ['How many outfits should I pack for 7 days?', `For a 7-day city trip in mild weather without laundry, the generator packs ${r7.pieces} clothing pieces: 6 tops, 3 bottoms, 1 dress, 2 layers and 2 pairs of shoes, which make ${r7.outfits} outfits. With laundry, longer trips pack the same amount.`],
+    ['How many tops should I pack?', 'About 3 tops for every 4 days of clothes (at least 2), plus one extra in hot weather. Tops show wear first, so they are the piece worth packing more of.'],
+    ['How many pairs of shoes should I take?', 'Two pairs cover most trips: one comfortable walking pair and one smarter pair. Add a third only for beach (sandals) or business trips (dress shoes), and wear the bulkiest pair while traveling.'],
+    ['How does laundry change my packing list?', 'If you can wash clothes, pack for at most 7 days. A 14-day trip with laundry needs the same clothes as a 7-day trip, only more toiletries.'],
+    ['How do I fit everything in a carry-on?', 'Choose one color palette so everything mixes, wear your heaviest shoes and coat on the plane, roll soft clothes, and keep liquids in containers of 100 ml or less in one clear bag.'],
+    ['What essentials do people forget?', 'Phone charger and plug adapter, medication, a copy of your ID or passport, a reusable water bottle and a small bag for laundry.'],
+    ['Can I print or save my packing list?', 'Yes. Use Print for a paper checklist, or Copy link: the link reopens the same list with your trip settings.']
+  ];
+  const body = `<p class="eyebrow">Free travel tool</p>
+<h1>Packing List Generator: What to Pack for Your Trip</h1>
+<p class="answer">${esc(ex)} Set your trip length, trip type, weather and laundry below to get a printable checklist sized to your trip, with every outfit built from the same pieces.</p>
+${verifiedLine(PKCore.FACTS.verified)}
+${toolShell('packing-list', 'Packing list generator', PK.controls(PK.norm(PK.DEFAULT)), PK.result(PK.norm(PK.DEFAULT)))}
+<h2>How the packing list generator works</h2>
+${steps(PKCore.FACTS.rules.map((r) => esc(r)))}
+<h2>Packing amounts by trip length</h2>
+${table("Clothing pieces and outfits, women's city trip in mild weather, no laundry", ['Days', 'Tops', 'Bottoms', 'Pieces', 'Outfits'], [3, 5, 7, 10, 14].map((d) => {
+    const p = PKCore.plan({ days: d, trip: 'city', weather: 'mild', wardrobe: 'women' });
+    const q = (id) => (p.groups.find((g) => g.id === id) || { items: [] }).items.reduce((s, i) => s + i.qty, 0);
+    return [d, q('tops'), q('bottoms'), p.pieces, p.outfits];
+  }))}
+${callout('These are starting amounts. Check your airline\'s baggage allowance and the weather forecast before you pack.')}
+${sources([
+    ['Capsule wardrobe (Wikipedia)', 'https://en.wikipedia.org/wiki/Capsule_wardrobe', 'the mix-and-match idea behind the list'],
+    ['SimplyStylo methodology', '/methodology/', 'packing rules']])}
+${faqBlock(faq)}
+${relatedBlock('packing-list')}`;
+  return {
+    path: '/tools/packing-list-generator/', type: 'tool', title: 'Packing List Generator: What to Pack for Any Trip', crumb: 'Packing List Generator',
+    crumbs: [['Tools', '/tools/']],
+    description: `Free packing list generator: enter trip days, type, weather and laundry for a printable checklist. 7 days in mild weather = ${r7.pieces} pieces, ${r7.outfits} outfits.`,
+    bundle: 'packing-list', faq, body, datePublished: '2026-11-02', dateModified: MODIFIED,
+    app: { name: tool('packing-list').name, description: tool('packing-list').blurb, features: ['1 to 30 days', '5 trip types', '3 weather types', 'Laundry option', 'Printable checklist'] },
+    about: { '@type': 'Thing', name: 'Travel packing list' },
+    llms: `Packing List Generator rules: ${PKCore.FACTS.rules.join(' ')} Example: 7-day women's city trip, mild, no laundry = ${r7.pieces} pieces, ${r7.outfits} outfits.`
+  };
+}
+
+// ---------- Dress Code Guide ----------
+function dressCode() {
+  const g = (id) => DCore.get(id);
+  const list = (id, s) => g(id)[s].map((i) => i[0].toLowerCase()).join(', ');
+  const faq = [
+    ['What is the difference between white tie and black tie?', `White tie is the most formal dress code: for men, ${list('white-tie', 'menswear')}; for women, a floor-length evening gown. Black tie is one step less formal: ${list('black-tie', 'menswear')} for men, and an evening gown or dressy cocktail dress for women.`],
+    ['What does black tie optional mean?', `The hosts will wear black tie, and guests may too. Men can wear a tuxedo or a dark suit with a white dress shirt and a conservative tie; women can wear an evening gown, a dressy cocktail dress, a little black dress or dressy separates.`],
+    ['What should I wear to a cocktail or semi-formal event?', `Men: ${list('cocktail', 'menswear')}. Women: a cocktail dress or little black dress, or a long dressy skirt and top. For events after 6 p.m., lean toward the more formal choice.`],
+    ['What is business casual?', `Business casual mixes office wear with relaxed pieces: for men, ${list('business-casual', 'menswear')}; for women, a skirt, chinos or trousers with a blouse, knit top or sweater, or a dress. Always check your company's own rules.`],
+    ['What is smart casual?', `Smart casual (also called dressy casual) is relaxed but polished: for men, ${list('smart-casual', 'menswear')}; for women, a dress, a skirt and dressy top, or nice jeans with a dressy top.`],
+    ['What does lounge suit mean on a UK invitation?', 'In British usage, "lounge suit" means a business suit worn with a shirt and tie; it is the equivalent of business formal, not loungewear.'],
+    ['What is creative black tie?', `Creative black tie keeps black tie formality but adds personality: for men, ${list('creative-black-tie', 'menswear')}; for women, an evening gown or cocktail dress with fun or unique accessories.`]
+  ];
+  const body = `<p class="eyebrow">Free dress code tool</p>
+<h1>Dress Code Guide: What to Wear for Every Invitation</h1>
+<p class="answer">Dress codes run from white tie (most formal) through black tie, cocktail and business to casual. Choose the dress code on your invitation and womenswear or menswear to see exactly what to wear, what to avoid and how formal it is.</p>
+${verifiedLine(DCore.FACTS.verified)}
+${toolShell('dress-code', 'Dress code guide', DC.controls(DC.DEFAULT), DC.result(DC.DEFAULT))}
+<h2>Dress codes from most to least formal</h2>
+${table('The 9 common dress codes', ['Dress code', 'Also called', 'Typical events'], DCore.CODES.map((c) => [esc(c.name), esc(c.aka), esc(c.when)]))}
+<h2>How to read an invitation</h2>
+${steps([
+    '<b>Find the dress code</b>: usually at the bottom of the invitation, or on the event website.',
+    '<b>Check the time:</b> for events after 6 p.m., lean toward the more formal option.',
+    '<b>Check the venue and season:</b> a garden or beach changes fabrics and shoes, not the formality level.',
+    '<b>If unsure, ask the host</b>, or dress one step more formal rather than less.'])}
+${callout('Dress codes vary by country, culture and host. Religious, cultural and national dress are appropriate at any level of formality.')}
+${sources([
+    ['Attire guide: dress codes from casual to white tie (Emily Post Institute)', 'https://emilypost.com/advice/attire-guide-dress-codes-from-casual-to-white-tie'],
+    ['Know your dress codes (Debrett\'s)', 'https://business.debretts.com/know-your-dress-codes', 'British usage, including lounge suit'],
+    ['Deconstructing dress codes (Debrett\'s)', 'https://debretts.com/deconstructing-dress-codes/'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('dress-code')}`;
+  return {
+    path: '/tools/dress-code-guide/', type: 'tool', title: 'Dress Code Guide: What to Wear for Every Invitation', crumb: 'Dress Code Guide',
+    crumbs: [['Tools', '/tools/']],
+    description: 'What to wear for white tie, black tie, black tie optional, cocktail, business formal, business casual, smart casual and casual, for women and men.',
+    bundle: 'dress-code', faq, body, datePublished: '2026-11-02', dateModified: MODIFIED,
+    app: { name: tool('dress-code').name, description: tool('dress-code').blurb, features: ['9 dress codes', 'Womenswear and menswear', 'Garment checklist', 'What to avoid', 'Formality scale'] },
+    about: { '@type': 'Thing', name: 'Dress codes' },
+    llms: `Dress Code Guide (Emily Post Institute, Debrett's): ${DCore.CODES.map((c) => `${c.name}: men ${c.menswear.map((i) => i[0]).join(', ')}; women ${c.womenswear.map((i) => i[0]).join(', ')}.`).join(' ')}`
+  };
+}
+
 function toolsIndex() {
   const body = `<p class="eyebrow">All tools</p>
 <h1>Free Style Tools</h1>
@@ -464,5 +646,5 @@ ${cards(TOOLS)}
   };
 }
 
-export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), toolsIndex()];
+export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), selfieAnalysis(), wardrobeColors(), packingList(), dressCode(), toolsIndex()];
 export { icon };

@@ -46,19 +46,21 @@
     belt: { body: ['M4 26 H60 V38 H4 Z'], detail: ['M22 24 H32 V40 H22 Z', 'M27 32 H38'] },
     watch: { body: ['M26 4 H38 V20 H26 Z', 'M26 44 H38 V60 H26 Z', 'M32 18 A14 14 0 1 1 31.9 18 Z'], detail: ['M32 26 V32 L36 35'] },
     sunglasses: { body: ['M6 26 H28 V34 Q28 44 17 44 Q6 44 6 34 Z', 'M36 26 H58 V34 Q58 44 47 44 Q36 44 36 34 Z'], detail: ['M28 29 Q32 26 36 29'] },
+    gloves: { body: ['M18 60 V30 L14 18 Q13 14 16 14 L20 24 V8 Q20 5 23 5 Q26 5 26 8 V22 V6 Q26 3 29 3 Q32 3 32 6 V22 V7 Q32 4 35 4 Q38 4 38 7 V23 V11 Q38 8 41 8 Q44 8 44 11 V40 L42 60 Z'] },
+    socks: { body: ['M24 4 H38 V36 L48 46 Q54 52 48 58 Q44 62 38 58 L26 46 Q24 44 24 40 Z'], detail: ['M24 10 H38'] },
     jewelry: { body: ['M32 52 L38 44 L32 36 L26 44 Z'], detail: ['M12 8 Q32 46 52 8'] }
   };
 
   var MATCH = [
-    [/\btie\b/i, 'tie'], [/pocket square/i, 'square'], [/belt/i, 'belt'], [/watch/i, 'watch'], [/sunglasses/i, 'sunglasses'],
+    [/cummerbund/i, 'belt'], [/\btie\b/i, 'tie'], [/gloves/i, 'gloves'], [/socks|underwear/i, 'socks'], [/swim/i, 'tank'], [/pocket square/i, 'square'], [/belt/i, 'belt'], [/watch/i, 'watch'], [/sunglasses/i, 'sunglasses'],
     [/jewel/i, 'jewelry'], [/scarf/i, 'scarf'], [/bag|tote|clutch|backpack/i, 'bag'], [/sneakers/i, 'sneakers'],
     [/boots/i, 'boots'], [/heels|pumps/i, 'heels'], [/sandals|espadrilles/i, 'sandals'],
     [/loafers|flats|derbies|oxfords|shoes/i, 'loafers'], [/gown/i, 'gown'], [/jumpsuit/i, 'jumpsuit'], [/dress/i, 'dress'],
-    [/skirt/i, 'skirt'], [/shorts/i, 'shorts'], [/coat|parka|trench|\bmac\b|puffer/i, 'coat'],
-    [/blazer|jacket|harrington|overshirt|shacket/i, 'jacket'], [/cardigan/i, 'cardigan'], [/vest|gilet/i, 'vest'],
+    [/skirt/i, 'skirt'], [/shorts/i, 'shorts'], [/waistcoat/i, 'vest'], [/coat|parka|trench|\bmac\b|puffer/i, 'coat'],
+    [/blazer|jacket|harrington|overshirt|shacket|tuxedo|\bsuit\b|sport coat/i, 'jacket'], [/cardigan/i, 'cardigan'], [/vest|gilet|waistcoat/i, 'vest'],
     [/jeans/i, 'jeans'], [/trousers|chinos/i, 'trousers'], [/turtleneck|rollneck/i, 'turtleneck'],
     [/sleeveless|tank|cami|shell/i, 'tank'], [/polo/i, 'polo'],
-    [/t-shirt|\btee\b|henley/i, 'tee'], [/sweater|knit|crew-neck|merino|quarter-zip|long-sleeve/i, 'sweater'], [/shirt|blouse|wrap top/i, 'shirt']
+    [/t-shirt|\btee\b|henley/i, 'tee'], [/sweater|knit|crew-neck|merino|quarter-zip|long-sleeve|fleece|sleepwear|activewear/i, 'sweater'], [/shirt|blouse|wrap top/i, 'shirt']
   ];
 
   function shapeFor(name) {
