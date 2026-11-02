@@ -25,6 +25,7 @@ export const ICONS = {
   grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M17.5 14v7M14 17.5h7"/>',
   suitcase: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V4h6v3M8 7v13M16 7v13"/>',
   bowtie: '<path d="M3 7l7 4v2l-7 4zM21 7l-7 4v2l7 4z"/><rect x="10" y="10" width="4" height="4" rx="1"/>',
+  dress: '<path d="M9 3h6l-1 4 3 3-2 2 4 9H5l4-9-2-2 3-3z"/>',
   swatch: '<rect x="3" y="3" width="8" height="18" rx="2"/><path d="m11 7 5-3 4 7-9 6"/><circle cx="7" cy="17" r="1"/>'
 };
 export const icon = (name, size = 24) =>
