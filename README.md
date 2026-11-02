@@ -19,11 +19,15 @@ Static site, zero npm dependencies, hosted on Cloudflare Workers Static Assets (
 | Packing List Generator | `/tools/packing-list-generator/` | `src/lib/packing-core.js` | `tests/packing.test.mjs` |
 | Dress Code Guide | `/tools/dress-code-guide/` | `src/lib/dresscode-core.js` | `tests/dresscode.test.mjs` |
 | Dress Designer | `/tools/dress-designer/` | `src/lib/dress-core.js` | `tests/dress.test.mjs` |
+| Wedding Dress Designer | `/tools/wedding-dress-designer/` | `src/lib/dress-core.js` (wedding variant) | `tests/wedding.test.mjs` |
+| Prom Dress Designer | `/tools/prom-dress-designer/` | `src/lib/dress-core.js` (prom variant) | `tests/wedding.test.mjs` |
+| Wedding Guest Outfit Finder | `/tools/wedding-guest-outfit/` | `src/lib/wedguest-core.js` | `tests/wedding.test.mjs` |
+| Bridesmaid Color Palette | `/tools/bridesmaid-color-palette/` | `src/lib/bridesmaid-core.js` | `tests/wedding.test.mjs` |
 | 14 color guides | `/colors/<color>/` | color engine + `src/data/colors.mjs` | built-in validator |
 | 12 color seasons | `/seasons/<season>/` | season engine + `src/data/seasons.mjs` | built-in validator |
 | Garment illustrations | used by outfit + capsule results | `src/lib/garments.js` | `tests/garments.test.mjs` |
 
-Plus home, tools, colors and seasons indexes, about, methodology, contact, privacy, terms and a 404 page (50 pages).
+Plus home, tools, colors and seasons indexes, about, methodology, contact, privacy, terms and a 404 page (54 pages).
 Every season and color guide has a 1000×1500 Pinterest image in `static/pins/` (shown on the page, lazy-loaded).
 
 ## Why no Astro

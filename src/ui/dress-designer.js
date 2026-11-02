@@ -8,7 +8,16 @@
 })(typeof self !== 'undefined' ? self : this, function (U, D, C, P) {
   'use strict';
 
-  var GROUPS = [['n', 'neckline', 'Neckline'], ['s', 'sleeve', 'Sleeves'], ['w', 'waist', 'Waist'], ['k', 'skirt', 'Skirt'], ['l', 'length', 'Length'], ['p', 'pattern', 'Fabric']];
+  var BASE = [['n', 'neckline', 'Neckline'], ['s', 'sleeve', 'Sleeves'], ['w', 'waist', 'Waist'], ['k', 'skirt', 'Skirt'], ['l', 'length', 'Length'], ['p', 'pattern', 'Fabric']];
+  // Variants share one engine: the wedding designer adds train, veil and bridal shades; the prom designer adds a slit.
+  var VARIANTS = {
+    default: { groups: BASE, presets: D.PRESETS, shades: null },
+    wedding: { groups: BASE.concat([['t', 'train', 'Train (floor length only)'], ['v', 'veil', 'Veil']]), presets: D.WEDDING_PRESETS,
+      shades: [['FFFFFF', 'Bright white'], ['FAFAF7', 'Soft white'], ['F3EDDF', 'Ivory'], ['E8D3B0', 'Champagne'], ['F2D4CF', 'Blush'], ['D9D4E8', 'Lilac mist']] },
+    prom: { groups: BASE.concat([['x', 'slit', 'Slit (midi or maxi)']]), presets: D.PROM_PRESETS, shades: null }
+  };
+  var GROUPS = BASE;
+  function V(variant) { return VARIANTS[variant] || VARIANTS.default; }
 
   function summary(d) {
     var a = D.advise(d);
@@ -29,15 +38,18 @@
       '<h3>Why these choices work</h3><ul>' + a.tips.map(function (t) { return '<li>' + U.esc(t) + '</li>'; }).join('') + '</ul>';
   }
 
-  function controls(design) {
-    var d = D.norm(design);
-    return '<div class="row">' + GROUPS.map(function (g) {
+  function controls(design, variant) {
+    var d = D.norm(design), cfg = V(variant);
+    return '<div class="row">' + cfg.groups.map(function (g) {
       var opts = D.OPTIONS[g[1]];
       return '<div><label class="lbl" for="dd-' + g[0] + '">' + g[2] + '</label><select id="dd-' + g[0] + '" name="' + g[0] + '">' + Object.keys(opts).map(function (k) {
         return '<option value="' + k + '"' + (k === d[g[0]] ? ' selected' : '') + '>' + U.esc(opts[k].name) + '</option>';
       }).join('') + '</select></div>';
     }).join('') +
-      '<div><label class="lbl" for="dd-c">Main color</label><input type="color" id="dd-c" name="c" value="#' + d.c.toLowerCase() + '"></div>' +
+      (cfg.shades ? '<div><label class="lbl" for="dd-c">Bridal shade</label><select id="dd-c" name="c">' + cfg.shades.map(function (sh) {
+        return '<option value="' + sh[0] + '"' + (sh[0] === d.c ? ' selected' : '') + '>' + sh[1] + '</option>';
+      }).join('') + '</select></div>'
+        : '<div><label class="lbl" for="dd-c">Main color</label><input type="color" id="dd-c" name="c" value="#' + d.c.toLowerCase() + '"></div>') +
       '<div><label class="lbl" for="dd-a">Pattern color</label><input type="color" id="dd-a" name="a" value="#' + d.a.toLowerCase() + '"></div>' +
       '<div><label class="lbl" for="dd-b">Belt</label><select id="dd-b" name="b"><option value="">No belt</option>' +
       [['1B1B1B', 'Black'], ['FAFAF7', 'White'], ['C9A44C', 'Gold'], ['6B4A33', 'Brown'], ['6D1F2E', 'Burgundy']].map(function (b) {
@@ -47,8 +59,8 @@
       '<small class="hint">Stays on your device; not included in shared links.</small></div></div>';
   }
 
-  function gallery() {
-    return '<ul class="looks">' + D.PRESETS.map(function (p) {
+  function gallery(variant) {
+    return '<ul class="looks">' + V(variant).presets.map(function (p) {
       var hash = Object.keys(p.d).map(function (k) { return k + '=' + p.d[k]; }).join('&');
       return '<li><a href="#' + hash + '" data-preset="' + p.id + '">' + D.svg(p.d, { id: 'pre-' + p.id, width: 120 }) + '<span>' + U.esc(p.name) + '</span></a></li>';
     }).join('') + '</ul>';
@@ -88,11 +100,14 @@
     var root = doc.querySelector('[data-tool=dress-designer]');
     if (!root) return;
     var res = root.querySelector('[data-result]'), live = root.querySelector('[data-live]'), photo = null;
-    var d = D.norm(U.readHash());
+    var cfg = V(root.dataset.variant);
+    var start = U.readHash();
+    if (!location.hash && cfg.presets !== D.PRESETS) start = cfg.presets[0].d;
+    var d = D.norm(start);
     var hadHash = !!location.hash;
     function sync() {
-      GROUPS.forEach(function (g) { root.querySelector('[name=' + g[0] + ']').value = d[g[0]]; });
-      root.querySelector('[name=c]').value = '#' + d.c.toLowerCase();
+      cfg.groups.forEach(function (g) { root.querySelector('[name=' + g[0] + ']').value = d[g[0]]; });
+      root.querySelector('[name=c]').value = cfg.shades ? d.c : '#' + d.c.toLowerCase();
       root.querySelector('[name=a]').value = '#' + d.a.toLowerCase();
       root.querySelector('[name=b]').value = d.b;
       root.querySelector('[data-photo-field]').hidden = d.p !== 'photo';
@@ -121,7 +136,7 @@
       var a = e.target.closest('[data-preset]');
       if (!a) return;
       e.preventDefault();
-      var p = D.PRESETS.filter(function (x) { return x.id === a.dataset.preset; })[0];
+      var p = cfg.presets.filter(function (x) { return x.id === a.dataset.preset; })[0];
       d = D.norm(p.d); sync(); draw(true);
       root.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });

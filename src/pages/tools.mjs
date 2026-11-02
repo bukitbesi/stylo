@@ -33,6 +33,10 @@ const DCore = require('../lib/dresscode-core.js');
 const DC = require('../ui/dress-code.js');
 const DDCore = require('../lib/dress-core.js');
 const DD = require('../ui/dress-designer.js');
+const WGCore = require('../lib/wedguest-core.js');
+const WG = require('../ui/wedding-guest.js');
+const BPCore = require('../lib/bridesmaid-core.js');
+const BP = require('../ui/bridesmaid-palette.js');
 
 const PUBLISHED = '2026-11-01';
 const MODIFIED = site.dateModified;
@@ -681,6 +685,193 @@ ${relatedBlock('dress-designer')}`;
   };
 }
 
+const variantShell = (variant, label, d, extra) => toolShell('dress-designer', label, DD.controls(d, variant), DD.result(d, null, variant), extra)
+  .replace('data-tool="dress-designer"', `data-tool="dress-designer" data-variant="${variant}"`);
+
+// ---------- Wedding Dress Designer ----------
+function weddingDress() {
+  const d0 = DDCore.WEDDING_PRESETS[0].d, O = DDCore.OPTIONS;
+  const faq = [
+    ['Can I design my own wedding dress online?', 'Yes. Choose a neckline, sleeves, waist, skirt silhouette, length, bridal shade and fabric (solid, lace, sparkle or your own fabric photo), then add a train and veil. The dress is drawn live on a dress form, and you can download it as an image to show your bridal shop or dressmaker.'],
+    ['What are the wedding dress train lengths?', `From shortest to longest: ${Object.values(O.train).filter((t) => t.w).map((t) => t.name.toLowerCase()).join(', ')}. Measurements in inches differ between designers and bridal shops, so check the exact length on the gown you choose.`],
+    ['What are the wedding veil lengths?', `From shortest to longest: ${Object.values(O.veil).filter((v) => v.y).map((v) => v.name.toLowerCase()).join(', ')}. As with trains, exact lengths vary by maker; a chapel veil usually reaches the floor and a cathedral veil extends beyond the dress.`],
+    ['Which wedding dress silhouette suits my body shape?', 'As a guide: A-line and ball gown (fit-and-flare) skirts suit almost every shape and balance fuller hips; mermaid and sheath (column) styles show curves and suit hourglass shapes; empire waists skim the tummy. The designer lists the shapes each design suits.'],
+    ['What is the difference between white, ivory and champagne?', 'Bright white is the cleanest white; soft white has a little warmth; ivory is creamier and flatters most skin tones; champagne has a golden-beige tint that suits warm complexions. Compare shades next to your face in daylight before you decide.'],
+    ['What train length should I choose for my venue?', 'Shorter trains (sweep, court) are easier for outdoor, beach and garden weddings and for dancing; chapel and cathedral trains suit large indoor venues and formal ceremonies. Many brides bustle a long train for the reception.'],
+    ['Is my fabric photo uploaded?', 'No. If you choose "My photo / fabric", the photo is cropped to a small tile inside your browser and never leaves your device. Shared links include the design choices but not the photo.']
+  ];
+  const body = `<p class="eyebrow">Free bridal design tool</p>
+<h1>Wedding Dress Designer: Design Your Own Wedding Dress</h1>
+<p class="answer">Design your wedding dress online for free: pick a silhouette, neckline, sleeves, bridal shade and lace or sparkle fabric, then add a train (sweep to royal) and a veil (elbow to cathedral). The gown is drawn live, with body shape advice, and downloads as an image for your bridal appointment.</p>
+${verifiedLine(DDCore.FACTS.verified)}
+<h2>Start from a bridal look</h2>
+${DD.gallery('wedding')}
+${variantShell('wedding', 'Wedding dress designer', d0, '<button type="button" class="btn" data-download>Download PNG</button>')}
+<h2>How the wedding dress designer works</h2>
+${steps([
+    '<b>Choose the silhouette:</b> skirt shape (A-line, ball gown, mermaid, sheath), length and waist.',
+    '<b>Choose the bodice:</b> neckline and sleeves, from strapless sweetheart to long lace sleeves.',
+    '<b>Choose the finish:</b> bridal shade, lace, sparkle or your own fabric photo, and an optional belt.',
+    '<b>Add a train and veil</b> to see the full bridal look, then download it or copy the link.'])}
+<h2>Train and veil lengths</h2>
+${table('Wedding dress trains and veils, shortest to longest', ['Train', 'Veil'], [1, 2, 3, 4, 5].map((i) => [esc(Object.values(O.train)[i].name), esc((Object.values(O.veil)[i] || { name: '–' }).name)]))}
+${callout('Train and veil lengths in inches differ between designers and bridal shops, so the designer shows them in order rather than in exact measurements. Check the length on the gown and veil you choose.')}
+${sources([
+    ['Train (clothing) (Wikipedia)', 'https://en.wikipedia.org/wiki/Train_(clothing)'],
+    ['Wedding dress trains (The Knot)', 'https://www.theknot.com/content/wedding-dress-trains'],
+    ['Wedding veil styles and lengths (The Knot)', 'https://www.theknot.com/content/beautiful-wedding-veil-styles'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('wedding-dress')}`;
+  return {
+    path: '/tools/wedding-dress-designer/', type: 'tool', title: 'Wedding Dress Designer: Design Your Own Wedding Dress', crumb: 'Wedding Dress Designer',
+    crumbs: [['Tools', '/tools/']],
+    description: 'Design your own wedding dress online free: silhouette, neckline, lace or sparkle, bridal shade, train and veil. Download your gown as an image.',
+    bundle: 'dress-designer', faq, body, datePublished: '2026-11-02', dateModified: MODIFIED,
+    app: { name: tool('wedding-dress').name, description: tool('wedding-dress').blurb, features: ['Bridal silhouettes and necklines', 'Lace, sparkle and own-fabric photo', '6 bridal shades', 'Trains from sweep to royal', 'Veils from elbow to cathedral', 'PNG download'] },
+    about: { '@type': 'Thing', name: 'Wedding dress design' },
+    llms: `Wedding Dress Designer: free online bridal gown designer with trains (${Object.values(O.train).filter((t) => t.w).map((t) => t.name).join(', ')}) and veils (${Object.values(O.veil).filter((v) => v.y).map((v) => v.name).join(', ')}), lace/sparkle fabrics, bridal shades and body shape advice; PNG download. Lengths shown in order because inches vary by designer.`
+  };
+}
+
+// ---------- Prom Dress Designer ----------
+function promDress() {
+  const d0 = DDCore.PROM_PRESETS[0].d;
+  const faq = [
+    ['Can I design my own prom dress online for free?', 'Yes. Choose a neckline, sleeves, skirt (mermaid, ball gown, A-line, column and more), length, color and fabric including sequin sparkle or your own fabric photo, and add a side slit. Download the design as an image to show a dressmaker or your friends.'],
+    ['What prom dress style suits my body shape?', 'As a guide: ball gown and A-line skirts balance fuller hips; mermaid and column styles show an hourglass figure; V-necks balance a fuller bust; off-shoulder and halter necklines suit narrower shoulders. The designer lists the body shapes each design suits.'],
+    ['What color prom dress should I wear?', 'Choose colors from your color season: jewel tones such as emerald and sapphire suit deep and cool colorings, while coral and warm reds suit warm colorings. Take the free color analysis quiz to find yours, then set that color in the designer.'],
+    ['Is a side slit appropriate for prom?', 'Many schools allow slits, but some dress codes limit how high a slit can go. Check your school\'s prom dress policy before you buy or commission a dress.'],
+    ['How far ahead should I plan a custom prom dress?', 'Dressmakers often ask for several months for a made-to-order gown, plus time for fittings. Bring your downloaded design, measurements and fabric ideas to the first consultation.'],
+    ['Can I see sequins or glitter fabric?', 'Yes: choose "Sequin / sparkle" as the fabric, then set the dress color and the sparkle color separately, for example navy with silver sparkle for a starry-night look.'],
+    ['Is my fabric photo uploaded?', 'No. Fabric photos are cropped to a tile inside your browser and never sent anywhere; they are also not included in shared links.']
+  ];
+  const body = `<p class="eyebrow">Free prom design tool</p>
+<h1>Prom Dress Designer: Design Your Own Prom Dress</h1>
+<p class="answer">Design your prom dress online for free: choose a mermaid, ball gown, A-line or column silhouette, a neckline, sequin sparkle or satin, any color and an optional side slit. The dress is drawn live with body shape advice and downloads as an image to share or take to a dressmaker.</p>
+${verifiedLine(DDCore.FACTS.verified)}
+<h2>Start from a prom look</h2>
+${DD.gallery('prom')}
+${variantShell('prom', 'Prom dress designer', d0, '<button type="button" class="btn" data-download>Download PNG</button>')}
+<h2>How the prom dress designer works</h2>
+${steps([
+    '<b>Pick a look</b> above or start from scratch.',
+    '<b>Choose the silhouette:</b> mermaid, ball gown (fit-and-flare), A-line, column, tiered or pencil, and the length.',
+    '<b>Make it shine:</b> sequin sparkle with its own sparkle color, any main color, a belt and an optional side slit.',
+    '<b>Save it:</b> download a PNG or copy the link to share with friends.'])}
+<h2>Prom silhouettes at a glance</h2>
+${table('Prom dress skirt shapes', ['Skirt', 'Effect', 'Often suits'], ['flare', 'aline', 'mermaid', 'column', 'tiered'].map((k) => {
+    const o = DDCore.OPTIONS.skirt[k];
+    return [esc(k === 'flare' ? 'Ball gown (fit-and-flare)' : o.name), esc(o.tip), esc(o.suits.map((s) => DDCore.SHAPE_NAMES[s]).join(', '))];
+  }))}
+${callout('Body shape and color suggestions are general styling guidance. Check your school\'s prom dress code, and wear what makes you feel confident.')}
+${sources([
+    ['Female body shape and the FFIT method (Wikipedia)', 'https://en.wikipedia.org/wiki/Female_body_shape'],
+    ['Neckline (Wikipedia)', 'https://en.wikipedia.org/wiki/Neckline'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('prom-dress')}`;
+  return {
+    path: '/tools/prom-dress-designer/', type: 'tool', title: 'Prom Dress Designer: Design Your Own Prom Dress', crumb: 'Prom Dress Designer',
+    crumbs: [['Tools', '/tools/']],
+    description: 'Design your own prom dress online free: mermaid, ball gown or A-line, sequins, any color and a side slit. Body shape advice and PNG download.',
+    bundle: 'dress-designer', faq, body, datePublished: '2026-11-02', dateModified: MODIFIED,
+    app: { name: tool('prom-dress').name, description: tool('prom-dress').blurb, features: ['Prom silhouettes', 'Sequin sparkle fabric', 'Side slit', 'Any color', 'PNG download'] },
+    about: { '@type': 'Thing', name: 'Prom dress design' },
+    llms: 'Prom Dress Designer: free online prom gown designer (mermaid, ball gown, A-line, column, tiered), sequin sparkle fabric with separate sparkle color, side slit, any color, body shape advice and PNG download; 6 preset prom looks.'
+  };
+}
+
+// ---------- Wedding Guest Outfit Finder ----------
+function weddingGuest() {
+  const ex = WG.summary(WG.norm(WG.DEFAULT));
+  const p = (o) => WGCore.plan(o).pieces.map((x) => x[0].toLowerCase()).join(', ');
+  const faq = [
+    ['What should I wear to a wedding as a guest?', 'Match the dress code on the invitation, then adjust for time, season and venue: darker and more formal for evening, lighter fabrics in summer, block heels for grass, flat sandals on the beach. Avoid white, ivory, cream and beige unless the couple asks for them.'],
+    ['What is cocktail attire for a wedding?', `For women, a knee- to midi-length cocktail dress with heels or dressy flats; for men, a suit and tie. Example for a summer evening garden wedding: ${p({ code: 'cocktail', time: 'evening', season: 'summer', venue: 'garden' })}.`],
+    ['What should a man wear to a wedding?', `It depends on the dress code: black tie means a tuxedo with a black bow tie; cocktail or semi-formal means a suit and tie; dressy casual means a blazer with chinos. Example, men's cocktail wedding: ${p({ code: 'cocktail', time: 'evening', season: 'fall', venue: 'ballroom', style: 'menswear' })}.`],
+    ['Can I wear black to a wedding?', 'Black is widely accepted today, especially for evening and formal weddings, though some families and cultures still avoid it. If in doubt, choose a deep jewel tone such as emerald, burgundy or navy.'],
+    ['Can I wear white, ivory or cream to a wedding?', 'No, unless the couple asks for it. White, ivory, cream and even beige can photograph as white and compete with the couple, so wedding guides such as The Knot and Zola advise against them.'],
+    ['What should I wear to a beach wedding?', 'Light, breathable fabrics such as linen and chiffon, a flowy midi or maxi dress or linen suit, and flat sandals, loafers or espadrilles instead of heels that sink in sand.'],
+    ['What should I wear to a winter wedding?', `Heavier fabrics such as velvet or wool crepe, long sleeves or a wrap, a proper coat for photos outside, and deep colors such as burgundy, emerald or navy. Example, winter evening cocktail: ${p({ code: 'cocktail', time: 'evening', season: 'winter', venue: 'ballroom' })}.`]
+  ];
+  const body = `<p class="eyebrow">Free wedding guest tool</p>
+<h1>What to Wear to a Wedding: Guest Outfit Finder</h1>
+<p class="answer">To choose a wedding guest outfit, match the invitation's dress code, then adjust for the time, season and venue, and avoid white, ivory, cream and beige. Example: ${esc(ex)} Set your wedding's details below for a complete outfit, colors and etiquette.</p>
+${verifiedLine(WGCore.FACTS.verified)}
+${toolShell('wedding-guest', 'Wedding guest outfit finder', WG.controls(WG.norm(WG.DEFAULT)), WG.result(WG.norm(WG.DEFAULT)))}
+<h2>How the wedding guest outfit finder works</h2>
+${steps([
+    '<b>Dress code</b> sets the formality and the main pieces, following the Emily Post Institute attire guide.',
+    '<b>Time and season</b> choose the colors: lighter by day and in spring and summer, deeper in the evening and in fall and winter.',
+    '<b>Venue</b> chooses the shoes and layers: block heels on grass, flat sandals on sand, a wrap for church.',
+    '<b>Etiquette</b> comes from wedding guides: no white or near-white, and the couple\'s request always wins.'])}
+<h2>Wedding guest dress codes</h2>
+${table('What each wedding dress code means for guests', ['Dress code', 'Womenswear', 'Menswear'], Object.keys(WGCore.CODES).map((c) => [esc(WGCore.CODES[c]),
+    esc(WGCore.plan({ code: c, style: 'womenswear' }).pieces[0][0]), esc(WGCore.plan({ code: c, style: 'menswear' }).pieces.slice(0, 2).map((x) => x[0]).join(' + '))]))}
+<h2>Shoes by venue</h2>
+${table('Wedding guest shoes for each venue', ['Venue', 'Womenswear', 'Menswear'], Object.keys(WGCore.VENUES).map((v) => [esc(WGCore.VENUES[v]),
+    esc(WGCore.plan({ venue: v, style: 'womenswear' }).pieces[1][0]), esc(WGCore.plan({ venue: v, code: 'cocktail', style: 'menswear' }).pieces.find((x) => /shoes|loafers/i.test(x[0]))[0])]))}
+${callout('Wedding customs differ between cultures and religions. When the invitation or the couple gives guidance, follow it over any general rule.')}
+${sources([
+    ['Attire guide: dress codes from casual to white tie (Emily Post Institute)', 'https://emilypost.com/advice/attire-guide-dress-codes-from-casual-to-white-tie'],
+    ['How to tell your mother-in-law she can\'t wear white (The Knot)', 'https://www.theknot.com/content/how-to-tell-your-mother-in-law-she-cant-wear-white', 'why white, ivory, cream and beige are avoided'],
+    ['Wedding guest attire: a guide to every dress code (Zola)', 'https://www.zola.com/expert-advice/what-to-wear-to-a-wedding'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('wedding-guest')}`;
+  return {
+    path: '/tools/wedding-guest-outfit/', type: 'tool', title: 'What to Wear to a Wedding: Guest Outfit Finder', crumb: 'Wedding Guest Outfit Finder',
+    crumbs: [['Tools', '/tools/']],
+    description: 'What to wear to a wedding as a guest: enter the dress code, time, season and venue for a complete outfit, colors and etiquette, for women and men.',
+    bundle: 'wedding-guest', faq, body, datePublished: '2026-11-02', dateModified: MODIFIED,
+    app: { name: tool('wedding-guest').name, description: tool('wedding-guest').blurb, features: ['5 wedding dress codes', 'Day or evening', '4 seasons', '6 venues', 'Womenswear and menswear', 'Etiquette notes'] },
+    about: { '@type': 'Thing', name: 'Wedding guest attire' },
+    llms: `Wedding Guest Outfit Finder: dress code (black tie, black tie optional, cocktail, dressy casual, casual) + day/evening + season + venue → outfit, 4 season colors and etiquette (no white/ivory/cream/beige unless asked; block heels on grass, flat sandals on sand; black widely accepted for evening). Example: ${ex}`
+  };
+}
+
+// ---------- Bridesmaid Color Palette ----------
+function bridesmaidPalette() {
+  const ex = BP.summary(BP.norm(BP.DEFAULT));
+  const faq = [
+    ['How do I choose bridesmaid dress colors?', 'Start from one main wedding color, then choose a style: ombre (the same hue from light to dark), mix and match (the main color plus its neighbors on the color wheel and a light and a deep shade), or matching (one color with different necklines). The generator shows every bridesmaid\'s dress at once.'],
+    ['What is an ombre bridal party?', 'Ombre bridesmaids wear the same color in graduating shades, usually lightest to darkest across the line. It looks coordinated in photos and lets each bridesmaid wear a slightly different shade.'],
+    ['How do mix-and-match bridesmaid dresses still look coordinated?', 'Keep one element the same, such as fabric, length or neckline, and choose colors from one palette. The generator builds a five-color palette from your main color so every mix still belongs together.'],
+    ['What color should groomsmen wear with the bridesmaids?', 'A neutral suit that contrasts with the bridesmaid color, with ties or pocket squares in the main wedding color. The generator suggests navy, light gray, tan or charcoal depending on your color and mood.'],
+    ['How many bridesmaids can I plan for?', 'From 2 to 12. With more than 7, ombre and mix-and-match palettes repeat colors so the line stays balanced.'],
+    ['Can I download the bridesmaid palette?', 'Yes. Download PNG saves the whole bridal party lineup as an image, ready to share with your bridesmaids or pin to a wedding board.'],
+    ['What are the best bridesmaid color moods?', 'Soft pastels suit spring and garden weddings, rich jewel tones suit fall and winter evenings, and earthy muted shades suit rustic and boho weddings. Set the mood and the generator adjusts every shade.']
+  ];
+  const body = `<p class="eyebrow">Free wedding color tool</p>
+<h1>Bridesmaid Color Palette Generator</h1>
+<p class="answer">Pick one wedding color and the generator dresses every bridesmaid: ombre from light to dark, a mix-and-match palette, or one matching color in different necklines, with groomsmen suit and tie colors. Example: ${esc(ex)} Download the lineup as an image to share.</p>
+${verifiedLine(BPCore.FACTS.verified)}
+${toolShell('bridesmaid-palette', 'Bridesmaid color palette generator', BP.controls(BP.norm(BP.DEFAULT)), BP.result(BP.norm(BP.DEFAULT)), '<button type="button" class="btn" data-download>Download PNG</button>')}
+<h2>How the bridesmaid palette generator works</h2>
+${steps([
+    '<b>Main color:</b> any color, adjusted to the mood you choose (pastel, jewel, earthy or exactly as chosen).',
+    '<b>Ombre:</b> the same hue in even steps from light to dark, one per bridesmaid.',
+    '<b>Mix and match:</b> a five-color palette (main color, two color-wheel neighbors 25° either side, a light tint and a deep shade) shared across the party.',
+    '<b>Groomsmen:</b> a classic suit color that contrasts with the main color, with ties in the main color.'])}
+${table('Bridesmaid color styles', ['Style', 'Looks', 'Best for'], [['Ombre', 'Same color, light to dark', 'Clear, coordinated photos'], ['Mix and match', 'Related colors from one palette', 'Relaxed, boho and garden weddings'], ['Matching', 'One color, different necklines', 'Classic, formal weddings']])}
+${callout('Screens show colors differently from fabric. Ask for fabric swatches before ordering bridesmaid dresses.')}
+${sources([
+    ['Color scheme and color wheel harmonies (Wikipedia)', 'https://en.wikipedia.org/wiki/Color_scheme'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('bridesmaid-palette')}`;
+  return {
+    path: '/tools/bridesmaid-color-palette/', type: 'tool', title: 'Bridesmaid Color Palette Generator', crumb: 'Bridesmaid Color Palette',
+    crumbs: [['Tools', '/tools/']],
+    description: 'Free bridesmaid color palette generator: one wedding color becomes ombre, mix-and-match or matching dresses for every bridesmaid, plus groomsmen colors.',
+    bundle: 'bridesmaid-palette', faq, body, datePublished: '2026-11-02', dateModified: MODIFIED,
+    app: { name: tool('bridesmaid-palette').name, description: tool('bridesmaid-palette').blurb, features: ['Ombre, mix-and-match or matching', '4 color moods', '2 to 12 bridesmaids', 'Groomsmen colors', 'PNG download'] },
+    about: { '@type': 'Thing', name: 'Bridesmaid dress colors' },
+    llms: `Bridesmaid Color Palette Generator: main color + style (ombre light-to-dark, mix-and-match 5-color palette from ±25° analogous, tint and shade, or matching with varied necklines) + mood (pastel, jewel, earthy) + 2–12 bridesmaids → dress lineup, wedding palette and groomsmen suit/tie colors. Example: ${ex}`
+  };
+}
+
 function toolsIndex() {
   const body = `<p class="eyebrow">All tools</p>
 <h1>Free Style Tools</h1>
@@ -697,5 +888,5 @@ ${cards(TOOLS)}
   };
 }
 
-export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), selfieAnalysis(), wardrobeColors(), packingList(), dressCode(), dressDesigner(), toolsIndex()];
+export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), selfieAnalysis(), wardrobeColors(), packingList(), dressCode(), dressDesigner(), weddingDress(), promDress(), weddingGuest(), bridesmaidPalette(), toolsIndex()];
 export { icon };
