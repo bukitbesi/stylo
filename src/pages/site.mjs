@@ -1,6 +1,6 @@
 // Home, trust and legal pages.
 import { createRequire } from 'node:module';
-import { esc, cards, faqBlock, site, longDate } from '../layout.mjs';
+import { esc, cards, faqBlock, site, longDate, icon } from '../layout.mjs';
 import { TOOLS } from '../tools.mjs';
 import { COLOR_GUIDES } from '../data/colors.mjs';
 
@@ -135,9 +135,61 @@ function simple(pathname, title, description, h1, html) {
   return { path: pathname, type: 'page', title, crumb: h1, description, datePublished: PUBLISHED, dateModified: M, body: `<h1>${esc(h1)}</h1><div class="prose">${html}</div>` };
 }
 
-const contact = () => simple('/contact/', 'Contact SimplyStylo', 'Contact SimplyStylo with corrections, suggestions or partnership questions.', 'Contact',
-  `<p class="answer">Email <a href="mailto:${site.email}">${site.email}</a> for corrections, tool suggestions or partnership questions. We read every message.</p>
-<p>If you are reporting an error, please include the page address and what you expected to see. We correct verified errors and update the page date.</p>`);
+// Contact: a real form (posted to the /api/contact Worker) with the email address as a fallback.
+function contact() {
+  const topics = [['general', 'General question'], ['correction', 'Correction or error report'], ['tool', 'Tool idea or feedback'],
+    ['advertising', 'Advertising and sponsorship'], ['partnership', 'Affiliate or brand partnership'], ['press', 'Press and media']];
+  const body = `<p class="eyebrow">Contact</p>
+<h1>Contact SimplyStylo and Work With Us</h1>
+<p class="answer">Send us a message with the form below or email <a href="mailto:${site.email}">${site.email}</a>. We reply to every genuine message, usually within two working days, whether it is a correction, a tool idea or a brand partnership.</p>
+<ul class="cards cards--contact">
+<li class="card"><span class="card__icon">${icon('sparkle')}</span><h2>Readers</h2><p>Spotted an error, have a style question or an idea for a tool? Corrections are checked against our sources and fixed with a new page date.</p><p><a href="/contact/?topic=correction#form">Report a correction</a></p></li>
+<li class="card" id="advertise"><span class="card__icon">${icon('star')}</span><h2>Brands and advertisers</h2><p>Sponsored guides, affiliate partnerships and display advertising for fashion, bridal and accessories brands. Paid content is always labeled and never appears inside a tool result.</p><p><a href="/contact/?topic=advertising#form">Ask about advertising</a></p></li>
+<li class="card"><span class="card__icon">${icon('image')}</span><h2>Press and creators</h2><p>Journalists, bloggers and creators may quote our guides and link to any tool. Ask us for data, charts or a comment.</p><p><a href="/contact/?topic=press#form">Press enquiry</a></p></li>
+</ul>
+<form class="form" id="form" action="/api/contact" method="post" data-contact>
+<h2>Send a message</h2>
+<div class="form__grid">
+<div class="field"><label for="cf-name">Your name</label><input id="cf-name" name="name" autocomplete="name" required minlength="2" maxlength="100"></div>
+<div class="field"><label for="cf-email">Email address</label><input id="cf-email" name="email" type="email" autocomplete="email" required maxlength="200"></div>
+<div class="field"><label for="cf-company">Company or website <span class="field__opt">(optional)</span></label><input id="cf-company" name="company" autocomplete="organization" maxlength="120"></div>
+<div class="field"><label for="cf-topic">Topic</label><select id="cf-topic" name="topic">${topics.map(([v, n]) => `<option value="${v}">${n}</option>`).join('')}</select></div>
+</div>
+<div class="field"><label for="cf-message">Message</label><textarea id="cf-message" name="message" rows="6" required minlength="10" maxlength="5000"></textarea></div>
+<div class="hp" aria-hidden="true"><label for="cf-website">Leave this empty</label><input id="cf-website" name="website" tabindex="-1" autocomplete="off"></div>
+<input type="hidden" name="t" value="">
+<p class="form__note">We use your name and email only to reply to you. Messages are delivered to our inbox and are not shared or added to any mailing list. See our <a href="/privacy/">privacy policy</a>.</p>
+<p><button class="btn" type="submit">Send message</button></p>
+<p class="form-status" role="status" data-status></p>
+</form>
+<div class="prose">
+<h2>Before you write</h2>
+<ul>
+<li><b>Corrections:</b> include the page address and what you expected to see. We fix verified errors and update the page date.</li>
+<li><b>Partnerships:</b> tell us about your brand, the products and the kind of placement you have in mind. We only work with brands we would recommend to readers.</li>
+<li><b>Styling questions:</b> we cannot give one-to-one styling advice, but popular questions become new guides and tools.</li>
+</ul>
+</div>`;
+  return {
+    path: '/contact/', type: 'contact', title: 'Contact SimplyStylo and Work With Us', crumb: 'Contact', bundle: 'contact', noshare: true,
+    description: 'Contact SimplyStylo: corrections, tool ideas, advertising, affiliate partnerships and press enquiries. We reply within two working days.',
+    body, datePublished: PUBLISHED, dateModified: M
+  };
+}
+
+const sent = () => ({
+  path: '/contact/sent/', type: 'page', title: 'Message Sent', crumb: 'Message sent', noindex: true, nositemap: true,
+  crumbs: [['Contact', '/contact/']], datePublished: PUBLISHED, dateModified: M,
+  description: 'Thank you for contacting SimplyStylo. Your message has been sent and we usually reply within two working days.',
+  body: `<h1>Thank you, your message is on its way</h1><p class="lede">We reply to every genuine message, usually within two working days. Meanwhile, try one of our free tools:</p>${cards(TOOLS.slice(0, 6))}`
+});
+
+const search = () => ({
+  path: '/search/', type: 'page', title: 'Search SimplyStylo', crumb: 'Search', noindex: true, nositemap: true,
+  datePublished: PUBLISHED, dateModified: M,
+  description: 'Search every SimplyStylo tool and guide: colors, sizes, wedding outfits, dresses, color seasons and more.',
+  body: `<h1>Search SimplyStylo</h1><div class="search-page" data-search-page><form class="search__form" action="/search/" role="search">${icon('search', 22)}<label class="sr" for="sp-q">Search tools and guides</label><input id="sp-q" name="q" type="search" placeholder="Search tools and guides" autocomplete="off"></form><ul class="search__results" data-search-results>${TOOLS.slice(0, 6).map((t) => `<li><a href="${t.path}"><b>${esc(t.name)}</b><span>Tool · ${esc(t.blurb)}</span></a></li>`).join('')}</ul></div>`
+});
 
 const privacy = () => simple('/privacy/', 'Privacy Policy', 'SimplyStylo privacy policy: tools run in your browser, no accounts, no photos uploaded, privacy-friendly analytics.', 'Privacy Policy',
   `<p class="meta-line">Last updated ${longDate(M)}</p>
@@ -146,6 +198,8 @@ const privacy = () => simple('/privacy/', 'Privacy Policy', 'SimplyStylo privacy
 <p>We use Cloudflare Web Analytics, a privacy-first service that counts page views without cookies and without tracking you across sites. Our host, Cloudflare, processes standard request data (such as IP address and browser type) to deliver and protect the site.</p>
 <h2>Tool settings in links</h2>
 <p>Some tools save your choices (for example a color or a size) in the page address after the # sign so you can share a result. This part of the address is not sent to our server.</p>
+<h2>Contact form</h2>
+<p>If you use our contact form, your name, email address, optional company and message are sent by email to our inbox through Cloudflare so we can reply. We keep them only as long as needed to handle your request, never sell or share them, and never add you to a mailing list.</p>
 <h2>Cookies</h2>
 <p>The site does not set cookies. If we add advertising or other services in future, we will update this policy and ask for consent where the law requires it.</p>
 <h2>Your rights and contact</h2>
@@ -169,4 +223,4 @@ function notFound() {
   };
 }
 
-export default () => [home(), about(), methodology(), contact(), privacy(), terms(), notFound()];
+export default () => [home(), about(), methodology(), contact(), sent(), search(), privacy(), terms(), notFound()];

@@ -1,14 +1,20 @@
-// Cloudflare Workers Static Assets: serves dist/ with no Worker script (static requests are free and unlimited).
+// Cloudflare Workers Static Assets + a tiny Worker for /api/* (the contact form). Every other request is served
+// straight from dist/ without running the Worker (run_worker_first), so static traffic stays free and unlimited.
 // Deployed by Cloudflare Workers Builds (Worker "stylo"): build command `npm run build`, deploy `npx wrangler deploy`.
+// The contact form needs Email Routing enabled on simplystylo.com and a secret CONTACT_TO (see README).
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "stylo",
+  "main": "worker/index.js",
   "compatibility_date": "2026-10-01",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "html_handling": "auto-trailing-slash",
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
   },
+  "send_email": [{ "name": "MAILER" }],
   "routes": [{ "pattern": "simplystylo.com", "custom_domain": true }],
   "observability": {
     "logs": {

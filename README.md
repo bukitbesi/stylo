@@ -1,7 +1,8 @@
 # SimplyStylo.com
 
 **Find your style. Wear it better.** Free, privacy-first style tools: colors, sizes and outfits.
-Static site, zero npm dependencies, hosted on Cloudflare Workers Static Assets (deployed by Workers Builds). © SimplyStylo. All rights reserved.
+Static site, zero npm dependencies, hosted on Cloudflare Workers Static Assets (deployed by Workers Builds), plus a
+tiny Worker (`worker/`) that only handles the contact form at `/api/contact`. © SimplyStylo. All rights reserved.
 
 | Tool | URL | Engine | Tests |
 | --- | --- | --- | --- |
@@ -25,9 +26,12 @@ Static site, zero npm dependencies, hosted on Cloudflare Workers Static Assets (
 | Bridesmaid Color Palette | `/tools/bridesmaid-color-palette/` | `src/lib/bridesmaid-core.js` | `tests/wedding.test.mjs` |
 | 14 color guides | `/colors/<color>/` | color engine + `src/data/colors.mjs` | built-in validator |
 | 12 color seasons | `/seasons/<season>/` | season engine + `src/data/seasons.mjs` | built-in validator |
+| Contact form | `/contact/` → `POST /api/contact` | `worker/contact.js` | `tests/contact.test.mjs` |
+| Site search | header search + `/search/` | `src/ui/site.js` + `dist/search-index.json` | `scripts/e2e.mjs` |
 | Garment illustrations | used by outfit + capsule results | `src/lib/garments.js` | `tests/garments.test.mjs` |
 
-Plus home, tools, colors and seasons indexes, about, methodology, contact, privacy, terms and a 404 page (58 pages).
+Plus home, tools, colors and seasons indexes, about, methodology, contact, privacy, terms, search, a 404 page and
+four seasonal wedding guest guides (60 pages). Every page has a header (menu + search), share bar and 3-column footer.
 Every season and color guide has a 1000×1500 Pinterest image in `static/pins/` (shown on the page, lazy-loaded).
 
 ## Why no Astro
@@ -57,7 +61,8 @@ src/pages/      page modules (content + FAQ)     src/data/    hand-written color
 src/layout.mjs  page shell, JSON-LD @graph, blocks          src/styles.css  design tokens + components (inlined)
 src/tools.mjs   tool catalog + script bundles    src/site.json  origin, brand, IndexNow key, dateModified
 scripts/        build, validate, indexnow, e2e, preview, images
-static/         favicon, icons, og.png, manifest (copied as is)
+static/         favicon, icons, og.png, manifest, pins/ (copied as is)
+worker/         Cloudflare Worker for /api/contact (static pages never run it)
 ```
 
 ## One-time setup (Cloudflare, free plan)
@@ -72,8 +77,14 @@ static/         favicon, icons, og.png, manifest (copied as is)
 5. **www → apex:** add a DNS record `www` (proxied, AAAA `100::`) and Rules → Redirect Rules → "Redirect from WWW to
    root" template (301).
 6. **Analytics:** Web Analytics → add site (automatic setup, cookieless). Already allowed by the CSP in `_headers`.
-7. **Email:** Email → Email Routing → route `hello@simplystylo.com` to your inbox (free).
-8. **Search engines:** verify in Google Search Console (DNS TXT) and submit `/sitemap.xml`; in Bing Webmaster Tools use
+7. **Email (free):** Email → Email Routing → Get started → add custom address `hello` → destination = your Gmail
+   (click the verification link Cloudflare emails you). Optionally add `ads@` and `press@` the same way.
+   To *reply as* hello@: Gmail → Settings → Accounts → "Send mail as" (needs an SMTP relay such as Brevo's free tier).
+8. **Contact form:** after step 7, Workers & Pages → `stylo` → Settings → Variables and Secrets → add a **Secret**
+   named `CONTACT_TO` = the verified Gmail address from step 7. (It is a secret so it is never in this public repo.)
+   Mail arrives from `form@simplystylo.com` with Reply-To set to the visitor. Until this is set the form shows a
+   friendly "email us at hello@" message.
+9. **Search engines:** verify in Google Search Console (DNS TXT) and submit `/sitemap.xml`; in Bing Webmaster Tools use
    "Import from GSC".
 
 ## IndexNow
@@ -84,6 +95,26 @@ waits until Cloudflare serves the new build (live manifest = built manifest), th
 new or changed URLs to `api.indexnow.org` (Bing, Yandex, Seznam, Naver; Bing feeds
 ChatGPT search and Copilot). Asset renames don't count as changes. Run the workflow manually with "Send every URL"
 after changing the key. Leave Cloudflare Crawler Hints off: it would duplicate these pings less precisely.
+
+## Editing pages yourself (GitHub web editor, no tools needed)
+
+Open the file on github.com, click the pencil, edit, "Commit changes" to `main`: Cloudflare rebuilds and the change is
+live in about a minute. If the build fails, the old site stays up; Cloudflare → Workers & Pages → stylo → Deployments shows why.
+
+| To change | Edit |
+| --- | --- |
+| Home, about, contact, privacy, terms text | `src/pages/site.mjs` |
+| A color guide's notes, pairings, occasions | `src/data/colors.mjs` |
+| A season's notes | `src/data/seasons.mjs` |
+| Seasonal wedding guest advice | `src/data/wedding-seasons.mjs` |
+| Tool names and card blurbs | `src/tools.mjs` |
+| Tool page text and FAQs | `src/pages/tools.mjs` |
+| Colors, fonts, spacing | `src/styles.css` (`:root` tokens at the top) |
+
+**Adding a photo:** upload a JPG/WebP (≤ 200 KB, ≥ 1200 px wide) to `static/img/` with "Add file → Upload files", then
+in the page text add `<img src="/img/name.jpg" width="1200" height="800" alt="What the photo shows" loading="lazy">`
+(width/height = the photo's real pixel size; the validator rejects images without alt, width or height). Use only your
+own photos or ones licensed for commercial use. Bump `dateModified` in `src/site.json` after content changes.
 
 ## Adding a tool (definition of done: see CLAUDE.md)
 

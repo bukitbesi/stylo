@@ -33,12 +33,21 @@
     cardigan: { body: ['M22 8 L32 30 L42 8 L52 13 L58 46 L51 48 L46 24 L46 56 L18 56 L18 24 L13 48 L6 46 L12 13 Z'],
       detail: ['M32 30 L32 56', 'M18 52 L46 52'] },
     vest: { body: ['M22 6 L32 26 L42 6 L46 10 L46 56 L18 56 L18 10 Z'], detail: ['M32 26 L32 56'] },
-    sneakers: { body: ['M6 40 Q8 28 17 28 L26 34 Q40 36 52 40 Q58 42 58 48 L58 50 L6 50 Z', 'M5 50 H59 V55 H5 Z'],
-      detail: ['M20 32 L24 38', 'M25 33 L29 38'] },
-    boots: { body: ['M18 6 H34 V36 Q50 38 55 46 V52 H18 Z', 'M17 52 H56 V57 H17 Z'] },
-    heels: { body: ['M8 42 Q20 30 34 37 L52 42 Q57 44 57 49 L40 49 L34 45 L20 50 L18 58 L14 58 L14 49 Z'] },
-    loafers: { body: ['M6 42 Q10 34 22 34 Q40 34 54 40 Q58 42 58 48 H6 Z', 'M5 48 H59 V53 H5 Z'], detail: ['M24 36 Q32 42 40 37'] },
-    sandals: { body: ['M6 48 H58 V53 H6 Z', 'M16 48 Q24 34 32 48', 'M34 48 Q42 36 50 48'] },
+    // Shoes are drawn side-on (heel left, toe right) with a sole in a separate tone so they read as shoes at 36 px.
+    sneakers: { body: ['M7 45 L7 31 Q7 26 12 26 L16 26 Q19 31 23 29 L26 24 Q30 23 31 26 L36 33 Q49 35 56 39 Q59 41 59 45 Z'],
+      sole: ['M5 44 H60 Q61 50 57 51 H8 Q5 51 5 47 Z'], tone: 'light',
+      detail: ['M27 30 L31 28', 'M30 33 L34 31', 'M14 41 Q26 34 40 40', 'M47 36 Q50 41 59 43', 'M5 48 H60'] },
+    loafers: { body: ['M6 45 Q6 37 12 36 Q20 35 27 37 Q38 34 50 37 Q58 40 59 45 Z'],
+      sole: ['M5 45 H60 V47 Q60 49 57 49 H18 V53 H7 V49 Q5 49 5 47 Z'], tone: 'dark',
+      detail: ['M30 37 Q40 33 52 39', 'M31 40 H45', 'M36 40 V42 H40 V40'] },
+    heels: { body: ['M9 25 Q12 24 13 27 Q22 37 38 39 Q52 40 58 44 Q60 46 58 48 L38 48 Q22 44 10 36 Z'],
+      sole: ['M9 35 L15 38.5 L14 58 L11 58 Z', 'M36 47 Q48 48.5 59 47 Q60 49 58 50.5 Q48 51 36 49.5 Z'], tone: 'dark',
+      detail: ['M13 27 Q20 33 26 36'] },
+    boots: { body: ['M14 16 H32 V37 Q46 38 54 42 Q59 44 59 48 H13 Z'],
+      sole: ['M12 48 H60 V51 Q60 53 58 53 H24 V57 H12 Z'], tone: 'dark',
+      detail: ['M22 17 Q22 29 29 36', 'M14 44 H59'] },
+    sandals: { body: ['M8 44 Q8 34 14 32 L26 30 L27 33 L16 35 Q12 37 12 44 Z', 'M34 44 Q38 34 50 36 Q56 38 56 44 H51 Q51 40 47 40 Q41 40 39 44 Z'],
+      sole: ['M5 47 Q4 44 9 44 H55 Q60 44 60 47 Q60 50 56 50 H9 Q5 50 5 47 Z', 'M7 50 H17 V55 H7 Z'], tone: 'tan' },
     bag: { body: ['M12 24 H52 L55 58 H9 Z'], detail: ['M24 24 Q24 10 32 10 Q40 10 40 24', 'M12 32 H52'] },
     scarf: { body: ['M24 6 H40 V34 L46 58 H36 L32 40 L28 58 H18 L24 34 Z'], detail: ['M19 54 H27', 'M37 54 H45'] },
     tie: { body: ['M28 6 H36 L38 13 L35 16 L40 50 L32 58 L24 50 L29 16 L26 13 Z'], detail: ['M26 13 H38'] },
@@ -90,6 +99,14 @@
     return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
   }
 
+  // Sole tone contrasts with the upper: a white sneaker gets a grey sole, a black boot a brown one.
+  function soleFor(tone, fill) {
+    var l = lum(fill);
+    if (tone === 'light') return l > 0.85 ? '#C9C4B8' : '#F4F1EA';
+    if (tone === 'tan') return l > 0.55 && l < 0.75 ? '#8A6A4A' : '#C9A27A';
+    return l < 0.2 ? '#6B4A33' : '#2A2522';
+  }
+
   // label is used as the accessible name; decorative=true hides it from screen readers (text is next to it).
   function svg(name, hex, size, decorative) {
     var s = SHAPES[shapeFor(name)];
@@ -99,6 +116,7 @@
     return '<svg class="garment" width="' + px + '" height="' + px + '" viewBox="0 0 64 64"' +
       (decorative ? ' aria-hidden="true"' : ' role="img" aria-label="' + String(name).replace(/"/g, '') + '"') + '>' +
       s.body.map(function (d) { return '<path d="' + d + '" fill="' + fill + '" stroke="' + line + '" stroke-width="1.5" stroke-linejoin="round"/>'; }).join('') +
+      (s.sole || []).map(function (d) { return '<path d="' + d + '" fill="' + soleFor(s.tone, fill) + '" stroke="' + line + '" stroke-width="1.2" stroke-linejoin="round"/>'; }).join('') +
       (s.detail || []).map(function (d) { return '<path d="' + d + '" fill="none" stroke="' + line + '" stroke-width="1.5" stroke-linecap="round"/>'; }).join('') +
       '</svg>';
   }

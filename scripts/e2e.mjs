@@ -162,6 +162,30 @@ for (const pth of paths) {
   if (errs.length) problems.push(`${pth}: console errors: ${errs.join(' | ')}`);
   await page.close();
 }
+// Site chrome: hamburger menu, search dialog and the contact form's client-side checks.
+{
+  const page = await ctx.newPage();
+  const errs = [];
+  page.on('pageerror', (e) => errs.push(e.message));
+  await page.goto(base + '/colors/sage-green/', { waitUntil: 'load' });
+  if (await page.isVisible('.site-head .nav')) problems.push('header: desktop nav visible at 390 px');
+  await page.click('.menu summary');
+  if (!(await page.isVisible('.menu__panel a[href="/tools/ring-size-converter/"]'))) problems.push('header: menu did not open');
+  await page.keyboard.press('Escape');
+  if (await page.isVisible('.menu__panel')) problems.push('header: Escape did not close the menu');
+  await page.click('[data-search-open]');
+  await page.fill('#search-q', 'ring size');
+  await page.waitForSelector('[data-search-results] a[href="/tools/ring-size-converter/"]', { timeout: 3000 }).catch(() => problems.push('search: no ring size result'));
+  await page.goto(base + '/search/?q=bridesmaid', { waitUntil: 'load' });
+  await page.waitForSelector('[data-search-page] a[href="/tools/bridesmaid-color-palette/"]', { timeout: 3000 }).catch(() => problems.push('search page: no result'));
+  const pin = await page.goto(base + '/seasons/soft-autumn/').then(() => page.getAttribute('.share__btn--pinterest', 'href'));
+  if (!/media=https%3A%2F%2Fsimplystylo.com%2Fpins%2F/.test(pin)) problems.push('share: Pinterest link does not use the page pin image');
+  await page.goto(base + '/contact/?topic=advertising', { waitUntil: 'load' });
+  if ((await page.inputValue('#cf-topic')) !== 'advertising') problems.push('contact: topic from link not preselected');
+  if (!(await page.inputValue('input[name=t]'))) problems.push('contact: timing field not set');
+  if (errs.length) problems.push('chrome: ' + errs.join(' | '));
+  await page.close();
+}
 await browser.close();
 server.kill();
 if (problems.length) { console.error(problems.join('\n')); process.exit(1); }

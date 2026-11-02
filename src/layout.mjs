@@ -2,6 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { TOOLS } from './tools.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 export const site = JSON.parse(fs.readFileSync(path.join(here, 'site.json'), 'utf8'));
@@ -30,6 +31,16 @@ export const ICONS = {
   star: '<path d="m12 3 2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6-4.5-4.2 6.1-.7z"/>',
   party: '<path d="M5 21l2-9h2l2 9M13 21l2-9h2l2 9"/><circle cx="8" cy="7" r="2.5"/><circle cx="16" cy="7" r="2.5"/>',
   dress: '<path d="M9 3h6l-1 4 3 3-2 2 4 9H5l4-9-2-2 3-3z"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+  close: '<path d="M6 6l12 12M18 6 6 18"/>',
+  share: '<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.9 7.6-4.6M8.2 13.1l7.6 4.6"/>',
+  pinterest: '<circle cx="12" cy="12" r="9"/><path d="M10.6 20.6 12.3 13"/><path d="M9.6 15.3c-1-.6-1.6-1.7-1.6-3.1 0-2.6 2-4.6 4.6-4.6 2.5 0 4.2 1.7 4.2 4 0 2.6-1.4 4.4-3.3 4.4-1 0-1.7-.6-1.6-1.6l.6-2.6"/>',
+  facebook: '<path d="M14.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4A21 21 0 0 0 15.4 4c-2.3 0-3.9 1.4-3.9 4v2.5H9v3h2.5V21"/>',
+  x: '<path d="M4 4h4.5L20 20h-4.5zM19.5 4l-6.3 7M10.8 13 4.5 20"/>',
+  whatsapp: '<path d="M4 20l1.2-3.9A8.5 8.5 0 1 1 8 18.9z"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l.8-1.6-2-1-1 .9a5 5 0 0 1-2.6-2.6l.9-1-1-2z"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>',
+  link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
   swatch: '<rect x="3" y="3" width="8" height="18" rx="2"/><path d="m11 7 5-3 4 7-9 6"/><circle cx="7" cy="17" r="1"/>'
 };
 export const icon = (name, size = 24) =>
@@ -59,6 +70,45 @@ ${controls}
 
 export const cards = (items) => `<ul class="cards">${items.map((t) => `<li class="card"><span class="card__icon">${icon(t.icon)}</span><h3><a href="${t.path}">${esc(t.name)}</a></h3><p>${esc(t.blurb)}</p></li>`).join('')}</ul>`;
 
+// ---------- site chrome: header, search, share bar, footer ----------
+// Share links are plain URLs (no third-party scripts); the native share sheet is offered where the browser has one.
+function shareBar(page, url) {
+  const pin = (page.body.match(/class="pin"><img src="([^"]+)"/) || [])[1] || site.ogImage.url;
+  const u = encodeURIComponent(url), t = encodeURIComponent(titleCase(page.title)), d = encodeURIComponent(page.description);
+  const links = [
+    ['pinterest', 'Pinterest', `https://www.pinterest.com/pin/create/button/?url=${u}&media=${encodeURIComponent(abs(pin))}&description=${d}`],
+    ['facebook', 'Facebook', `https://www.facebook.com/sharer/sharer.php?u=${u}`],
+    ['x', 'X', `https://x.com/intent/post?url=${u}&text=${t}`],
+    ['whatsapp', 'WhatsApp', `https://wa.me/?text=${t}%20${u}`],
+    ['mail', 'Email', `mailto:?subject=${t}&body=${d}%0A%0A${u}`]
+  ];
+  return `<section class="share no-print" aria-labelledby="share-h"><h2 id="share-h">Share this page</h2><div class="share__row">
+<button type="button" class="share__btn share__btn--native" data-share hidden>${icon('share', 20)}<span>Share</span></button>${links
+    .map(([k, n, href]) => `<a class="share__btn share__btn--${k}" href="${esc(href)}" target="_blank" rel="noopener nofollow" aria-label="Share on ${n}">${icon(k, 20)}<span>${n}</span></a>`).join('')}
+<button type="button" class="share__btn" data-share-copy aria-label="Copy link">${icon('link', 20)}<span>Copy link</span></button></div></section>`;
+}
+
+const GUIDES = [['Color guides', '/colors/'], ['Color seasons', '/seasons/'], ['Spring weddings', '/wedding-guest/spring/'], ['Summer weddings', '/wedding-guest/summer/'],
+  ['Fall weddings', '/wedding-guest/fall/'], ['Winter weddings', '/wedding-guest/winter/']];
+const COMPANY = [['About', '/about/'], ['Methodology', '/methodology/'], ['Contact and advertising', '/contact/'], ['Privacy', '/privacy/'], ['Terms', '/terms/']];
+const linkList = (items) => `<ul>${items.map(([n, p]) => `<li><a href="${p}">${esc(n)}</a></li>`).join('')}</ul>`;
+
+// Mobile menu is a <details> element, so it opens even before (or without) JavaScript.
+const header = (nav) => `<header class="site-head"><div class="wrap site-head__in"><a class="logo" href="/" aria-label="${site.brand} home">${MARK(34)}<span>Simply<i>Stylo</i></span></a>
+<nav class="nav" aria-label="Main">${nav}</nav>
+<div class="head-act"><a class="icon-btn" href="/search/" data-search-open aria-label="Search">${icon('search', 22)}</a>
+<details class="menu"><summary class="icon-btn" aria-label="Menu">${icon('menu', 22)}</summary><div class="menu__panel"><nav aria-label="Menu">
+<div><p class="menu__h">Tools</p>${linkList(TOOLS.map((t) => [t.name, t.path]))}<p><a class="menu__all" href="/tools/">All tools</a></p></div>
+<div><p class="menu__h">Guides</p>${linkList(GUIDES)}<p class="menu__h">${site.brand}</p>${linkList(COMPANY.slice(0, 3))}</div>
+</nav></div></details></div></div></header>
+<dialog class="search" id="search" aria-label="Search ${site.brand}"><form class="search__form" action="/search/" role="search">${icon('search', 22)}<label class="sr" for="search-q">Search tools and guides</label><input id="search-q" name="q" type="search" placeholder="Search tools and guides" autocomplete="off" enterkeyhint="search"><button type="button" class="icon-btn" data-search-close aria-label="Close search">${icon('close', 22)}</button></form><ul class="search__results" data-search-results></ul></dialog>`;
+
+const footer = () => `<footer class="site-foot"><div class="wrap"><div class="foot-grid">
+<section class="foot-col" aria-label="About ${site.brand}"><a class="logo" href="/" aria-label="${site.brand} home">${MARK(30)}<span>Simply<i>Stylo</i></span></a><p>${esc(site.tagline)} Free tools for colors, sizes, outfits and dresses. Everything runs in your browser: no sign-up, no uploads.</p><p><a class="btn btn--ghost" href="/contact/">Work with us</a></p></section>
+<nav class="foot-col" aria-labelledby="foot-tools"><h2 class="foot-h" id="foot-tools">Popular tools</h2>${linkList([...TOOLS.slice(0, 7).map((t) => [t.name, t.path]), ['All tools', '/tools/']])}</nav>
+<nav class="foot-col" aria-labelledby="foot-guides"><h2 class="foot-h" id="foot-guides">Guides and company</h2>${linkList([...GUIDES.slice(0, 2), ['Wedding guest outfits', '/wedding-guest/spring/'], ...COMPANY])}</nav>
+</div><div class="foot-bar"><p>© ${site.founded} ${site.brand}. All rights reserved.</p><p>Independent · No paid placement in tool results</p></div></div></footer>`;
+
 // ---------- page shell ----------
 const NAV = [['Tools', '/tools/'], ['Colors', '/colors/'], ['Seasons', '/seasons/'], ['Color Analysis', '/tools/color-analysis/']];
 
@@ -78,7 +128,7 @@ function graph(page, url, crumbs) {
   };
   const website = { '@type': 'WebSite', '@id': abs('/#website'), url: abs('/'), name: site.brand, description: site.description, publisher: { '@id': abs('/#org') }, inLanguage: site.lang };
   const webpage = {
-    '@type': page.type === 'collection' || page.type === 'home' ? 'CollectionPage' : page.type === 'about' ? 'AboutPage' : 'WebPage',
+    '@type': page.type === 'collection' || page.type === 'home' ? 'CollectionPage' : page.type === 'about' ? 'AboutPage' : page.type === 'contact' ? 'ContactPage' : 'WebPage',
     '@id': url + '#webpage', url, name: page.title, description: page.description, isPartOf: { '@id': abs('/#website') },
     inLanguage: site.lang, datePublished: page.datePublished, dateModified: page.dateModified,
     primaryImageOfPage: { '@type': 'ImageObject', url: abs(site.ogImage.url) },
@@ -145,16 +195,13 @@ ${page.noindex ? '<meta name="robots" content="noindex">' : '<meta name="robots"
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="site-head"><div class="wrap site-head__in"><a class="logo" href="/" aria-label="${site.brand} home">${MARK(34)}<span>Simply<i>Stylo</i></span></a><nav class="nav" aria-label="Main">${nav}</nav></div></header>
+${header(nav)}
 <main id="main"><div class="wrap">
 ${crumbHtml}
 ${body}
+${page.noindex || page.noshare ? '' : shareBar(page, url)}
 </div></main>
-<footer class="site-foot"><div class="wrap">
-<p><b>${site.brand}</b>: ${esc(site.tagline)} Free tools for colors, sizes and outfits. Everything runs in your browser; no sign-up.</p>
-<nav aria-label="Footer"><a href="/tools/">All tools</a><a href="/colors/">Color guides</a><a href="/about/">About</a><a href="/methodology/">Methodology</a><a href="/contact/">Contact</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav>
-<p>© ${site.founded} ${site.brand}. All rights reserved.</p>
-</div></footer>
+${footer()}
 ${scriptSrc ? `<script src="${scriptSrc}" defer></script>` : ''}
 </body>
 </html>
