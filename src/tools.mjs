@@ -1,5 +1,7 @@
 // Tool catalog: one record per live tool. Order = order on the home and tools pages.
 export const TOOLS = [
+  { id: 'dress-designer', name: 'Dress Designer', path: '/tools/dress-designer/', icon: 'dress',
+    blurb: 'Design your own dress: neckline, sleeves, waist, skirt, length, color and print, or your own fabric photo. Download it as an image.' },
   { id: 'color-combination', name: 'Color Combination Finder', path: '/tools/color-combination/', icon: 'palette',
     blurb: 'Pick any clothing color and see the neutrals, accents and color-wheel combinations that go with it.' },
   { id: 'size-converter', name: 'International Size Converter', path: '/tools/size-converter/', icon: 'ruler',
@@ -42,6 +44,7 @@ export const BUNDLES = {
   'selfie-analysis': ['src/ui/common.js', 'src/lib/color-core.js', 'src/lib/season-core.js', 'src/lib/selfie-core.js', 'src/ui/color-analysis.js', 'src/ui/selfie-analysis.js'],
   'wardrobe-colors': ['src/ui/common.js', 'src/lib/color-core.js', 'src/lib/season-core.js', 'src/lib/palette-core.js', 'src/lib/wardrobe-core.js', 'src/ui/wardrobe-colors.js'],
   'packing-list': ['src/ui/common.js', 'src/lib/packing-core.js', 'src/lib/garments.js', 'src/ui/packing-list.js'],
+  'dress-designer': ['src/ui/common.js', 'src/lib/color-core.js', 'src/lib/season-core.js', 'src/lib/palette-core.js', 'src/lib/dress-core.js', 'src/ui/dress-designer.js'],
   'dress-code': ['src/ui/common.js', 'src/lib/dresscode-core.js', 'src/lib/garments.js', 'src/ui/dress-code.js']
 };
 

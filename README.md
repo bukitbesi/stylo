@@ -18,11 +18,12 @@ Static site, zero npm dependencies, hosted on Cloudflare Workers Static Assets (
 | Wardrobe Color Checker | `/tools/wardrobe-color-checker/` | `src/lib/wardrobe-core.js` | `tests/wardrobe.test.mjs` |
 | Packing List Generator | `/tools/packing-list-generator/` | `src/lib/packing-core.js` | `tests/packing.test.mjs` |
 | Dress Code Guide | `/tools/dress-code-guide/` | `src/lib/dresscode-core.js` | `tests/dresscode.test.mjs` |
+| Dress Designer | `/tools/dress-designer/` | `src/lib/dress-core.js` | `tests/dress.test.mjs` |
 | 14 color guides | `/colors/<color>/` | color engine + `src/data/colors.mjs` | built-in validator |
 | 12 color seasons | `/seasons/<season>/` | season engine + `src/data/seasons.mjs` | built-in validator |
 | Garment illustrations | used by outfit + capsule results | `src/lib/garments.js` | `tests/garments.test.mjs` |
 
-Plus home, tools, colors and seasons indexes, about, methodology, contact, privacy, terms and a 404 page (49 pages).
+Plus home, tools, colors and seasons indexes, about, methodology, contact, privacy, terms and a 404 page (50 pages).
 Every season and color guide has a 1000×1500 Pinterest image in `static/pins/` (shown on the page, lazy-loaded).
 
 ## Why no Astro

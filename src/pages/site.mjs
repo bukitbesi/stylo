@@ -112,6 +112,8 @@ function methodology() {
 <p>${esc(PK.FACTS.rules.join(' '))} Layers follow the weather; swimwear is added for beach trips and hot weather.</p>
 <h2>Dress code guide</h2>
 <p>Garments follow the ${esc(DC.FACTS.source)}. Where British and American usage differ (white tie and black tie for women, "lounge suit"), the page notes both.</p>
+<h2>Dress designer</h2>
+<p>The dress is drawn as a vector image from the chosen neckline, sleeves, waist seam, skirt shape and length. Body shape suggestions add up the shapes each chosen element is commonly recommended for (for example, A-line skirts for triangle and spoon shapes, V-necks for top hourglass and inverted triangle shapes); this is styling guidance, not a rule. The suggested dress code follows length, neckline, skirt and fabric formality. A fabric photo is cropped to a small tile in the browser and never uploaded.</p>
 <h2>Testing</h2>
 <p>Every engine has automated tests whose worked examples match the numbers quoted in our FAQs, and every page is checked for accessibility, mobile layout and speed before publishing.</p>
 </div>`;

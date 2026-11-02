@@ -31,6 +31,8 @@ const PKCore = require('../lib/packing-core.js');
 const PK = require('../ui/packing-list.js');
 const DCore = require('../lib/dresscode-core.js');
 const DC = require('../ui/dress-code.js');
+const DDCore = require('../lib/dress-core.js');
+const DD = require('../ui/dress-designer.js');
 
 const PUBLISHED = '2026-11-01';
 const MODIFIED = site.dateModified;
@@ -630,6 +632,55 @@ ${relatedBlock('dress-code')}`;
   };
 }
 
+// ---------- Dress Designer ----------
+function dressDesigner() {
+  const def = DDCore.DEFAULT, adv = DDCore.advise(def);
+  const faq = [
+    ['Can I design my own dress online for free?', 'Yes. Choose a neckline, sleeves, waist, skirt shape, length, color and print (or upload your own fabric photo), and the dress is drawn live on a dress form. You can download it as a PNG image or copy a link to share it. No sign-up is needed.'],
+    ['Can I use my own fabric or print?', 'Yes. Choose "My photo / fabric" as the fabric and pick a photo of a print or fabric. It is cropped to a small square tile and repeated across the dress inside your browser; it is not uploaded and not included in shared links.'],
+    ['Which dress shape flatters my body?', 'As a guide: A-line and fit-and-flare skirts balance fuller hips; V-necks balance a fuller bust; wrap and natural-waist styles define the waist; off-shoulder and boat necklines widen narrow shoulders. The designer lists the body shapes each design suits; find your shape with the body shape calculator.'],
+    ['What is the difference between A-line and fit-and-flare?', 'An A-line skirt widens gradually from the waist like the letter A. A fit-and-flare skirt is fitted through the bodice and flares out more fully from the waist, often with gathers or pleats, so it creates a stronger waist.'],
+    ['What dress length is best for a wedding guest?', 'Midi and knee-length dresses suit most day and cocktail weddings; floor-length gowns suit black tie evening weddings. Check the invitation\'s dress code, and avoid white unless the couple asks for it.'],
+    ['Can I take my design to a dressmaker?', 'Yes. Download the PNG and the design summary, and bring them with your measurements and fabric. A dressmaker or tailor can turn the sketch into a pattern; the drawing shows style lines, not exact measurements.'],
+    ['Why is there a "Designed on SimplyStylo.com" line on the image?', 'The downloaded image carries a small credit so friends know where the designer is when you share it. The drawing itself is yours to use for personal projects.']
+  ];
+  const body = `<p class="eyebrow">Free design tool</p>
+<h1>Dress Designer: Design Your Own Dress Online</h1>
+<p class="answer">Design your own dress for free: choose from 8 necklines, 7 sleeves, 3 waistlines, 7 skirt shapes and 4 lengths, pick any color and print or use your own fabric photo, then download it as an image. The designer also tells you which body shapes it flatters and where to wear it.</p>
+${verifiedLine(DDCore.FACTS.verified)}
+<h2>Start from a look</h2>
+${DD.gallery()}
+${toolShell('dress-designer', 'Dress designer', DD.controls(def), DD.result(def), '<button type="button" class="btn" data-download>Download PNG</button>')}
+<figure class="pin"><img src="/pins/dress-designer.jpg" width="1000" height="1500" loading="lazy" decoding="async" alt="Six dress designs made with the SimplyStylo dress designer: wedding guest midi, bridal gown, prom ball gown, office sheath, 1950s swing dress and boho maxi"><figcaption>Save this to Pinterest to come back to the designer.</figcaption></figure>
+<h2>How the dress designer works</h2>
+${steps([
+    '<b>Pick the style lines:</b> neckline, sleeves, waist seam, skirt shape and length. The dress is redrawn on the dress form as you choose.',
+    '<b>Choose the fabric:</b> any main color, a pattern color for dots, stripes, gingham or florals, or upload your own fabric photo.',
+    '<b>Read the advice:</b> which body shapes the design suits, which dress code it fits and which color seasons its color belongs to.',
+    '<b>Save it:</b> download a PNG to keep, pin or take to a dressmaker, or copy a link that reopens the same design.'])}
+<h2>Neckline guide</h2>
+${table('Necklines and what they do', ['Neckline', 'Effect', 'Often suits'], Object.values(DDCore.OPTIONS.neckline).map((o) => [esc(o.name), esc(o.tip), esc(o.suits.map((s) => DDCore.SHAPE_NAMES[s]).join(', '))]))}
+<h2>Skirt shape guide</h2>
+${table('Skirt shapes and what they do', ['Skirt', 'Effect', 'Often suits'], Object.values(DDCore.OPTIONS.skirt).map((o) => [esc(o.name), esc(o.tip), esc(o.suits.map((s) => DDCore.SHAPE_NAMES[s]).join(', '))]))}
+${callout('Body shape suggestions are general styling guidance. Wear what you love: fit, fabric and confidence matter more than any rule.')}
+${sources([
+    ['Neckline (Wikipedia)', 'https://en.wikipedia.org/wiki/Neckline', 'neckline names and shapes'],
+    ['A-line (Wikipedia)', 'https://en.wikipedia.org/wiki/A-line_(clothing)'],
+    ['Female body shape and the FFIT method (Wikipedia)', 'https://en.wikipedia.org/wiki/Female_body_shape', 'body shape names used in the advice'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('dress-designer')}`;
+  return {
+    path: '/tools/dress-designer/', type: 'tool', title: 'Dress Designer: Design Your Own Dress Online Free', crumb: 'Dress Designer',
+    crumbs: [['Tools', '/tools/']],
+    description: 'Design your own dress online free: neckline, sleeves, waist, skirt, length, color and print or your own fabric photo. Download as PNG, no sign-up.',
+    bundle: 'dress-designer', faq, body, datePublished: '2026-11-02', dateModified: MODIFIED,
+    app: { name: tool('dress-designer').name, description: tool('dress-designer').blurb, features: ['8 necklines, 7 sleeves, 3 waists, 7 skirts, 4 lengths', 'Any color, 5 prints or your own fabric photo', 'Body shape and dress code advice', 'PNG download', 'Shareable design links'] },
+    about: { '@type': 'Thing', name: 'Dress design' },
+    llms: `Dress Designer: free online dress designer drawing a dress on a dress form from neckline (${Object.values(DDCore.OPTIONS.neckline).map((o) => o.name).join(', ')}), sleeves, waist, skirt (${Object.values(DDCore.OPTIONS.skirt).map((o) => o.name).join(', ')}), length, color and print or the user's own fabric photo (processed on device). Gives flattering body shapes, dress code and color season; PNG download. Example: ${DDCore.describe(def)} suits ${adv.shapes.map((s) => s.name).join(', ')}.`
+  };
+}
+
 function toolsIndex() {
   const body = `<p class="eyebrow">All tools</p>
 <h1>Free Style Tools</h1>
@@ -646,5 +697,5 @@ ${cards(TOOLS)}
   };
 }
 
-export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), selfieAnalysis(), wardrobeColors(), packingList(), dressCode(), toolsIndex()];
+export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), selfieAnalysis(), wardrobeColors(), packingList(), dressCode(), dressDesigner(), toolsIndex()];
 export { icon };

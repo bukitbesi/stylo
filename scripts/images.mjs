@@ -12,6 +12,7 @@ import { COLOR_GUIDES } from '../src/data/colors.mjs';
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
 const SE = require('../src/lib/season-core.js');
+const DR = require('../src/lib/dress-core.js');
 const C = require('../src/lib/color-core.js');
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.join(root, 'static');
@@ -59,6 +60,12 @@ function colorPin(slug) {
 <ol style="margin:0;padding-left:34px;font:400 29px/1.45 ${sans};color:#2F2C28">${g.outfits.map((o) => `<li style="margin-bottom:10px">${o}</li>`).join('')}</ol>`, `/colors/${slug}/`);
 }
 
+function dressPin() {
+  return frame(`<div style="font:600 78px/1.05 ${serif};margin:52px 0 12px;letter-spacing:-2px">Design Your<br>Own Dress</div>
+<div style="font:400 30px/1.35 ${sans};color:#4E4B46;margin-bottom:30px">Free online dress designer: necklines, sleeves, skirts, colors and your own fabric photo</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">${DR.PRESETS.map((p) => `<div style="background:#FFFFFF;border-radius:20px;padding:8px;text-align:center;font:500 22px/1.2 ${sans}">${DR.svg(p.d, { id: 'pin-' + p.id, width: 260 })}<div style="margin:2px 0 8px">${p.name}</div></div>`).join('')}</div>`, '/tools/dress-designer/');
+}
+
 const browser = await chromium.launch();
 const shot = async (html, w, h, file, type = 'png') => {
   const page = await browser.newPage({ viewport: { width: w, height: h } });
@@ -78,6 +85,7 @@ if (only !== 'pins') {
 if (only !== 'icons') {
   for (const id of Object.keys(SE.SEASONS)) await shot(seasonPin(id), 1000, 1500, `pins/season-${id}.jpg`, 'jpeg');
   for (const slug of Object.keys(COLOR_GUIDES)) await shot(colorPin(slug), 1000, 1500, `pins/color-${slug}.jpg`, 'jpeg');
-  console.log(`wrote ${Object.keys(SE.SEASONS).length + Object.keys(COLOR_GUIDES).length} Pinterest images`);
+  await shot(dressPin(), 1000, 1500, 'pins/dress-designer.jpg', 'jpeg');
+  console.log(`wrote ${Object.keys(SE.SEASONS).length + Object.keys(COLOR_GUIDES).length + 1} Pinterest images`);
 }
 await browser.close();

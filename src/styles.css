@@ -138,3 +138,9 @@ caption{text-align:left;padding:10px 12px;font-weight:600;caption-side:top}
 .count .dot{width:22px;height:22px}
 .selfie{margin:12px 0}
 .selfie canvas{max-width:100%;height:auto;border-radius:var(--r-md);cursor:crosshair;display:block;touch-action:manipulation}
+.dress-stage{background:#F5F1E9;border-radius:var(--r-lg);padding:8px;flex:none;border:1px solid #DED8CE}
+.dress-stage svg{display:block;max-width:100%;height:auto}
+.looks{list-style:none;padding:0;margin:12px 0;display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+.looks a{display:flex;flex-direction:column;align-items:center;gap:4px;background:#F5F1E9;color:#171717;border:1px solid #DED8CE;border-radius:var(--r-md);padding:8px;text-decoration:none;font-size:.85rem;text-align:center}
+.looks a:hover{border-color:#171717}
+.looks svg{max-width:100%;height:auto}

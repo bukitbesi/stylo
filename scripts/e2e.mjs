@@ -86,6 +86,21 @@ const interactions = {
     await p.selectOption('#dc-s', 'menswear');
     return /Black bow tie/.test(await p.textContent('[data-result]')) && /d=black-tie/.test(p.url());
   },
+  '/tools/dress-designer/': async (p) => {
+    await p.selectOption('#dd-n', 'sweetheart');
+    await p.selectOption('#dd-k', 'mermaid');
+    const a = /Midi mermaid dress with a sweetheart/.test(await p.textContent('[data-result]')) && /n=sweetheart/.test(p.url());
+    await p.click('[data-preset=prom]');
+    const b = /Maxi \/ floor length fit-and-flare dress with a off-shoulder|off-shoulder/.test(await p.textContent('[data-result]'));
+    await p.selectOption('#dd-p', 'photo');
+    await p.setInputFiles('#dd-photo', path.join(root, 'static/og.png'));
+    await p.waitForFunction(() => /data:image\/jpeg/.test(document.querySelector('[data-stage]').innerHTML), null, { timeout: 5000 });
+    const [dl] = await Promise.all([p.waitForEvent('download', { timeout: 5000 }), p.click('[data-download]')]);
+    const ok = dl.suggestedFilename() === 'simplystylo-dress.png';
+    // The photo is not part of the shared link, so restore the plain design before the link check.
+    await p.selectOption('#dd-p', 'solid');
+    return a && b && ok;
+  },
   '/tools/outfit-generator/': async (p) => {
     const before = await p.textContent('[data-result]');
     await p.selectOption('#og-o', 'formal');
