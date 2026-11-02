@@ -25,8 +25,11 @@ fs.mkdirSync(path.join(dist, 'assets/js'), { recursive: true });
 fs.cpSync(path.join(root, 'static'), dist, { recursive: true });
 
 // Script bundles: concatenated in dependency order, light whitespace/comment trim, hashed filename.
+// src/ui/site.js (menu, search, share) leads every bundle; pages without a tool get it alone.
 const bundleSrc = {};
-for (const [name, files] of Object.entries(BUNDLES)) {
+const ALL = { site: [], contact: ['src/ui/contact.js'], ...BUNDLES };
+for (const [name, list] of Object.entries(ALL)) {
+  const files = ['src/ui/site.js', ...list];
   const code = files.map((f) => fs.readFileSync(path.join(root, f), 'utf8')
     .replace(/^\s*\/\/.*$/gm, '').replace(/\n\s*\n/g, '\n')).join('\n');
   const file = `/assets/js/${name}.${hash(code)}.js`;
@@ -40,7 +43,7 @@ const manifest = {};
 for (const page of pages) {
   if (seen.has(page.path)) throw new Error('Duplicate path ' + page.path);
   seen.add(page.path);
-  const html = render(page, page.bundle ? bundleSrc[page.bundle] : '');
+  const html = render(page, bundleSrc[page.bundle || 'site']);
   const out = page.path.endsWith('.html') ? page.path : page.path + 'index.html';
   fs.mkdirSync(path.dirname(path.join(dist, out)), { recursive: true });
   fs.writeFileSync(path.join(dist, out), html);
@@ -52,6 +55,12 @@ for (const page of pages) {
 }
 
 const listed = pages.filter((p) => !p.nositemap && !p.noindex);
+
+// Site search index: [title, path, kind, description], fetched by site.js the first time search opens.
+const kind = (p) => (p.app ? 'Tool' : p.path.startsWith('/colors/') ? 'Color guide' : p.path.startsWith('/seasons/') ? 'Color season'
+  : p.path.startsWith('/wedding-guest/') ? 'Wedding guide' : 'Page');
+fs.writeFileSync(path.join(dist, 'search-index.json'), JSON.stringify(listed.filter((p) => p.path !== '/')
+  .map((p) => [p.title, p.path, kind(p), p.description])));
 fs.writeFileSync(path.join(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${listed.map((p) => `<url><loc>${abs(p.path)}</loc><lastmod>${p.dateModified}</lastmod></url>`).join('\n')}
