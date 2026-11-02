@@ -147,3 +147,6 @@ caption{text-align:left;padding:10px 12px;font-weight:600;caption-side:top}
 .lineup{background:#F5F1E9;border:1px solid #DED8CE;border-radius:var(--r-lg);padding:8px;margin:12px 0}
 .lineup svg{display:block;width:100%;height:auto}
 .list-check li span{flex:1}
+ul.chips{list-style:none;padding:0;margin:12px 0}
+.looks--wide{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.looks--wide span{line-height:1.35}
