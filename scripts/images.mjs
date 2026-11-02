@@ -13,6 +13,8 @@ const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
 const SE = require('../src/lib/season-core.js');
 const DR = require('../src/lib/dress-core.js');
+const WG = require('../src/lib/wedguest-core.js');
+const BM = require('../src/lib/bridesmaid-core.js');
 const C = require('../src/lib/color-core.js');
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.join(root, 'static');
@@ -66,6 +68,43 @@ function dressPin() {
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">${DR.PRESETS.map((p) => `<div style="background:#FFFFFF;border-radius:20px;padding:8px;text-align:center;font:500 22px/1.2 ${sans}">${DR.svg(p.d, { id: 'pin-' + p.id, width: 260 })}<div style="margin:2px 0 8px">${p.name}</div></div>`).join('')}</div>`, '/tools/dress-designer/');
 }
 
+const lookGrid = (presets, url, title, sub) => frame(`<div style="font:600 74px/1.05 ${serif};margin:48px 0 12px;letter-spacing:-2px">${title}</div>
+<div style="font:400 30px/1.35 ${sans};color:#4E4B46;margin-bottom:28px">${sub}</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">${presets.map((p) => `<div style="background:#FFFFFF;border-radius:20px;padding:8px;text-align:center;font:500 22px/1.2 ${sans}">${DR.svg(p.d, { id: 'pin-' + p.id, width: 260 })}<div style="margin:2px 0 8px">${p.name}</div></div>`).join('')}</div>`, url);
+
+const SEASON_LOOKS = [['black-tie', 'evening', 'ballroom', 'Black tie'], ['cocktail', 'evening', 'garden', 'Cocktail'], ['smart-casual', 'day', 'barn', 'Dressy casual'], ['casual', 'day', 'beach', 'Beach']];
+function weddingSeasonPin(season) {
+  const N = season[0].toUpperCase() + season.slice(1), pal = WG.PALETTES[season];
+  return frame(`<div style="font:600 76px/1.05 ${serif};margin:48px 0 24px;letter-spacing:-2px">What to Wear to a<br>${N} Wedding</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">${SEASON_LOOKS.map(([code, time, venue, label], i) => {
+    const p = WG.plan({ code, time, season, venue, color: i });
+    return `<div style="background:#FFFFFF;border-radius:18px;padding:6px;text-align:center;font:500 21px/1.2 ${sans}">${DR.svg(p.dress, { id: 'wp-' + season + i, width: 196 })}<div style="margin:0 0 8px">${label}</div></div>`;
+  }).join('')}</div>
+<div style="font:600 30px/1 ${sans};margin:34px 0 14px">Day colors</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">${pal.day.map((c) => chip('#' + c[1], c[0], 120)).join('')}</div>
+<div style="font:600 30px/1 ${sans};margin:28px 0 14px">Evening colors</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">${pal.evening.map((c) => chip('#' + c[1], c[0], 120)).join('')}</div>`, `/wedding-guest/${season}/`);
+}
+
+function guestHubPin() {
+  return frame(`<div style="font:600 76px/1.05 ${serif};margin:48px 0 14px;letter-spacing:-2px">What to Wear<br>to a Wedding</div>
+<div style="font:400 30px/1.35 ${sans};color:#4E4B46;margin-bottom:26px">Guest outfits for every season, dress code and venue</div>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px">${['spring', 'summer', 'fall', 'winter'].map((s, i) => {
+    const p = WG.plan({ code: i % 2 ? 'cocktail' : 'black-tie', time: 'evening', season: s, venue: 'ballroom', color: 0 });
+    return `<div style="background:#FFFFFF;border-radius:20px;padding:8px;text-align:center;font:600 26px/1.2 ${serif}">${DR.svg(p.dress, { id: 'hub' + s, width: 300 }).replace('height="510"', 'height="420" preserveAspectRatio="xMidYMin slice"')}<div style="margin:2px 0 8px">${s[0].toUpperCase() + s.slice(1)}</div></div>`;
+  }).join('')}</div>`, '/tools/wedding-guest-outfit/');
+}
+
+function bridesmaidPin() {
+  const rows = [['#9CAF94', 'ombre', 'classic', 'Sage ombre'], ['#6D1F2E', 'mix', 'jewel', 'Jewel mix'], ['#E8B9B0', 'match', 'pastel', 'Blush, mixed necklines']];
+  return frame(`<div style="font:600 70px/1.05 ${serif};margin:48px 0 26px;letter-spacing:-2px">Bridesmaid Color<br>Palette Ideas</div>
+${rows.map(([c, style, vibe, label], r) => {
+    const p = BM.plan({ color: c, style, vibe, count: 5 });
+    return `<div style="font:600 28px/1 ${sans};margin:10px 0 8px">${label}</div><div style="display:flex;gap:4px;background:#FFFFFF;border-radius:18px;padding:6px 10px;margin-bottom:14px">${p.maids.map((m, i) =>
+      DR.svg({ n: m.neckline, s: 'none', w: 'natural', k: 'aline', l: 'maxi', p: 'solid', c: m.hex.slice(1), a: 'FAFAF7', b: '' }, { id: 'bmp' + r + i, width: 168 }).replace('height="286"', 'height="250" preserveAspectRatio="xMidYMin slice"')).join('')}</div>`;
+  }).join('')}`, '/tools/bridesmaid-color-palette/');
+}
+
 const browser = await chromium.launch();
 const shot = async (html, w, h, file, type = 'png') => {
   const page = await browser.newPage({ viewport: { width: w, height: h } });
@@ -86,6 +125,11 @@ if (only !== 'icons') {
   for (const id of Object.keys(SE.SEASONS)) await shot(seasonPin(id), 1000, 1500, `pins/season-${id}.jpg`, 'jpeg');
   for (const slug of Object.keys(COLOR_GUIDES)) await shot(colorPin(slug), 1000, 1500, `pins/color-${slug}.jpg`, 'jpeg');
   await shot(dressPin(), 1000, 1500, 'pins/dress-designer.jpg', 'jpeg');
-  console.log(`wrote ${Object.keys(SE.SEASONS).length + Object.keys(COLOR_GUIDES).length + 1} Pinterest images`);
+  await shot(lookGrid(DR.WEDDING_PRESETS, '/tools/wedding-dress-designer/', 'Design Your<br>Wedding Dress', 'Silhouettes, lace, trains and veils: free online wedding dress designer'), 1000, 1500, 'pins/wedding-dress-designer.jpg', 'jpeg');
+  await shot(lookGrid(DR.PROM_PRESETS, '/tools/prom-dress-designer/', 'Design Your<br>Prom Dress', 'Mermaid, ball gown or slit: free online prom dress designer'), 1000, 1500, 'pins/prom-dress-designer.jpg', 'jpeg');
+  await shot(guestHubPin(), 1000, 1500, 'pins/wedding-guest-outfit.jpg', 'jpeg');
+  await shot(bridesmaidPin(), 1000, 1500, 'pins/bridesmaid-color-palette.jpg', 'jpeg');
+  for (const s of ['spring', 'summer', 'fall', 'winter']) await shot(weddingSeasonPin(s), 1000, 1500, `pins/wedding-guest-${s}.jpg`, 'jpeg');
+  console.log(`wrote ${Object.keys(SE.SEASONS).length + Object.keys(COLOR_GUIDES).length + 9} Pinterest images`);
 }
 await browser.close();

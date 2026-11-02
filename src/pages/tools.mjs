@@ -707,6 +707,7 @@ ${verifiedLine(DDCore.FACTS.verified)}
 <h2>Start from a bridal look</h2>
 ${DD.gallery('wedding')}
 ${variantShell('wedding', 'Wedding dress designer', d0, '<button type="button" class="btn" data-download>Download PNG</button>')}
+<figure class="pin"><img src="/pins/wedding-dress-designer.jpg" width="1000" height="1500" loading="lazy" decoding="async" alt="Six wedding dress designs: classic ball gown, lace mermaid, boho lace A-line, minimalist sheath, tea-length retro and off-shoulder princess"><figcaption>Save this to your wedding board.</figcaption></figure>
 <h2>How the wedding dress designer works</h2>
 ${steps([
     '<b>Choose the silhouette:</b> skirt shape (A-line, ball gown, mermaid, sheath), length and waist.',
@@ -753,6 +754,7 @@ ${verifiedLine(DDCore.FACTS.verified)}
 <h2>Start from a prom look</h2>
 ${DD.gallery('prom')}
 ${variantShell('prom', 'Prom dress designer', d0, '<button type="button" class="btn" data-download>Download PNG</button>')}
+<figure class="pin"><img src="/pins/prom-dress-designer.jpg" width="1000" height="1500" loading="lazy" decoding="async" alt="Six prom dress designs: sequin mermaid, red carpet slit, satin ball gown, starry night, blush princess and party mini"><figcaption>Save this prom inspiration to Pinterest.</figcaption></figure>
 <h2>How the prom dress designer works</h2>
 ${steps([
     '<b>Pick a look</b> above or start from scratch.',
@@ -800,12 +802,15 @@ function weddingGuest() {
 <p class="answer">To choose a wedding guest outfit, match the invitation's dress code, then adjust for the time, season and venue, and avoid white, ivory, cream and beige. Example: ${esc(ex)} Set your wedding's details below for a complete outfit, colors and etiquette.</p>
 ${verifiedLine(WGCore.FACTS.verified)}
 ${toolShell('wedding-guest', 'Wedding guest outfit finder', WG.controls(WG.norm(WG.DEFAULT)), WG.result(WG.norm(WG.DEFAULT)))}
+<figure class="pin"><img src="/pins/wedding-guest-outfit.jpg" width="1000" height="1500" loading="lazy" decoding="async" alt="What to wear to a wedding: guest dresses for spring, summer, fall and winter"><figcaption>Save this wedding guest guide.</figcaption></figure>
 <h2>How the wedding guest outfit finder works</h2>
 ${steps([
     '<b>Dress code</b> sets the formality and the main pieces, following the Emily Post Institute attire guide.',
     '<b>Time and season</b> choose the colors: lighter by day and in spring and summer, deeper in the evening and in fall and winter.',
     '<b>Venue</b> chooses the shoes and layers: block heels on grass, flat sandals on sand, a wrap for church.',
     '<b>Etiquette</b> comes from wedding guides: no white or near-white, and the couple\'s request always wins.'])}
+<h2>Wedding guest guides by season</h2>
+<ul class="chips">${['spring', 'summer', 'fall', 'winter'].map((s) => `<li><a class="chip" href="/wedding-guest/${s}/"><span class="dot" style="background:#${WGCore.PALETTES[s].evening[0][1]}"></span>What to wear to a ${s} wedding</a></li>`).join('')}</ul>
 <h2>Wedding guest dress codes</h2>
 ${table('What each wedding dress code means for guests', ['Dress code', 'Womenswear', 'Menswear'], Object.keys(WGCore.CODES).map((c) => [esc(WGCore.CODES[c]),
     esc(WGCore.plan({ code: c, style: 'womenswear' }).pieces[0][0]), esc(WGCore.plan({ code: c, style: 'menswear' }).pieces.slice(0, 2).map((x) => x[0]).join(' + '))]))}
@@ -848,6 +853,7 @@ function bridesmaidPalette() {
 <p class="answer">Pick one wedding color and the generator dresses every bridesmaid: ombre from light to dark, a mix-and-match palette, or one matching color in different necklines, with groomsmen suit and tie colors. Example: ${esc(ex)} Download the lineup as an image to share.</p>
 ${verifiedLine(BPCore.FACTS.verified)}
 ${toolShell('bridesmaid-palette', 'Bridesmaid color palette generator', BP.controls(BP.norm(BP.DEFAULT)), BP.result(BP.norm(BP.DEFAULT)), '<button type="button" class="btn" data-download>Download PNG</button>')}
+<figure class="pin"><img src="/pins/bridesmaid-color-palette.jpg" width="1000" height="1500" loading="lazy" decoding="async" alt="Bridesmaid color palette ideas: sage ombre, jewel mix and blush with mixed necklines"><figcaption>Save these bridesmaid palettes to your wedding board.</figcaption></figure>
 <h2>How the bridesmaid palette generator works</h2>
 ${steps([
     '<b>Main color:</b> any color, adjusted to the mood you choose (pastel, jewel, earthy or exactly as chosen).',
