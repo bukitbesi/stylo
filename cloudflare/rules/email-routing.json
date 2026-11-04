@@ -1,0 +1,50 @@
+{
+  "description": "Cloudflare Email Routing DNS records and forwarding rule for contact@simplystylo.com",
+  "dns_records": [
+    {
+      "type": "MX",
+      "name": "simplystylo.com",
+      "content": "route1.mx.cloudflare.net",
+      "priority": 13,
+      "ttl": "auto"
+    },
+    {
+      "type": "MX",
+      "name": "simplystylo.com",
+      "content": "route2.mx.cloudflare.net",
+      "priority": 56,
+      "ttl": "auto"
+    },
+    {
+      "type": "MX",
+      "name": "simplystylo.com",
+      "content": "route3.mx.cloudflare.net",
+      "priority": 94,
+      "ttl": "auto"
+    },
+    {
+      "type": "TXT",
+      "name": "simplystylo.com",
+      "content": "v=spf1 include:_spf.mx.cloudflare.net ~all",
+      "ttl": "auto"
+    }
+  ],
+  "routing_rules": [
+    {
+      "match": {
+        "type": "literal",
+        "field": "to",
+        "value": "contact@simplystylo.com"
+      },
+      "actions": [
+        {
+          "type": "forward",
+          "value": ["YOUR_PERSONAL_OR_WORK_EMAIL@domain.com"]
+        }
+      ],
+      "enabled": true,
+      "name": "Forward contact form inquiries"
+    }
+  ],
+  "worker_secret_setup": "Run: npx wrangler secret put CONTACT_TO (and enter YOUR_PERSONAL_OR_WORK_EMAIL@domain.com)"
+}

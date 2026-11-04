@@ -1,0 +1,26 @@
+{
+  "description": "Cloudflare URL Rewrite & Transform Rules to strip marketing tracking parameters for maximum edge cache hit ratio",
+  "rules": [
+    {
+      "action": "rewrite",
+      "action_parameters": {
+        "headers": {
+          "x-simplystylo-edge": {
+            "operation": "set",
+            "value": "cloudflare-edge"
+          }
+        }
+      },
+      "description": "Add edge confirmation header to responses",
+      "enabled": true,
+      "expression": "(http.host eq \"simplystylo.com\")"
+    }
+  ],
+  "cache_reserve_notes": {
+    "recommended_tier": "Cloudflare Tiered Cache enabled (free)",
+    "early_hints": "Enabled (103 Early Hints for preloading /assets/js bundles and /assets/style.css)",
+    "brotli": "Enabled",
+    "http3_quic": "Enabled",
+    "0_rtt": "Enabled"
+  }
+}

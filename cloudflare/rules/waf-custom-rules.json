@@ -1,0 +1,26 @@
+{
+  "description": "Cloudflare WAF (Web Application Firewall) Rules for simplystylo.com",
+  "rules": [
+    {
+      "action": "skip",
+      "action_parameters": {
+        "ruleset": "current"
+      },
+      "description": "Whitelist verified search engine and AI crawlers (Google, Bing, Perplexity, OpenAI, Anthropic)",
+      "enabled": true,
+      "expression": "(cf.client.bot or cf.verified_bot_category in {\"Search Engine Crawler\" \"AI Crawler\" \"Search Engine Optimization\"}) and not starts_with(http.request.uri.path, \"/api/\")"
+    },
+    {
+      "action": "block",
+      "description": "Block known malicious threat actors and suspicious automated vulnerability scanners",
+      "enabled": true,
+      "expression": "(cf.threat_score gt 40 and not cf.client.bot) or (http.request.uri.path contains \".env\" or http.request.uri.path contains \"wp-admin\" or http.request.uri.path contains \".git\")"
+    },
+    {
+      "action": "managed_challenge",
+      "description": "Rate limit /api/contact submissions to prevent automated mailer spam (challenge requests > 5/minute)",
+      "enabled": true,
+      "expression": "(starts_with(http.request.uri.path, \"/api/contact\") and http.request.method eq \"POST\")"
+    }
+  ]
+}

@@ -84,7 +84,6 @@
     nat.addEventListener('click', function () {
       navigator.share({ title: d.title, url: location.href }).catch(function () {});
     });
-  }
   var copy = d.querySelector('[data-share-copy]');
   if (copy) copy.addEventListener('click', function () {
     var label = copy.querySelector('span');
@@ -94,4 +93,24 @@
       setTimeout(function () { label.textContent = 'Copy link'; }, 2000);
     }, function () {});
   });
+
+  // ----- interactive lookbook studio switcher -----
+  var lb = d.querySelector('[data-lookbook]');
+  if (lb) {
+    var tabs = lb.querySelectorAll('[data-lookbook-tab]');
+    var panels = lb.querySelectorAll('[data-lookbook-panel]');
+    tabs.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.getAttribute('data-lookbook-tab');
+        tabs.forEach(function (t) { t.setAttribute('aria-pressed', t === btn ? 'true' : 'false'); });
+        panels.forEach(function (p) {
+          if (p.getAttribute('data-lookbook-panel') === id) {
+            p.removeAttribute('hidden');
+          } else {
+            p.setAttribute('hidden', '');
+          }
+        });
+      });
+    });
+  }
 })();

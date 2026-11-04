@@ -72,6 +72,47 @@ main{display:block;padding-bottom:48px}
 .hero-showcase__palette{display:flex;border-radius:var(--r-md);overflow:hidden;height:38px;border:1px solid rgba(0,0,0,.08)}
 .hero-showcase__palette span{display:block;height:100%}
 .hero-showcase__pieces{display:flex;align-items:center;justify-content:space-around;background:var(--bg);border-radius:var(--r-md);padding:10px 8px;border:1px solid var(--line)}
+
+/* Editorial Lookbook Studio & Model Croquis */
+.lookbook-studio{background:var(--surface);border:1px solid var(--sand);border-radius:var(--r-lg);padding:24px;box-shadow:0 18px 44px rgba(17,17,16,.08);display:flex;flex-direction:column;gap:18px}
+.lookbook-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;border-bottom:1px solid var(--line);padding-bottom:12px}
+.lookbook-header__title{font:600 .74rem/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.lookbook-tabs{display:inline-flex;gap:4px;background:var(--bg);padding:3px;border-radius:var(--r-sm);border:1px solid var(--line)}
+.lookbook-tab{border:0;background:transparent;padding:6px 12px;font:500 .82rem/1.2 var(--sans);color:var(--text-2);border-radius:4px;cursor:pointer;transition:all .15s ease}
+.lookbook-tab:hover{color:var(--text)}
+.lookbook-tab[aria-pressed=true]{background:var(--surface);color:var(--text);font-weight:600;box-shadow:0 2px 6px rgba(17,17,16,.08)}
+.lookbook-panel{display:grid;grid-template-columns:1fr;gap:20px;align-items:center}
+@media (min-width:620px){.lookbook-panel{grid-template-columns:210px 1fr;gap:24px}}
+.lookbook-figure-wrap{display:grid;place-items:center;background:linear-gradient(180deg,var(--bg) 0%,var(--surface) 100%);border-radius:var(--r-md);border:1px solid var(--line);padding:14px 6px;position:relative;overflow:hidden}
+.lookbook-figure{width:100%;max-width:220px;height:auto}
+.lookbook-meta{display:flex;flex-direction:column;gap:12px}
+.lookbook-meta__head h3{margin:0;font:600 1.3rem/1.2 var(--serif);color:var(--text)}
+.lookbook-meta__head p{margin:2px 0 0;font-size:.85rem;color:var(--muted)}
+.lookbook-palette{display:flex;border-radius:var(--r-md);overflow:hidden;height:38px;border:1px solid rgba(0,0,0,.08);box-shadow:inset 0 1px 3px rgba(0,0,0,.1)}
+.lookbook-palette span{display:flex;align-items:center;justify-content:center;color:#FAF8F5;font:600 .72rem/1 var(--sans);letter-spacing:.04em;text-shadow:0 1px 2px rgba(0,0,0,.45)}
+.lookbook-garments{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.lookbook-garment{display:flex;flex-direction:column;gap:3px;padding:9px;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-sm);text-decoration:none;transition:border-color .15s}
+.lookbook-garment:hover{border-color:var(--text)}
+.lookbook-garment__kicker{font:600 .68rem/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.lookbook-garment__color{display:flex;align-items:center;gap:6px;font-size:.82rem;font-weight:600;color:var(--text)}
+.lookbook-garment__swatch{width:13px;height:13px;border-radius:50%;border:1px solid rgba(0,0,0,.2);flex:none}
+.lookbook-garment__name{font-size:.76rem;color:var(--muted)}
+.lookbook-footwear{display:flex;align-items:center;gap:12px;padding:8px 12px;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-sm)}
+.lookbook-footwear b{font-size:.85rem}
+.lookbook-footwear span{font-size:.78rem;color:var(--muted);display:block}
+.lookbook-note{font-size:.86rem;color:var(--text-2);margin:0;font-style:italic;line-height:1.5}
+.lookbook-link{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;color:var(--accent);text-decoration:none;margin-top:2px}
+.lookbook-link:hover{text-decoration:underline}
+
+/* Capsule Wardrobe Foundation Matrix */
+.capsule-preview{margin:36px 0 20px}
+.capsule-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));margin:16px 0}
+.capsule-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;display:flex;flex-direction:column;gap:10px}
+.capsule-card__header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:8px}
+.capsule-card__title{font:600 .95rem/1.2 var(--serif);margin:0}
+.capsule-card__tag{font:500 .72rem/1 var(--sans);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.capsule-card__garments{display:flex;align-items:center;justify-content:space-around;background:var(--bg);border-radius:var(--r-md);padding:10px 4px;border:1px solid var(--line)}
+.capsule-card__desc{font-size:.84rem;color:var(--text-2);margin:0;line-height:1.4}
 .trust-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:28px 0 36px;padding:16px 20px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg)}
 .trust-item{text-align:center}
 .trust-item b{display:block;font:600 1.25rem/1.2 var(--serif);color:var(--text)}

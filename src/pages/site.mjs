@@ -36,6 +36,97 @@ function home() {
     ['How accurate are the sizing and tailoring formulas?', `They follow published international standards (ISO/TR 10652 and Mondopoint for sizing, and classical Savile Row tailoring standards for trouser breaks); for example, a UK 8 shoe corresponds to a US men's ${uk8.usMen} and EU ${uk8.eu}.`]
   ];
 
+  const lookbookHtml = `<div class="lookbook-studio" data-lookbook aria-label="Editorial lookbook style studio">
+<div class="lookbook-header">
+<span class="lookbook-header__title">Editorial Lookbook Studio · 60-30-10 Science</span>
+<div class="lookbook-tabs" role="tablist" aria-label="Curated style looks">
+<button type="button" class="lookbook-tab" data-lookbook-tab="savile" aria-pressed="true">Look 01 · Savile Bespoke</button>
+<button type="button" class="lookbook-tab" data-lookbook-tab="mayfair" aria-pressed="false">Look 02 · Mayfair Cashmere</button>
+<button type="button" class="lookbook-tab" data-lookbook-tab="riviera" aria-pressed="false">Look 03 · Riviera Linen</button>
+</div>
+</div>
+${Object.values(G.LOOKS).map((look, i) => `
+<div class="lookbook-panel" data-lookbook-panel="${look.id}" ${i > 0 ? 'hidden' : ''}>
+<div class="lookbook-figure-wrap">
+${G.figureSvg(look.id, 220, 360)}
+</div>
+<div class="lookbook-meta">
+<div class="lookbook-meta__head">
+<h3>${look.name}</h3>
+<p>${look.subhead} · Color Season: <a href="${look.seasonLink}">${look.season}</a></p>
+</div>
+<div class="lookbook-palette" role="img" aria-label="${look.palette.map((p) => p.role + ' ' + p.name).join(', ')}">
+<span style="flex:6;background:${look.palette[0].hex}" title="${look.palette[0].role}: ${look.palette[0].name}">60% ${look.palette[0].name}</span>
+<span style="flex:3;background:${look.palette[1].hex}" title="${look.palette[1].role}: ${look.palette[1].name}">30% ${look.palette[1].name}</span>
+<span style="flex:1;background:${look.palette[2].hex}" title="${look.palette[2].role}: ${look.palette[2].name}">10%</span>
+</div>
+<div class="lookbook-garments">
+${look.palette.map((p) => `<a class="lookbook-garment" href="${p.tool}">
+<span class="lookbook-garment__kicker">${p.role}</span>
+<span class="lookbook-garment__color"><span class="lookbook-garment__swatch" style="background:${p.hex}"></span>${p.name}</span>
+<span class="lookbook-garment__name">${p.garment}</span>
+</a>`).join('')}
+</div>
+<div class="lookbook-footwear">
+${G.svg(look.shoeType, look.shoeHex, 36, true)}
+<div><b>${look.shoesName}</b><span>Goodyear welted · classical last</span></div>
+</div>
+<p class="lookbook-note">${look.notes}</p>
+<a class="lookbook-link" href="${look.palette[0].tool}">Test this palette in Color Combinations &rarr;</a>
+</div>
+</div>`).join('')}
+</div>`;
+
+  const capsulePreviewHtml = `<section class="capsule-preview" aria-labelledby="capsule-arch-title">
+<div class="section-head">
+<h2 id="capsule-arch-title">Capsule Architecture: 10 Pieces, 36 Ensembles</h2>
+<a href="/tools/capsule-wardrobe/">Open Capsule Builder &rarr;</a>
+</div>
+<p class="lede">By applying classical 60-30-10 color ratios and high-low textural harmony, a tightly curated 10-piece foundation generates dozens of elegant combinations for work, evening, and weekend travel.</p>
+<div class="capsule-grid">
+<div class="capsule-card">
+<div class="capsule-card__header"><h3 class="capsule-card__title">Look A · Executive Boardroom</h3><span class="capsule-card__tag">Formal</span></div>
+<div class="capsule-card__garments">
+${G.svg('blazer', '#1F2A44', 44, true)}
+${G.svg('shirt', '#FAF8F5', 44, true)}
+${G.svg('trousers', '#384358', 44, true)}
+${G.svg('loafers', '#4A3326', 44, true)}
+</div>
+<p class="capsule-card__desc">Navy tailored blazer, Sea Island white poplin, high-twist pleated trousers, and burnished espresso loafers.</p>
+</div>
+<div class="capsule-card">
+<div class="capsule-card__header"><h3 class="capsule-card__title">Look B · Mayfair Gallery Evening</h3><span class="capsule-card__tag">Smart Casual</span></div>
+<div class="capsule-card__garments">
+${G.svg('jacket', '#263327', 44, true)}
+${G.svg('sweater', '#DDD0BE', 44, true)}
+${G.svg('trousers', '#423A31', 44, true)}
+${G.svg('boots', '#261F1A', 44, true)}
+</div>
+<p class="capsule-card__desc">Loden green tweed sport coat, fine-gauge oatmeal cashmere sweater, tailored trousers, and Chelsea boots.</p>
+</div>
+<div class="capsule-card">
+<div class="capsule-card__header"><h3 class="capsule-card__title">Look C · Riviera Weekend</h3><span class="capsule-card__tag">Resort Casual</span></div>
+<div class="capsule-card__garments">
+${G.svg('shirt', '#8BA3C0', 44, true)}
+${G.svg('trousers', '#EAE5D9', 44, true)}
+${G.svg('belt', '#8A6A4A', 44, true)}
+${G.svg('sandals', '#8A6A4A', 44, true)}
+</div>
+<p class="capsule-card__desc">Sky chambray popover shirt, sandstone lightweight linen trousers, woven bridle leather belt, and suede loafers.</p>
+</div>
+<div class="capsule-card">
+<div class="capsule-card__header"><h3 class="capsule-card__title">Look D · Urban Minimalist</h3><span class="capsule-card__tag">Weekend Travel</span></div>
+<div class="capsule-card__garments">
+${G.svg('coat', '#B98A57', 44, true)}
+${G.svg('turtleneck', '#1F2A44', 44, true)}
+${G.svg('jeans', '#2E3E57', 44, true)}
+${G.svg('sneakers', '#F6F3EC', 44, true)}
+</div>
+<p class="capsule-card__desc">Camel wool trench over midnight merino rollneck, raw Japanese selvedge denim, and minimalist white cupsole sneakers.</p>
+</div>
+</div>
+</section>`;
+
   const body = `<section class="hero hero--split">
 <div>
 <p class="hero-tag">Bespoke Style Architecture · 100% Private</p>
@@ -46,23 +137,7 @@ function home() {
 <a class="btn btn--ghost" href="/tools/pant-break-guide/">Calculate pant break</a>
 </div>
 </div>
-<div class="hero-showcase" aria-label="Editorial style palette showcase">
-<div class="hero-showcase__head">
-<b>Savile Navy &amp; Cashmere</b>
-<span>60 · 30 · 10 Rule</span>
-</div>
-<div class="hero-showcase__palette" role="img" aria-label="60% Navy, 30% Camel Cashmere, 10% Burgundy Accent">
-<span style="flex:6;background:#1F2A44" title="60% Navy (Dominant)"></span>
-<span style="flex:3;background:#B98A57" title="30% Camel (Secondary)"></span>
-<span style="flex:1;background:#6D1F2E" title="10% Burgundy (Accent)"></span>
-</div>
-<div class="hero-showcase__pieces">
-${G.svg('blazer', '#1F2A44', 48, true)}
-${G.svg('shirt', '#FAF8F5', 48, true)}
-${G.svg('loafers', '#5E422F', 48, true)}
-</div>
-<p class="meta-line">Navy blazer over crisp white shirt, finished with espresso loafers and a deep burgundy pocket square. <a href="/tools/color-combination/">Explore combinations &rarr;</a></p>
-</div>
+${lookbookHtml}
 </section>
 
 <div class="trust-strip">
@@ -73,6 +148,8 @@ ${G.svg('loafers', '#5E422F', 48, true)}
 </div>
 
 <p class="answer">SimplyStylo is a free style toolkit: ${TOOLS.length} interactive tools and ${Object.keys(COLOR_GUIDES).length} color guides. Example answers: a UK 8 shoe is about a US men's ${uk8.usMen}, and a 25-piece capsule wardrobe makes ${w25.outfits} outfits.</p>
+
+${capsulePreviewHtml}
 
 <div class="section-head">
 <h2>Editor’s flagship tools</h2>

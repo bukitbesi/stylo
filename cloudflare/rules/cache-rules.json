@@ -1,0 +1,46 @@
+{
+  "description": "Cloudflare Cache Rules for optimal Edge Cache TTL, Core Web Vitals, and Instant Page Delivery",
+  "rules": [
+    {
+      "action": "set_cache_settings",
+      "action_parameters": {
+        "cache": true,
+        "edge_ttl": {
+          "mode": "override_origin",
+          "default": 604800,
+          "status_code_ttl": [
+            {
+              "status_code": 200,
+              "value": 604800
+            },
+            {
+              "status_code": 404,
+              "value": 3600
+            }
+          ]
+        },
+        "browser_ttl": {
+          "mode": "respect_origin"
+        },
+        "serve_stale": {
+          "disable_stale_while_updating": false
+        },
+        "cache_key": {
+          "ignore_query_strings_order": true
+        }
+      },
+      "description": "Cache all static HTML pages and search index at edge for 7 days with stale-while-revalidate",
+      "enabled": true,
+      "expression": "(http.request.uri.path ne \"/api/contact\" and not starts_with(http.request.uri.path, \"/api/\"))"
+    },
+    {
+      "action": "set_cache_settings",
+      "action_parameters": {
+        "cache": false
+      },
+      "description": "Bypass cache for dynamic contact form API endpoint",
+      "enabled": true,
+      "expression": "(starts_with(http.request.uri.path, \"/api/\"))"
+    }
+  ]
+}

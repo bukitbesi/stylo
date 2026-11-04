@@ -228,5 +228,166 @@
       '</svg>';
   }
 
-  return { SHAPES: SHAPES, shapeFor: shapeFor, impliedHex: impliedHex, svg: svg };
+  // Editorial Lookbook Presets: fully coordinated high-fashion ensembles with color science ratios.
+  var LOOKS = {
+    savile: {
+      id: 'savile',
+      name: 'Savile Row Bespoke',
+      subhead: 'Executive Sartorial Power',
+      tagline: 'Classic British architectural tailoring with refined Italian drape',
+      season: 'Deep Winter / Deep Autumn',
+      seasonLink: '/seasons/deep-winter/',
+      shirtHex: '#FAF8F5',
+      blazerHex: '#1F2A44',
+      trouserHex: '#384358',
+      shoeHex: '#4A3326',
+      shoeType: 'loafers',
+      accentHex: '#6D1F2E',
+      palette: [
+        { role: '60% Base', hex: '#1F2A44', name: 'Midnight Navy', garment: 'Roped-Shoulder Blazer', tool: '/tools/color-combination/' },
+        { role: '30% Secondary', hex: '#B98A57', name: 'Cashmere Camel', garment: 'Pleated Wool Trousers', tool: '/tools/pant-break-guide/' },
+        { role: '10% Accent', hex: '#6D1F2E', name: 'Vintage Burgundy', garment: 'Silk Pocket Square', tool: '/tools/color-analysis/' }
+      ],
+      shoesName: 'Espresso Burnished Loafers',
+      notes: 'The undisputed benchmark of international power dressing. Deep midnight navy commands authority, balanced by tactile cashmere and a flash of vintage burgundy.'
+    },
+    mayfair: {
+      id: 'mayfair',
+      name: 'Mayfair Quiet Luxury',
+      subhead: 'Autumn Tweed & Knitwear',
+      tagline: 'Understated British countryside elegance calibrated for the city',
+      season: 'Soft Autumn / Warm Autumn',
+      seasonLink: '/seasons/soft-autumn/',
+      shirtHex: '#DDD0BE',
+      blazerHex: '#263327',
+      trouserHex: '#423A31',
+      shoeHex: '#261F1A',
+      shoeType: 'boots',
+      accentHex: '#9E472A',
+      palette: [
+        { role: '60% Base', hex: '#263327', name: 'Forest Loden', garment: 'Tweed Sport Coat', tool: '/tools/color-combination/' },
+        { role: '30% Secondary', hex: '#DDD0BE', name: 'Oatmeal Merino', garment: 'Crewneck Knit', tool: '/tools/capsule-wardrobe/' },
+        { role: '10% Accent', hex: '#9E472A', name: 'Burnt Terracotta', garment: 'Silk Wool Scarf', tool: '/tools/color-analysis/' }
+      ],
+      shoesName: 'Burnished Chelsea Boots',
+      notes: 'Low-contrast tonal sophistication. Deep forest green grounded with warm oatmeal wool and spiced with earthy terracotta creates effortless elegance.'
+    },
+    riviera: {
+      id: 'riviera',
+      name: 'Riviera Summer Linen',
+      subhead: 'Mediterranean Sprezzatura',
+      tagline: 'Sun-drenched, breathable tailoring with effortless nonchalance',
+      season: 'Light Summer / Warm Spring',
+      seasonLink: '/seasons/light-summer/',
+      shirtHex: '#8BA3C0',
+      blazerHex: '#C2B69D',
+      trouserHex: '#EAE5D9',
+      shoeHex: '#8A6A4A',
+      shoeType: 'loafers',
+      accentHex: '#C5A059',
+      palette: [
+        { role: '60% Base', hex: '#C2B69D', name: 'Sandstone Linen', garment: 'Unstructured Jacket', tool: '/tools/color-combination/' },
+        { role: '30% Secondary', hex: '#8BA3C0', name: 'Chambray Sky', garment: 'Linen Popover Shirt', tool: '/tools/capsule-wardrobe/' },
+        { role: '10% Accent', hex: '#C5A059', name: 'Champagne Brass', garment: 'Woven Hardware Belt', tool: '/tools/color-analysis/' }
+      ],
+      shoesName: 'Cognac Suede Horsebit Loafers',
+      notes: 'Breezy coastal tailoring engineered for warm climates. Natural sand linen softens formal structure, lifted by sky blue chambray and warm brass.'
+    }
+  };
+
+  // Renders a high-fashion styled model figure (editorial croquis) with layered garments and pin leaders.
+  function figureSvg(lookId, width, height) {
+    var look = LOOKS[lookId] || LOOKS.savile;
+    var w = width || 260;
+    var h = height || 410;
+    var blazerFill = look.blazerHex;
+    var blazerStroke = shade(blazerFill, 0.65);
+    var blazerLapel = shade(blazerFill, 0.85);
+    var shirtFill = look.shirtHex;
+    var trouserFill = look.trouserHex;
+    var trouserStroke = shade(trouserFill, 0.65);
+    var shoeFill = look.shoeHex;
+    var shoeStroke = shade(shoeFill, 0.6);
+    var accentFill = look.accentHex;
+
+    return '<svg class="lookbook-figure" width="' + w + '" height="' + h + '" viewBox="0 0 240 390" role="img" aria-label="' + look.name + ' styled model silhouette">' +
+      '<defs>' +
+      '  <radialGradient id="lb-halo" cx="50%" cy="40%" r="55%">' +
+      '    <stop offset="0%" stop-color="#C5A059" stop-opacity="0.12"/>' +
+      '    <stop offset="100%" stop-color="#FAF8F5" stop-opacity="0"/>' +
+      '  </radialGradient>' +
+      '</defs>' +
+      '<!-- Editorial ambient halo -->' +
+      '<ellipse cx="120" cy="180" rx="95" ry="160" fill="url(#lb-halo)"/>' +
+      '<!-- Ground shadow -->' +
+      '<ellipse cx="120" cy="370" rx="68" ry="7" fill="rgba(17,17,16,0.1)"/>' +
+      '<ellipse cx="120" cy="370" rx="42" ry="4" fill="rgba(17,17,16,0.14)"/>' +
+
+      '<!-- Head silhouette & sculpted chignon -->' +
+      '<path d="M110 26 Q120 18 130 26 Q134 38 127 49 Q120 54 113 49 Q106 38 110 26 Z" fill="#D9CEBF" stroke="#9A8C7A" stroke-width="1.1"/>' +
+      '<path d="M110 26 Q118 20 126 23 Q132 28 131 34 Q127 28 117 29 Q111 31 110 26 Z" fill="#2B241E"/>' +
+      '<!-- Neck -->' +
+      '<path d="M115 48 L115 67 Q120 70 125 67 L125 48 Z" fill="#D9CEBF"/>' +
+
+      '<!-- Inner poplin shirt / knit collar -->' +
+      '<path d="M114 66 L120 84 L112 92 L106 78 Z" fill="' + shirtFill + '" stroke="#CCC5B8" stroke-width="1"/>' +
+      '<path d="M126 66 L120 84 L128 92 L134 78 Z" fill="' + shirtFill + '" stroke="#CCC5B8" stroke-width="1"/>' +
+      '<path d="M120 84 V116" stroke="#BBB2A3" stroke-width="1" stroke-linecap="round"/>' +
+
+      '<!-- Tailored Trousers (high-twist wool) -->' +
+      '<path d="M94 176 L82 334 H112 L120 226 L128 334 H158 L146 176 Z" fill="' + trouserFill + '" stroke="' + trouserStroke + '" stroke-width="1.3" stroke-linejoin="round"/>' +
+      '<!-- Trouser pressed crease lines (Savile Row standard) -->' +
+      '<line x1="97" y1="190" x2="97" y2="330" stroke="' + shade(trouserFill, 0.78) + '" stroke-width="1.1" stroke-dasharray="1 0"/>' +
+      '<line x1="143" y1="190" x2="143" y2="330" stroke="' + shade(trouserFill, 0.78) + '" stroke-width="1.1" stroke-dasharray="1 0"/>' +
+      '<!-- Trouser cuffs -->' +
+      '<line x1="82" y1="330" x2="112" y2="330" stroke="' + trouserStroke + '" stroke-width="1.5"/>' +
+      '<line x1="128" y1="330" x2="158" y2="330" stroke="' + trouserStroke + '" stroke-width="1.5"/>' +
+
+      '<!-- Goodyear-welted Footwear -->' +
+      '<!-- Left shoe -->' +
+      '<path d="M82 334 Q79 346 83 356 Q87 360 106 360 Q114 360 114 354 L112 334 Z" fill="' + shoeFill + '" stroke="' + shoeStroke + '" stroke-width="1.2"/>' +
+      '<path d="M80 356 H114 Q114 363 108 363 H84 Q80 363 80 356 Z" fill="#2A1E17"/>' +
+      '<path d="M91 346 H103 V349 H91 Z" fill="#C5A059" stroke="#8A6E30" stroke-width="0.75"/>' +
+      '<!-- Right shoe -->' +
+      '<path d="M128 334 L126 354 Q126 360 134 360 Q153 360 157 356 Q161 346 158 334 Z" fill="' + shoeFill + '" stroke="' + shoeStroke + '" stroke-width="1.2"/>' +
+      '<path d="M126 356 H160 Q160 363 156 363 H132 Q126 363 126 356 Z" fill="#2A1E17"/>' +
+      '<path d="M137 346 H149 V349 H137 Z" fill="#C5A059" stroke="#8A6E30" stroke-width="0.75"/>' +
+
+      '<!-- Tailored Roped-Shoulder Blazer / Jacket (Layered over trousers) -->' +
+      '<path d="M115 67 L80 77 L66 142 L79 146 L89 104 L91 184 Q120 188 149 184 L151 104 L161 146 L174 142 L160 77 L125 67 Z" fill="' + blazerFill + '" stroke="' + blazerStroke + '" stroke-width="1.4" stroke-linejoin="round"/>' +
+      '<!-- Roped sleeve seams -->' +
+      '<path d="M80 77 Q86 112 89 144" stroke="' + blazerStroke + '" stroke-width="1.1" fill="none"/>' +
+      '<path d="M160 77 Q154 112 151 144" stroke="' + blazerStroke + '" stroke-width="1.1" fill="none"/>' +
+      '<!-- Peaked Lapels -->' +
+      '<path d="M115 67 L96 98 L114 128 L120 126 Z" fill="' + blazerLapel + '" stroke="' + blazerStroke + '" stroke-width="1.1"/>' +
+      '<path d="M125 67 L144 98 L126 128 L120 126 Z" fill="' + blazerLapel + '" stroke="' + blazerStroke + '" stroke-width="1.1"/>' +
+      '<!-- Center button closure -->' +
+      '<circle cx="120" cy="138" r="2.8" fill="#C5A059" stroke="#8A6E30" stroke-width="0.8"/>' +
+      '<circle cx="120" cy="154" r="2.8" fill="#C5A059" stroke="#8A6E30" stroke-width="0.8"/>' +
+      '<!-- Flap pockets -->' +
+      '<path d="M84 152 H102 V157 H84 Z" fill="' + shade(blazerFill, 0.88) + '" stroke="' + blazerStroke + '" stroke-width="1"/>' +
+      '<path d="M138 152 H156 V157 H138 Z" fill="' + shade(blazerFill, 0.88) + '" stroke="' + blazerStroke + '" stroke-width="1"/>' +
+      '<!-- Breast welt pocket with silk accent square -->' +
+      '<path d="M96 108 H108 V111 H96 Z" fill="' + shade(blazerFill, 0.8) + '" stroke="' + blazerStroke + '" stroke-width="0.9"/>' +
+      '<path d="M98 108 L101 99 L104 105 L106 100 L107 108 Z" fill="' + accentFill + '" stroke="' + shade(accentFill, 0.7) + '" stroke-width="0.8"/>' +
+
+      '<!-- Sartorial Precision Callout Pins & Hairline Leaders -->' +
+      '<!-- Pin 1: Outerwear / Top -->' +
+      '<line x1="42" y1="102" x2="84" y2="102" stroke="#C5A059" stroke-width="1" stroke-dasharray="2 2"/>' +
+      '<circle cx="84" cy="102" r="3" fill="#C5A059"/>' +
+      '<!-- Pin 2: Accent Pocket Square -->' +
+      '<line x1="42" y1="126" x2="101" y2="104" stroke="#C5A059" stroke-width="1" stroke-dasharray="2 2"/>' +
+      '<circle cx="101" cy="104" r="3" fill="' + accentFill + '" stroke="#FAF8F5" stroke-width="1"/>' +
+      '<!-- Pin 3: Tailored Inseam -->' +
+      '<line x1="198" y1="242" x2="143" y2="242" stroke="#C5A059" stroke-width="1" stroke-dasharray="2 2"/>' +
+      '<circle cx="143" cy="242" r="3" fill="#C5A059"/>' +
+      '<!-- Pin 4: Hand-Burnished Footwear -->' +
+      '<line x1="198" y1="352" x2="154" y2="352" stroke="#C5A059" stroke-width="1" stroke-dasharray="2 2"/>' +
+      '<circle cx="154" cy="352" r="3" fill="#C5A059"/>' +
+
+      '</svg>';
+  }
+
+  return { SHAPES: SHAPES, LOOKS: LOOKS, shapeFor: shapeFor, impliedHex: impliedHex, svg: svg, figureSvg: figureSvg };
 });
+
