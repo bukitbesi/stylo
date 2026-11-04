@@ -31,12 +31,26 @@
     if (!colors.length) return '<p class="summary" data-summary>' + U.esc(summary(colors)) + '</p>';
     var seasons = P.seasonMatch(colors, 3);
     var neutrals = colors.filter(function (c) { return c.neutral; }).reduce(function (s, c) { return s + c.share; }, 0);
+    var lums = colors.map(function (c) {
+      var n = parseInt(c.hex.slice(1), 16);
+      return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
+    });
+    var minL = Math.min.apply(null, lums), maxL = Math.max.apply(null, lums);
+    var contrastGap = Math.round((maxL - minL) * 100);
+    var contrastLevel = contrastGap >= 50 ? 'High Contrast' : contrastGap >= 28 ? 'Medium Contrast' : 'Tonal / Low Contrast';
+
     return (isDemo ? '<h2>Example Result: Navy, Camel and White Outfit</h2>' : '<h2>Your Photo’s Palette</h2>') +
       '<p class="summary" data-summary>' + U.esc(summary(colors)) + '</p>' +
       '<div class="pal" role="img" aria-label="Palette by share">' + colors.map(function (c) {
         return '<span style="background:' + c.hex + ';flex:' + Math.max(1, c.share) + '"></span>';
       }).join('') + '</div>' +
       '<ul class="swatches">' + colors.map(function (c) { return U.swatch(c.hex, c.name + ' · ' + c.share + '%'); }).join('') + '</ul>' +
+      '<div class="kpis">' +
+      '<div class="kpi"><span>Neutrals Share</span><b>' + neutrals + '%</b><span>' + (neutrals >= 50 ? 'Classic 60/30/10 base' : 'Color-led palette') + '</span></div>' +
+      '<div class="kpi"><span>Value Contrast</span><b>' + contrastGap + '%</b><span>' + contrastLevel + '</span></div>' +
+      '<div class="kpi"><span>Primary Season Match</span><b>' + U.esc(seasons[0] ? seasons[0].name : 'Universal') + '</b><span>Top chromatic fit</span></div>' +
+      '<div class="kpi"><span>Palette Harmony</span><b>' + (neutrals >= 70 ? 'Minimalist' : neutrals >= 40 ? 'Balanced' : 'Chromatic') + '</b><span>Outfit balance</span></div>' +
+      '</div>' +
       '<div class="grid2"><div class="panel"><h3>Color balance</h3><p>Neutrals make up ' + neutrals + '% of this image. ' +
       (neutrals >= 50 ? 'That is a classic 60/30/10 base: add one accent color and it will look intentional.' : 'Color leads this look; keep the rest of the outfit neutral so it does not compete.') + '</p></div>' +
       '<div class="panel"><h3>Closest color seasons</h3><p>' + seasons.map(function (s) {

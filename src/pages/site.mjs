@@ -17,42 +17,113 @@ const SF = require('../lib/selfie-core.js');
 const WR = require('../lib/wardrobe-core.js');
 const PK = require('../lib/packing-core.js');
 const DC = require('../lib/dresscode-core.js');
+const G = require('../lib/garments.js');
 const PUBLISHED = '2026-11-01';
 const M = site.dateModified;
 
 function home() {
   const uk8 = S.convertShoe('uk', 8), w25 = K.build({ wardrobe: 'women', size: 25 });
+  const toolMap = Object.fromEntries(TOOLS.map((t) => [t.id, t]));
+  const featured = ['color-analysis', 'color-combination', 'size-converter', 'pant-break'].map((id) => toolMap[id]);
+  const colorTools = ['color-analysis', 'color-combination', 'photo-palette', 'selfie-analysis', 'wardrobe-colors'].map((id) => toolMap[id]);
+  const tailoringTools = ['pant-break', 'face-shape', 'size-converter', 'body-shape', 'ring-size'].map((id) => toolMap[id]);
+  const eventTools = ['wedding-guest', 'bridesmaid-palette', 'dress-code', 'dress-designer', 'wedding-dress', 'prom-dress'].map((id) => toolMap[id]);
+  const wardrobeTools = ['capsule-wardrobe', 'outfit-generator', 'packing-list', 'cost-per-wear'].map((id) => toolMap[id]);
+
   const faq = [
-    ['Is SimplyStylo free?', 'Yes. Every tool is free, works without an account and runs in your browser. Nothing you enter is sent to a server.'],
-    ['Which tool should I start with?', 'Start with the personal color analysis quiz to find colors that suit you, then use the color combination finder to pair them, and the capsule wardrobe planner to turn them into a wardrobe.'],
-    ['How accurate are the size conversions?', `They follow the published formulas for each sizing system; for example a UK 8 shoe is about a US men's ${uk8.usMen} and EU ${uk8.eu}. Brands differ by half to one size, so compare with the brand's chart.`]
+    ['Is SimplyStylo free to use?', 'Yes. Every tool is 100% free, works with zero sign-up or accounts, and runs directly in your browser. No photos, personal measurements, or private data are ever sent to a server.'],
+    ['Which style tool should I use first?', 'Start with the personal color analysis quiz to discover your color season, use the color combination finder to build foolproof 60-30-10 palettes, and try the pant break guide or size converter for sharp tailoring.'],
+    ['How accurate are the sizing and tailoring formulas?', `They follow published international standards (ISO/TR 10652 and Mondopoint for sizing, and classical Savile Row tailoring standards for trouser breaks); for example, a UK 8 shoe corresponds to a US men's ${uk8.usMen} and EU ${uk8.eu}.`]
   ];
-  const body = `<section class="hero">
-<p class="eyebrow">Fashion decisions, made simple</p>
+
+  const body = `<section class="hero hero--split">
+<div>
+<p class="hero-tag">Bespoke Style Architecture · 100% Private</p>
 <h1>Find your style. Wear it better.</h1>
-<p class="lede">Free tools that answer the everyday questions: which colors go together, which colors suit you, what size to order abroad and what to wear today. No sign-up, nothing to install.</p>
-<p><a class="btn" href="/tools/color-analysis/">Find your colors</a> <a class="btn btn--ghost" href="/tools/">See all tools</a></p>
+<p class="lede">Free interactive tools that eliminate fashion guesswork: discover your color season, calculate your face and body proportions, convert international sizes, and build timeless capsule wardrobes. Tested formulas, zero personal data collected, running entirely in your browser.</p>
+<div class="hero-cta">
+<a class="btn" href="/tools/color-analysis/">Find your color season</a>
+<a class="btn btn--ghost" href="/tools/pant-break-guide/">Calculate pant break</a>
+</div>
+</div>
+<div class="hero-showcase" aria-label="Editorial style palette showcase">
+<div class="hero-showcase__head">
+<b>Savile Navy &amp; Cashmere</b>
+<span>60 · 30 · 10 Rule</span>
+</div>
+<div class="hero-showcase__palette" role="img" aria-label="60% Navy, 30% Camel Cashmere, 10% Burgundy Accent">
+<span style="flex:6;background:#1F2A44" title="60% Navy (Dominant)"></span>
+<span style="flex:3;background:#B98A57" title="30% Camel (Secondary)"></span>
+<span style="flex:1;background:#6D1F2E" title="10% Burgundy (Accent)"></span>
+</div>
+<div class="hero-showcase__pieces">
+${G.svg('blazer', '#1F2A44', 48, true)}
+${G.svg('shirt', '#FAF8F5', 48, true)}
+${G.svg('loafers', '#5E422F', 48, true)}
+</div>
+<p class="meta-line">Navy blazer over crisp white shirt, finished with espresso loafers and a deep burgundy pocket square. <a href="/tools/color-combination/">Explore combinations &rarr;</a></p>
+</div>
 </section>
+
+<div class="trust-strip">
+<div class="trust-item"><b>20</b><span>Style Engines</span></div>
+<div class="trust-item"><b>100%</b><span>Private &amp; Local</span></div>
+<div class="trust-item"><b>Oklab &amp; CIE</b><span>Color Science</span></div>
+<div class="trust-item"><b>ISO &amp; Savile Row</b><span>Tailoring Standards</span></div>
+</div>
+
 <p class="answer">SimplyStylo is a free style toolkit: ${TOOLS.length} interactive tools and ${Object.keys(COLOR_GUIDES).length} color guides. Example answers: a UK 8 shoe is about a US men's ${uk8.usMen}, and a 25-piece capsule wardrobe makes ${w25.outfits} outfits.</p>
-<h2>Style tools</h2>
-${cards(TOOLS)}
+
+<div class="section-head">
+<h2>Editor’s flagship tools</h2>
+<a href="/tools/">See all ${TOOLS.length} tools &rarr;</a>
+</div>
+<ul class="cards">${featured.map((t) => `<li class="card card--featured"><span class="card__kicker">Editor's choice</span><span class="card__icon">${icon(t.icon)}</span><h3><a href="${t.path}">${esc(t.name)}</a></h3><p>${esc(t.blurb)}</p></li>`).join('')}</ul>
+
+<div class="section-head">
+<h2>Color science &amp; personal seasons</h2>
+<a href="/colors/">Browse 14 color guides &rarr;</a>
+</div>
+${cards(colorTools)}
+
+<div class="section-head">
+<h2>Tailoring, proportions &amp; sizing</h2>
+<a href="/tools/size-converter/">Open size converter &rarr;</a>
+</div>
+${cards(tailoringTools)}
+
+<div class="section-head">
+<h2>Occasions, weddings &amp; dress design</h2>
+<a href="/wedding-guest/spring/">Wedding guest guides &rarr;</a>
+</div>
+${cards(eventTools)}
+
+<div class="section-head">
+<h2>Wardrobe architecture &amp; packing</h2>
+<a href="/tools/capsule-wardrobe/">Plan a capsule &rarr;</a>
+</div>
+${cards(wardrobeTools)}
+
 <h2>Popular color guides</h2>
 <div class="chips">${Object.keys(COLOR_GUIDES).map((s) => {
     const n = C.bySlug(s);
     return `<a class="chip" href="/colors/${s}/"><span class="dot" style="background:${n.hex}"></span>${esc(n.name)}</a>`;
   }).join('')}</div>
+
 <h2>The 12 color seasons</h2>
 <div class="chips">${Object.entries(SE.SEASONS).map(([id, x]) => `<a class="chip" href="/seasons/${id}/"><span class="dot" style="background:${x.palette[0]}"></span>${esc(x.name)}</a>`).join('')}</div>
+
 <h2>Why SimplyStylo</h2>
 <div class="grid2">
-<div class="panel"><h3>Decisions, not trends</h3><p>We do not publish fashion news. Every page answers a practical question with a clear result.</p></div>
+<div class="panel"><h3>Decisions, not trends</h3><p>We do not publish fast fashion gossip. Every page answers a practical question with a clear mathematical result.</p></div>
 <div class="panel"><h3>Transparent methods</h3><p>Every number comes from a published formula or rule, explained on the page and in our <a href="/methodology/">methodology</a>.</p></div>
-<div class="panel"><h3>Private by design</h3><p>The tools run in your browser. We do not ask for photos, accounts or personal details.</p></div>
+<div class="panel"><h3>Private by design</h3><p>The tools run in your browser. We never upload photos, demand accounts or store personal details.</p></div>
 </div>
 ${faqBlock(faq)}`;
+
   return {
-    path: '/', type: 'home', title: 'SimplyStylo: Free Style Tools for Colors, Sizes and Outfits',
-    description: 'Free style tools: find colors that go together, your color season, international clothing and shoe sizes, a capsule wardrobe and outfit ideas.',
+    path: '/', type: 'home', title: 'SimplyStylo: Free Style Tools, Color Analysis and Size Converter',
+    description: 'Free style tools for personal color analysis, outfit color combinations, international shoe and dress size conversion, capsule wardrobes, and tailoring guides.',
     body, faq, datePublished: PUBLISHED, dateModified: M, itemList: TOOLS.map((t) => [t.name, t.path]),
     llms: `SimplyStylo (simplystylo.com) is a free, privacy-first style toolkit with ${TOOLS.length} browser-based tools (${TOOLS.map((t) => t.name).join(', ')}) and color guides. All tools run client-side with published formulas.`
   };
