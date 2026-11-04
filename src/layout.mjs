@@ -43,7 +43,8 @@ export const ICONS = {
   link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
   swatch: '<rect x="3" y="3" width="8" height="18" rx="2"/><path d="m11 7 5-3 4 7-9 6"/><circle cx="7" cy="17" r="1"/>',
   glasses: '<circle cx="6.5" cy="14" r="4"/><circle cx="17.5" cy="14" r="4"/><path d="M10.5 14h3M2.5 14 4 8M21.5 14 20 8"/>',
-  trousers: '<path d="M6 3h12l2 18h-5.5L12 10 9.5 21H4z"/><path d="M6 7h12"/>'
+  trousers: '<path d="M6 3h12l2 18h-5.5L12 10 9.5 21H4z"/><path d="M6 7h12"/>',
+  proportion: '<rect x="6" y="2" width="12" height="20" rx="3"/><line x1="6" y1="9" x2="18" y2="9"/><line x1="6" y1="16" x2="18" y2="16"/><circle cx="12" cy="9" r="1.5" fill="currentColor"/>'
 };
 export const icon = (name, size = 24) =>
   `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;

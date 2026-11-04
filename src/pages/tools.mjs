@@ -41,6 +41,8 @@ const FCore = require('../lib/face-core.js');
 const FS = require('../ui/face-shape.js');
 const PCore = require('../lib/pant-core.js');
 const PB = require('../ui/pant-break.js');
+const PropCore = require('../lib/proportion-core.js');
+const PropUI = require('../ui/body-proportion.js');
 
 const PUBLISHED = '2026-11-01';
 const MODIFIED = site.dateModified;
@@ -977,6 +979,56 @@ ${relatedBlock('pant-break')}`;
   };
 }
 
+// ---------- Body Proportion & Golden Ratio Calculator ----------
+function bodyProportion() {
+  const ex = PropUI.summary(PropUI.norm(PropUI.DEFAULT));
+  const faq = [
+    ['What is the golden ratio in fashion and outfit styling?', 'The golden ratio (approx 1:1.618) in fashion is applied as the Rule of Thirds: dividing your visual height into 1/3 top and 2/3 bottom (or vice versa), rather than cutting your body in half at a 1:1 ratio. A 1:2 visual ratio elongates your silhouette, which is why tucking shirts and wearing high-rise trousers looks naturally balanced.'],
+    ['How do I know if I have a long torso or long legs?', 'Measure your total standing height and your inseam (from crotch seam straight to the floor). Divide your inseam by your height: if the ratio is under 46% (0.46), you have a longer torso with shorter legs; between 46% and 49.5% is balanced; and above 49.5% indicates longer legs with a shorter torso.'],
+    ['What should I wear if I have a long torso and shorter legs?', 'Wear high-rise trousers and high-waisted skirts to raise the perceived waistline. Always full-tuck your tops, wear cropped jackets or blazers ending at or above the hip bone, and choose shoes that match your trouser or hose color to create an uninterrupted vertical leg line.'],
+    ['How should I dress if I have long legs and a shorter torso?', 'Balance your proportions with mid-rise or low-rise trousers, untucked tops, tunics, dropped waistlines, and longline blazers or duster cardigans. Avoid ultra high-waisted pants with wide contrast belts that sit directly beneath your bust.'],
+    ['What is the Adonis Index in menswear tailoring?', 'The Adonis Index measures the golden taper from shoulder breadth across the back to waist diameter (waist circumference divided by π). A ratio around 1.618 produces the classic athletic V-taper. Tailors enhance this with roped or canvassed shoulder pads and suppressed jacket waists.'],
+    ['Does tucking in your shirt really make your legs look longer?', 'Yes. Tucking your shirt into mid-rise or high-rise trousers shortens the vertical block of the top to roughly 1/3 of your height, allowing the trouser fabric to span the remaining 2/3. An untucked long shirt creates an optical 1:1 split, which visually foreshortens the legs.'],
+    ['Can footwear color and vamp height change my body proportions?', 'Yes. Pointed-toe shoes and low-vamp loafers reveal more of the instep, which extends the perceived length of your leg. Matching your shoe leather to your trouser color avoids a visual horizontal cut at your ankles.']
+  ];
+  const body = `<p class="eyebrow">Free proportion &amp; tailoring tool</p>
+<h1>Body Proportion Calculator: Find Your Golden Ratio</h1>
+<p class="answer">Body proportions depend on your leg-to-torso ratio and the golden Rule of Thirds (1:2 vertical split). Example: ${esc(ex)} Enter your height, inseam, and shoulder measurements below to see your vertical percentage, live silhouette diagram, and tailored rise and tucking strategy.</p>
+${verifiedLine(PropCore.FACTS.verified)}
+${toolShell('body-proportion', 'Body proportion and golden ratio calculator', PropUI.controls(PropUI.norm(PropUI.DEFAULT)), PropUI.result(PropUI.norm(PropUI.DEFAULT)))}
+<h2>How the body proportion calculator works</h2>
+${steps([
+    '<b>Leg-to-height ratio</b> divides your inseam by your total height: under 46% is a long torso, 46% to 49.5% is balanced, and over 49.5% is long legs.',
+    '<b>Rule of Thirds calculation</b> computes the exact top and bottom garment lengths needed to form an optical 1:2 ratio (1/3 upper body, 2/3 lower body).',
+    '<b>Upper frame analysis</b> compares shoulder width to waist diameter to evaluate athletic V-taper (menswear) or shoulder-to-waist presence (womenswear).',
+    '<b>Tailoring rules</b> specify the exact trouser rise, jacket length, and shirt-tucking methods that optimize your silhouette.'])}
+<h2>Vertical proportion classification</h2>
+${table('Vertical body proportions and optimal tailoring rules', ['Proportion', 'Leg % of height', 'Trouser rise', 'Hem & tucking rule'], [
+    ['Long torso / shorter legs', 'Under 46%', 'High-rise (above natural waist)', 'Always full-tuck tops; wear cropped jackets'],
+    ['Balanced vertical', '46% to 49.5%', 'Classic mid-rise or high-rise', 'French tuck, full tuck, or neat tailored hems'],
+    ['Long legs / shorter torso', 'Over 49.5%', 'Mid-rise or classic low-rise', 'Untucked tops, tunics, and longline blazers']
+  ])}
+${callout('Proportion is optical, not anatomical flaw. Every vertical type can wear any garment style simply by adjusting the hem height, waist rise, or layering pieces to restore the 1:2 golden visual division.')}
+${sources([
+    ['Vitruvian Man and Human Proportions (Leonardo da Vinci / Marcus Vitruvius)', 'https://en.wikipedia.org/wiki/Vitruvian_Man', 'classical human vertical proportions'],
+    ['The Golden Ratio in Art and Architecture (Mario Livio)', 'https://en.wikipedia.org/wiki/Golden_ratio', 'golden section 1:1.618 and 1:2 thirds rule in visual design'],
+    ['SimplyStylo methodology', '/methodology/', 'how every tool is built and checked']])}
+${faqBlock(faq)}
+${relatedBlock('body-proportion')}`;
+  return {
+    path: '/tools/body-proportion-calculator/', type: 'tool', title: 'Body Proportion Calculator: Golden Ratio Outfit Guide', crumb: 'Body Proportion Calculator',
+    crumbs: [['Tools', '/tools/']],
+    description: 'Calculate your leg-to-torso ratio, golden 1:2 thirds rule, optimal trouser rise, tucking strategy and jacket length with live silhouette SVG.',
+    bundle: 'body-proportion', faq, body, datePublished: '2026-11-04', dateModified: MODIFIED,
+    app: { name: tool('body-proportion').name, description: tool('body-proportion').blurb, features: ['Leg-to-torso vertical ratio', 'Golden 1:2 Rule of Thirds calculation', 'Optimal trouser rise guidance', 'Live proportional silhouette SVG diagram'] },
+    about: [
+      { '@type': 'Thing', name: 'Golden ratio', sameAs: 'https://en.wikipedia.org/wiki/Golden_ratio' },
+      { '@type': 'Thing', name: 'Proportion (architecture)', sameAs: 'https://en.wikipedia.org/wiki/Proportion_(architecture)' }
+    ],
+    llms: `Body Proportion and Golden Ratio Calculator: evaluates vertical leg-to-height ratio (inseam ÷ height: < 46% long torso, 46–49.5% balanced, > 49.5% long legs), 1:2 Rule of Thirds garment length breakdown, shoulder-to-waist diameter ratio, and rise/tuck tailoring recommendations. Example: ${ex}`
+  };
+}
+
 function toolsIndex() {
   const body = `<p class="eyebrow">All tools</p>
 <h1>Free Style Tools</h1>
@@ -993,6 +1045,6 @@ ${cards(TOOLS)}
   };
 }
 
-export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), selfieAnalysis(), wardrobeColors(), packingList(), dressCode(), dressDesigner(), weddingDress(), promDress(), weddingGuest(), bridesmaidPalette(), faceShape(), pantBreak(), toolsIndex()];
+export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), selfieAnalysis(), wardrobeColors(), packingList(), dressCode(), dressDesigner(), weddingDress(), promDress(), weddingGuest(), bridesmaidPalette(), faceShape(), pantBreak(), bodyProportion(), toolsIndex()];
 export { icon };
 
