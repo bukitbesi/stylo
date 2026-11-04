@@ -84,6 +84,7 @@
     nat.addEventListener('click', function () {
       navigator.share({ title: d.title, url: location.href }).catch(function () {});
     });
+  }
   var copy = d.querySelector('[data-share-copy]');
   if (copy) copy.addEventListener('click', function () {
     var label = copy.querySelector('span');
