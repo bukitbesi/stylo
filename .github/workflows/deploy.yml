@@ -2,7 +2,7 @@ name: Check and IndexNow
 
 # Every push and PR: unit tests → build → validate → 390 px browser test.
 # Push to main: Cloudflare Workers Builds deploys the site; the indexnow job then pings only the changed URLs.
-# No secrets needed.
+# Optional secret GOOGLE_SERVICE_ACCOUNT_JSON (service-account key JSON) also pings the Google Indexing API.
 on:
   push:
     branches: [main]
@@ -77,3 +77,15 @@ jobs:
           "
       - name: Send changed URLs to IndexNow
         run: node scripts/indexnow.mjs ${{ inputs.indexnow_all && '--all' || 'prev-manifest.json' }}
+      # Best-effort: Google's Indexing API officially covers only JobPosting/livestream pages, so a failure here
+      # must never fail the deploy. Skipped silently until the GOOGLE_SERVICE_ACCOUNT_JSON secret exists.
+      - name: Notify Google Indexing API
+        continue-on-error: true
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          if [ -z "$GOOGLE_SERVICE_ACCOUNT_JSON" ]; then
+            echo "GOOGLE_SERVICE_ACCOUNT_JSON secret not set; Google ping skipped."
+          else
+            node scripts/ping-google.mjs ${{ inputs.indexnow_all && '--all' || 'prev-manifest.json' }}
+          fi

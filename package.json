@@ -17,7 +17,8 @@
     "check": "npm test && npm run build && npm run validate",
     "lint": "node --test tests/*.test.mjs && node scripts/validate.mjs",
     "preview": "node scripts/preview.mjs",
-    "images": "node scripts/images.mjs"
+    "images": "node scripts/images.mjs",
+    "ping-google": "node scripts/ping-google.mjs"
   },
   "dependencies": {
     "express": "^5.3.0"
