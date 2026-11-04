@@ -76,7 +76,9 @@ worker/         Cloudflare Worker for /api/contact (static pages never run it)
 4. **GitHub Pages:** keep it off (Settings → Pages → Source: None); Cloudflare is the only host.
 5. **www → apex:** add a DNS record `www` (proxied, AAAA `100::`) and Rules → Redirect Rules → "Redirect from WWW to
    root" template (301).
-6. **Analytics:** Web Analytics → add site (automatic setup, cookieless). Already allowed by the CSP in `_headers`.
+6. **Analytics:** Google Analytics 4 runs through Cloudflare Zaraz (dashboard → Zaraz → Tools), which injects itself
+   at the edge, so no tracking code lives in this repo and none should be added (it would double-count). To see it with
+   curl, send `Accept: text/html`. If analytics changes, update the privacy policy in `src/pages/site.mjs`.
 7. **Email (free):** Email → Email Routing → Get started → add custom address `hello` → destination = your Gmail
    (click the verification link Cloudflare emails you). Optionally add `ads@` and `press@` the same way.
    To *reply as* hello@: Gmail → Settings → Accounts → "Send mail as" (needs an SMTP relay such as Brevo's free tier).

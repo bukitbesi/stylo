@@ -31,7 +31,7 @@ function home() {
   const wardrobeTools = ['capsule-wardrobe', 'outfit-generator', 'packing-list', 'cost-per-wear'].map((id) => toolMap[id]);
 
   const faq = [
-    ['Is SimplyStylo free to use?', 'Yes. Every tool is 100% free, works with zero sign-up or accounts, and runs directly in your browser. No photos, personal measurements, or private data are ever sent to a server.'],
+    ['Is SimplyStylo free to use?', 'Yes. Every tool is 100% free, works with zero sign-up or accounts, and runs directly in your browser. Your photos and the measurements you type are processed on your device, not uploaded.'],
     ['Which style tool should I use first?', 'Start with the personal color analysis quiz to discover your color season, use the color combination finder to build foolproof 60-30-10 palettes, and try the pant break guide or size converter for sharp tailoring.'],
     ['How accurate are the sizing and tailoring formulas?', `They follow published international standards (ISO/TR 10652 and Mondopoint for sizing, and classical Savile Row tailoring standards for trouser breaks); for example, a UK 8 shoe corresponds to a US men's ${uk8.usMen} and EU ${uk8.eu}.`]
   ];
@@ -131,7 +131,7 @@ ${G.svg('sneakers', '#F6F3EC', 44, true)}
 <div>
 <p class="hero-tag">Bespoke Style Architecture · 100% Private</p>
 <h1>Find your style. Wear it better.</h1>
-<p class="lede">Free interactive tools that eliminate fashion guesswork: discover your color season, calculate your face and body proportions, convert international sizes, and build timeless capsule wardrobes. Tested formulas, zero personal data collected, running entirely in your browser.</p>
+<p class="lede">Free interactive tools that eliminate fashion guesswork: discover your color season, calculate your face and body proportions, convert international sizes, and build timeless capsule wardrobes. Tested formulas, no accounts, running entirely in your browser.</p>
 <div class="hero-cta">
 <a class="btn" href="/tools/color-analysis/">Find your color season</a>
 <a class="btn btn--ghost" href="/tools/pant-break-guide/">Calculate pant break</a>
@@ -339,17 +339,17 @@ const search = () => ({
   body: `<h1>Search SimplyStylo</h1><div class="search-page" data-search-page><form class="search__form" action="/search/" role="search">${icon('search', 22)}<label class="sr" for="sp-q">Search tools and guides</label><input id="sp-q" name="q" type="search" placeholder="Search tools and guides" autocomplete="off"></form><ul class="search__results" data-search-results>${TOOLS.slice(0, 6).map((t) => `<li><a href="${t.path}"><b>${esc(t.name)}</b><span>Tool · ${esc(t.blurb)}</span></a></li>`).join('')}</ul></div>`
 });
 
-const privacy = () => simple('/privacy/', 'Privacy Policy', 'SimplyStylo privacy policy: tools run in your browser, no accounts, no photos uploaded, privacy-friendly analytics.', 'Privacy Policy',
-  `<p class="meta-line">Last updated ${longDate(M)}</p>
-<p class="answer">SimplyStylo tools run entirely in your browser. We do not ask for accounts, we do not upload photos, and what you enter in a tool is not sent to us.</p>
+const privacy = () => simple('/privacy/', 'Privacy Policy', 'SimplyStylo privacy policy: tools run in your browser, no accounts, no photos uploaded, and Google Analytics measures site traffic.', 'Privacy Policy',
+  `<p class="meta-line">Last updated ${longDate('2026-11-04')}</p>
+<p class="answer">SimplyStylo tools run entirely in your browser. We do not ask for accounts and we do not upload photos. We measure site traffic with Google Analytics, loaded through Cloudflare Zaraz.</p>
 <h2>What we collect</h2>
-<p>We use Cloudflare Web Analytics, a privacy-first service that counts page views without cookies and without tracking you across sites. Our host, Cloudflare, processes standard request data (such as IP address and browser type) to deliver and protect the site.</p>
+<p>Google Analytics 4 tells us which pages are visited, how people found them, and general device and location information. Cloudflare Zaraz passes this page-view data to Google. Google's use of this data is explained at <a href="https://policies.google.com/technologies/partner-sites">How Google uses information from sites that use its services</a>. Our host, Cloudflare, also processes standard request data (such as IP address and browser type) to deliver and protect the site.</p>
 <h2>Tool settings in links</h2>
-<p>Some tools save your choices (for example a color or a size) in the page address after the # sign so you can share a result. This part of the address is not sent to our server.</p>
+<p>Some tools save your choices (for example a color, a size or a measurement) in the page address after the # sign so you can share a result. Changing a tool does not send them anywhere, but opening a link that already contains them can pass the full address to our analytics, so share such links with care.</p>
 <h2>Contact form</h2>
 <p>If you use our contact form, your name, email address, optional company and message are sent by email to our inbox through Cloudflare so we can reply. We keep them only as long as needed to handle your request, never sell or share them, and never add you to a mailing list.</p>
 <h2>Cookies</h2>
-<p>The site does not set cookies. If we add advertising or other services in future, we will update this policy and ask for consent where the law requires it.</p>
+<p>Cloudflare Zaraz sets a first-party cookie (cf_zaraz_client) so our analytics can work. We do not use advertising cookies. If we add advertising or other services in future, we will update this policy and ask for consent where the law requires it.</p>
 <h2>Your rights and contact</h2>
 <p>Because we do not hold personal data from the tools, there is usually nothing to access or delete. For any privacy question, email <a href="mailto:${site.email}">${site.email}</a>.</p>`);
 
