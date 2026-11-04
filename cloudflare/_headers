@@ -16,6 +16,9 @@
 /sitemap.xml
   Cache-Control: public, max-age=3600, s-maxage=86400
 
+/feed.xml
+  Cache-Control: public, max-age=3600, s-maxage=86400
+
 /robots.txt
   Cache-Control: public, max-age=3600, s-maxage=86400
 

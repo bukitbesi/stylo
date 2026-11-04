@@ -121,6 +121,8 @@ fs.writeFileSync(path.join(dist, '_headers'), `/*
   Cache-Control: public, max-age=31536000, immutable
 /*.html
   Cache-Control: public, max-age=0, s-maxage=604800, stale-while-revalidate=86400
+/feed.xml
+  Cache-Control: public, max-age=3600, s-maxage=86400
 /indexnow-manifest.json
   Cache-Control: no-store
 `);

@@ -30,7 +30,7 @@ const exists = (urlPath) => {
 
 const titles = new Map(), descs = new Map();
 for (const file of htmlFiles) {
-  const rel = '/' + path.relative(dist, file).replace(/index\.html$/, '');
+  const rel = '/' + path.relative(dist, file).split(path.sep).join('/').replace(/index\.html$/, '');
   const html = fs.readFileSync(file, 'utf8');
   const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || '';
   const desc = unescape((html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '');
@@ -88,6 +88,13 @@ const sitemap = fs.readFileSync(path.join(dist, 'sitemap.xml'), 'utf8');
 const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 for (const loc of locs) if (!loc.startsWith(site.origin) || !exists(loc.slice(site.origin.length))) fail('sitemap.xml', `bad URL ${loc}`);
 if (locs.length !== titles.size) fail('sitemap.xml', `${locs.length} URLs but ${titles.size} indexable pages`);
+// RSS feed: every item must be a URL from the sitemap, so the feed can never point at a missing or non-canonical page.
+if (!exists('/feed.xml')) fail('dist', 'feed.xml missing (run npm run build, not scripts/build.mjs alone)');
+else {
+  const items = [...fs.readFileSync(path.join(dist, 'feed.xml'), 'utf8').matchAll(/<item>[\s\S]*?<link>([^<]+)<\/link>/g)].map((m) => m[1]);
+  if (!items.length) fail('feed.xml', 'no items');
+  for (const link of items) if (!locs.includes(link)) fail('feed.xml', `item not in sitemap: ${link}`);
+}
 if (!fs.existsSync(path.join(dist, site.indexNowKey + '.txt'))) fail('dist', 'IndexNow key file missing');
 if (!/^[a-f0-9]{32}$/.test(site.indexNowKey)) fail('site.json', 'indexNowKey must be 32 hex characters');
 

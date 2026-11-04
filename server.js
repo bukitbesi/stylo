@@ -12,7 +12,7 @@ const dist = path.join(__dirname, 'dist');
 // Ensure dist is built before serving
 if (!fs.existsSync(path.join(dist, 'index.html'))) {
   console.log('dist/ not found, building static site...');
-  execSync('node scripts/build.mjs', { stdio: 'inherit', cwd: __dirname });
+  execSync('npm run build', { stdio: 'inherit', cwd: __dirname });
 }
 
 const app = express();

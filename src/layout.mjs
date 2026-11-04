@@ -182,6 +182,7 @@ ${page.noindex ? '<meta name="robots" content="noindex">' : '<meta name="robots"
 <link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
+<link rel="alternate" type="application/rss+xml" title="${site.brand}" href="/feed.xml">
 <meta property="og:site_name" content="${site.brand}">
 <meta property="og:type" content="${page.type === 'article' ? 'article' : 'website'}">
 <meta property="og:title" content="${esc(page.ogTitle || title)}">
