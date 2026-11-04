@@ -98,6 +98,14 @@ ${listed.filter((p) => ['/about/', '/methodology/'].includes(p.path)).map((p) =>
 fs.writeFileSync(path.join(dist, 'llms.txt'), llms);
 manifest[abs('/llms.txt')] = hash(llms, 16);
 
+// Full AI context dump (llms-full.txt) for Perplexity, ChatGPT Search, and Claude deep RAG indexing.
+const stripTags = (s) => s.replace(/<style[\s\S]*?<\/style>/g, '').replace(/<script[\s\S]*?<\/script>/g, '')
+  .replace(/<\/(h1|h2|h3|p|li|tr|div|section)>/gi, '\n').replace(/<[^>]+>/g, ' ').replace(/[ \t]+/g, ' ').replace(/\n\s*\n+/g, '\n\n').trim();
+const llmsFull = `${llms}\n---\n\n# Detailed Tool Specifications, Formulas, and FAQ Answers\n\n` +
+  listed.map((p) => `## ${p.title}\nURL: ${abs(p.path)}\nSummary: ${p.description}\n${p.llms ? 'Technical Engine Summary: ' + p.llms + '\n' : ''}\n${stripTags(p.body)}\n`).join('\n---\n\n');
+fs.writeFileSync(path.join(dist, 'llms-full.txt'), llmsFull);
+manifest[abs('/llms-full.txt')] = hash(llmsFull, 16);
+
 fs.writeFileSync(path.join(dist, `${site.indexNowKey}.txt`), site.indexNowKey);
 fs.writeFileSync(path.join(dist, 'indexnow-manifest.json'), JSON.stringify(manifest, null, 1));
 
@@ -106,12 +114,13 @@ fs.writeFileSync(path.join(dist, '_headers'), `/*
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
-  Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-DNS-Prefetch-Control: on
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 /*.html
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: public, max-age=0, s-maxage=604800, stale-while-revalidate=86400
 /indexnow-manifest.json
   Cache-Control: no-store
 `);
@@ -122,3 +131,4 @@ fs.writeFileSync(path.join(dist, '_redirects'), `/tools/color-combinations/ /too
 `);
 
 console.log(`Built ${pages.length} pages, ${Object.keys(bundleSrc).length} bundles → dist/`);
+

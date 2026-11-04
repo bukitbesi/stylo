@@ -78,7 +78,7 @@ for (const file of htmlFiles) {
     if (res.replace(/<[^>]+>/g, '').trim().length < 40) fail(rel, 'tool result is not rendered into the HTML');
     if (!/aria-live="polite"/.test(html)) fail(rel, 'tool needs an aria-live region');
     if (!/<p class="answer">/.test(html)) fail(rel, 'tool page needs an answer-first paragraph');
-    if ((html.match(/<details>/g) || []).length < 7) fail(rel, 'tool page needs at least 7 FAQs');
+    if ((html.match(/<details[\s>]/g) || []).length < 7) fail(rel, 'tool page needs at least 7 FAQs');
     if (!/Method verified/.test(html)) fail(rel, 'tool page must show the verified date');
   }
 }

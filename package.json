@@ -5,13 +5,20 @@
   "description": "SimplyStylo.com: free style tools for colors, sizes and outfits. Zero-dependency static build.",
   "license": "UNLICENSED",
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
     "test": "node --test tests/*.test.mjs",
     "build": "node scripts/build.mjs",
     "validate": "node scripts/validate.mjs",
     "check": "npm test && npm run build && npm run validate",
     "preview": "node scripts/preview.mjs",
     "images": "node scripts/images.mjs"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
   }
 }

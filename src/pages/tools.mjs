@@ -37,6 +37,10 @@ const WGCore = require('../lib/wedguest-core.js');
 const WG = require('../ui/wedding-guest.js');
 const BPCore = require('../lib/bridesmaid-core.js');
 const BP = require('../ui/bridesmaid-palette.js');
+const FCore = require('../lib/face-core.js');
+const FS = require('../ui/face-shape.js');
+const PCore = require('../lib/pant-core.js');
+const PB = require('../ui/pant-break.js');
 
 const PUBLISHED = '2026-11-01';
 const MODIFIED = site.dateModified;
@@ -878,6 +882,101 @@ ${relatedBlock('bridesmaid-palette')}`;
   };
 }
 
+// ---------- Face Shape & Sunglasses Finder ----------
+function faceShape() {
+  const ex = FS.summary(FS.norm(FS.DEFAULT));
+  const shapes = Object.entries(FCore.SHAPES);
+  const faq = [
+    ['How do I know my face shape for sunglasses?', 'Measure four distances across your face in front of a mirror: forehead width, cheekbone width, jawline width, and total face length from hairline to chin. An oval face is about 1.35 to 1.55 times as long as it is wide at the cheekbones; a round or square face is under 1.35; an oblong face is 1.55 or more.'],
+    ['What sunglasses suit a round face?', 'Angular frames such as wayfarers, rectangular frames, geometric shapes, and upswept cat-eyes suit a round face best. Their straight lines and crisp corners add definition and visually lengthen the face, whereas small round lenses emphasize fullness.'],
+    ['What sunglasses look best on a square face?', 'Round, oval, teardrop aviator, and classic browline (Clubmaster) sunglasses flatter a square face. Curved rims and thinner metal bridges soften a strong, angular jawline and wide forehead.'],
+    ['What is the golden ratio or facial index for an oval face?', 'In facial anthropometry (Farkas, 1994), a mesoprosopic or balanced oval face has a length-to-cheekbone width ratio between 1.35 and 1.55, with the forehead slightly wider than the jaw and cheekbones forming the widest horizontal line.'],
+    ['What frames fit a heart-shaped or diamond face?', 'Heart-shaped faces (wider forehead, narrow chin) suit aviators, round frames, and light or rimless bottom edges that add width lower down. Diamond faces (widest at the cheekbones) look best in browline, cat-eye, and oval frames that balance narrow temples.'],
+    ['How wide should sunglasses be for my face?', 'Your frame width should match your cheekbone width within 2 to 3 millimeters so the temples neither pinch your head nor extend far past your face. Most medium adult frames measure 135 to 142 mm across the front.'],
+    ['Does face shape also affect necklines and shirt collars?', 'Yes. Visual balance works the same way below the chin: round and square faces benefit from V-necks and open collars that lengthen the neck, while oblong faces look balanced in crew necks, boat necks, and spread shirt collars.']
+  ];
+  const body = `<p class="eyebrow">Free eyewear &amp; proportion tool</p>
+<h1>Face Shape Calculator and Sunglasses Frame Matcher</h1>
+<p class="answer">An oval face has a length-to-cheekbone ratio between 1.35 and 1.55; under 1.35 is round or square, and 1.55 or above is oblong. Example: ${esc(ex)} Enter your four measurements below to see your exact facial ratios, live contour diagram, and best sunglasses, haircuts, and necklines.</p>
+${verifiedLine(FCore.FACTS.verified)}
+${toolShell('face-shape', 'Face shape and sunglasses finder', FS.controls(FS.norm(FS.DEFAULT)), FS.result(FS.norm(FS.DEFAULT)))}
+<h2>How the face shape and sunglasses matcher works</h2>
+${steps([
+    '<b>Length-to-width index</b> divides your face length (hairline to chin) by your cheekbone width, following Farkas facial anthropometry.',
+    '<b>Contour taper ratios</b> compare your forehead and jawline against your cheekbones to distinguish oval, heart, diamond, and triangle shapes.',
+    '<b>Oppositional frame geometry</b> matches curved frames to angular faces (square, diamond) and structured angular frames to soft faces (round).',
+    '<b>Hair and collar balance</b> applies the same vertical vs horizontal optical rules to necklines, lapels, and haircuts.'])}
+<h2>Face shapes and best sunglasses chart</h2>
+${table('All 7 face shapes, their proportions, and recommended eyewear', ['Face shape', 'Key ratio / rule', 'Best sunglasses', 'Frames to avoid'], shapes.map(([, s]) => [
+    esc(s.name), esc(s.rule), esc(s.frames.join(', ')), esc(s.avoid)]))}
+${callout('Most people sit close to two shapes—for example, an oval face with a slightly square jaw. Use your primary shape for frame width and your secondary trait to choose between curved or angular rims.')}
+${sources([
+    ['Anthropometry of the Head and Face (Leslie G. Farkas, 1994)', 'https://en.wikipedia.org/wiki/Facial_index', 'facial index (length ÷ bizygomatic breadth) and contour classifications'],
+    ['Eyewear and face shape dispensing guidelines (The Vision Council)', 'https://thevisioncouncil.org/', 'optical frame geometry and bridge balance'],
+    ['SimplyStylo methodology', '/methodology/', 'how every tool is built and checked']])}
+${faqBlock(faq)}
+${relatedBlock('face-shape')}`;
+  return {
+    path: '/tools/face-shape-sunglasses/', type: 'tool', title: 'Face Shape Calculator: Best Sunglasses and Frames Guide', crumb: 'Face Shape Calculator',
+    crumbs: [['Tools', '/tools/']],
+    description: 'Calculate your face shape from forehead, cheekbone, jawline and length measurements. Find the best sunglasses, eyeglasses, haircuts and necklines.',
+    bundle: 'face-shape', faq, body, datePublished: '2026-11-03', dateModified: MODIFIED,
+    app: { name: tool('face-shape').name, description: tool('face-shape').blurb, features: ['7 anthropometric face shapes', 'Live SVG face & sunglasses diagram', 'Centimeters and inches', 'Eyewear, haircut and neckline advice'] },
+    about: [
+      { '@type': 'Thing', name: 'Facial index', sameAs: 'https://en.wikipedia.org/wiki/Facial_index' },
+      { '@type': 'Thing', name: 'Sunglasses', sameAs: 'https://en.wikipedia.org/wiki/Sunglasses' }
+    ],
+    llms: `Face Shape and Sunglasses Finder: classifies 7 face shapes (Oval, Round, Square, Oblong, Heart, Diamond, Triangle) from forehead, cheekbone, jawline and face length in cm or inches using the facial index (length ÷ cheekbones: < 1.35 round/square, 1.35–1.55 oval, ≥ 1.55 oblong) and jaw/forehead taper ratios. Example: ${ex}`
+  };
+}
+
+function pantBreak() {
+  const ex = PB.summary(PB.norm(PB.DEFAULT));
+  const breaks = Object.entries(PCore.BREAKS);
+  const faq = [
+    ['What is pant break in tailoring?', 'Pant break is the fold or crease that forms at the bottom front of your trouser leg where it rests on the top (vamp) of your shoe. Tailors measure it in five stages: cropped (ankle), no break, quarter break, half break, and full break.'],
+    ['What is the difference between no break, quarter break, and half break?', 'No break means the trouser hem lightly kisses the top of the shoe with zero horizontal folding (+0 in offset). A quarter break adds about 0.4 in (1 cm) so a single subtle dimple forms. A half break adds 0.75 in (1.9 cm) for a classic Savile Row fold halfway down the shoe vamp.'],
+    ['Which pant break is best for a modern suit or wedding?', 'A quarter break (slight break) is the most versatile choice for business suits and wedding guests: it looks clean while standing and covers the sock better than no-break trousers when you walk or sit.'],
+    ['Does shoe style change my trouser inseam?', 'Yes. Loafers and slip-ons have a lower vamp than lace-up oxfords, so trousers worn primarily with loafers need to be hemmed about 0.25 in (0.6 cm) shorter to achieve the same break without pooling over the instep.'],
+    ['How wide should my trouser leg opening be for each break?', 'Slim trousers (7 in / 17.8 cm flat leg opening) only accommodate cropped, no-break, or quarter-break hems because a narrow opening stops high on the shoe. Tailored trousers (7.75 in / 19.7 cm) work with no break through half break, while relaxed or wide-leg trousers (8.75 in / 22.2 cm) drape cleanly into a half or full break.'],
+    ['How tall should trouser turn-up cuffs be?', 'Classic turn-up cuffs measure 1.5 in (3.8 cm) on slim trousers, 1.75 in (4.5 cm) on tailored straight trousers, and 2.0 in (5 cm) on relaxed or pleated trousers. A turn-up cuff requires about 4 in (10 cm) of extra unhemmed cloth.'],
+    ['What is a military hem or angled trouser hem?', 'An angled hem (also called a military or Savile Row slant) cuts the back of the trouser leg 0.25 to 0.5 in lower than the front so the front drapes cleanly on the shoe vamp while the back covers the top of the shoe heel counter.']
+  ];
+  const body = `<p class="eyebrow">Free Savile Row tailoring tool</p>
+<h1>Pant Break Guide and Trouser Hem Inseam Calculator</h1>
+<p class="answer">Pant break is how much your trouser hem rests on your shoe: no break adds 0 in to your baseline inseam, a quarter break adds 0.4 in (1 cm), a half break adds 0.75 in (1.9 cm), and a full break adds 1.25 in (3.2 cm). Example: ${esc(ex)} Enter your inseam below for exact tailor instructions and a live side-profile diagram.</p>
+${verifiedLine(PCore.FACTS.verified)}
+${toolShell('pant-break', 'Pant break and trouser hem calculator', PB.controls(PB.norm(PB.DEFAULT)), PB.result(PB.norm(PB.DEFAULT)))}
+<h2>How the trouser hem and pant break calculator works</h2>
+${steps([
+    '<b>Baseline no-break inseam</b> is measured from the crotch seam straight down to the top of your shoe vamp.',
+    '<b>Break offset</b> adds or subtracts length: −1 in for cropped, 0 in for no break, +0.4 in for quarter break, +0.75 in for half break, and +1.25 in for full break.',
+    '<b>Footwear vamp adjustment</b> shortens the hem by 0.25 in for low-vamp loafers or lengthens by 0.25 in for dress boots.',
+    '<b>Leg opening and cuff check</b> pairs your trouser width (7 to 8.75 in flat) with the right cuff height (1.5 to 2 in) and flags combinations that bunch.'])}
+<h2>Pant break comparison chart</h2>
+${table('All 5 trouser breaks, their inseam offsets, and best occasions', ['Break style', 'Inseam offset', 'How it drapes', 'Best for'], breaks.map(([, b]) => [
+    esc(b.name), `${b.offsetIn > 0 ? '+' : ''}${b.offsetIn} in (${Math.round(b.offsetIn * 2.54 * 10) / 10} cm)`, esc(b.look), esc(b.vibe)]))}
+${callout('Always bring the exact shoes and belt you plan to wear to your fitting. Changing from oxfords to loafers or shifting your waistband by half an inch changes the break immediately.')}
+${sources([
+    ['Trouser length and break guide (Savile Row & Permanent Style)', 'https://www.permanentstyle.com/', 'quarter, half, and full break drape over the shoe instep'],
+    ['Tailoring alterations and turn-up cuff proportions (Gentleman\'s Gazette)', 'https://www.gentlemansgazette.com/', 'cuff height and leg opening ratios'],
+    ['SimplyStylo methodology', '/methodology/', 'how every tool is built and checked']])}
+${faqBlock(faq)}
+${relatedBlock('pant-break')}`;
+  return {
+    path: '/tools/pant-break-guide/', type: 'tool', title: 'Pant Break Guide: Trouser Hem and Inseam Calculator', crumb: 'Pant Break Calculator',
+    crumbs: [['Tools', '/tools/']],
+    description: 'Calculate your exact trouser hem inseam for no break, quarter break, half break, full break or cropped pants, adjusted for loafers, oxfords and cuffs.',
+    bundle: 'pant-break', faq, body, datePublished: '2026-11-03', dateModified: MODIFIED,
+    app: { name: tool('pant-break').name, description: tool('pant-break').blurb, features: ['5 trouser break styles', 'Footwear vamp adjustment', 'Leg opening and turn-up cuff specs', 'Live side-profile SVG diagram'] },
+    about: [
+      { '@type': 'Thing', name: 'Trousers', sameAs: 'https://en.wikipedia.org/wiki/Trousers' },
+      { '@type': 'Thing', name: 'Hemline', sameAs: 'https://en.wikipedia.org/wiki/Hemline' }
+    ],
+    llms: `Pant Break and Trouser Hem Calculator: calculates finished trouser inseam, leg opening width, and cuff height from baseline no-break inseam (in or cm), break style (cropped −1 in, no break 0 in, quarter break +0.4 in, half break +0.75 in, full break +1.25 in), footwear vamp (loafers −0.25 in, oxfords 0 in, boots +0.25 in), and fit (slim 7 in, tailored 7.75 in, relaxed 8.75 in). Example: ${ex}`
+  };
+}
+
 function toolsIndex() {
   const body = `<p class="eyebrow">All tools</p>
 <h1>Free Style Tools</h1>
@@ -888,11 +987,12 @@ ${cards(TOOLS)}
 <p class="prose">Looking for what goes with one specific color? Our <a href="/colors/">color guides</a> cover the most-worn clothing colors with outfit formulas.</p>`;
   return {
     path: '/tools/', type: 'collection', title: 'Free Style Tools: Colors, Sizes and Outfits', crumb: 'Tools',
-    description: 'Free style tools: color combination finder, size converter, color analysis quiz, capsule wardrobe planner and outfit generator.',
+    description: 'Free style tools: color combination finder, size converter, color analysis quiz, capsule wardrobe planner, face shape calculator and outfit generator.',
     body, datePublished: PUBLISHED, dateModified: MODIFIED, itemList: TOOLS.map((t) => [t.name, t.path]),
     llms: `Tools index: ${TOOLS.map((t) => t.name).join(', ')}.`
   };
 }
 
-export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), selfieAnalysis(), wardrobeColors(), packingList(), dressCode(), dressDesigner(), weddingDress(), promDress(), weddingGuest(), bridesmaidPalette(), toolsIndex()];
+export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), selfieAnalysis(), wardrobeColors(), packingList(), dressCode(), dressDesigner(), weddingDress(), promDress(), weddingGuest(), bridesmaidPalette(), faceShape(), pantBreak(), toolsIndex()];
 export { icon };
+

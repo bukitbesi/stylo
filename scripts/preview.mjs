@@ -19,4 +19,4 @@ http.createServer((req, res) => {
   }
   if (!fs.existsSync(file)) { res.writeHead(404, { 'Content-Type': types['.html'] }).end(fs.readFileSync(path.join(dist, '404.html'))); return; }
   res.writeHead(200, { 'Content-Type': types[path.extname(file)] || 'application/octet-stream' }).end(fs.readFileSync(file));
-}).listen(port, () => console.log(`http://localhost:${port}/`));
+}).listen(port, '0.0.0.0', () => console.log(`http://0.0.0.0:${port}/`));

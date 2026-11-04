@@ -137,6 +137,21 @@ const interactions = {
     const after = await p.textContent('[data-result]');
     await p.selectOption('#og-u', 'f');
     return before !== after && (await p.inputValue('#og-t')) === '68';
+  },
+  '/tools/face-shape-sunglasses/': async (p) => {
+    await p.fill('#fs-f', '14.0');
+    await p.fill('#fs-c', '14.2');
+    await p.fill('#fs-j', '13.8');
+    await p.fill('#fs-l', '18.2');
+    const ok = /Square Face/.test(await p.textContent('[data-result]'));
+    await p.selectOption('#fs-u', 'in');
+    return ok && /Square Face/.test(await p.textContent('[data-result]')) && /u=in/.test(p.url());
+  },
+  '/tools/pant-break-guide/': async (p) => {
+    await p.fill('#pb-i', '32');
+    await p.selectOption('#pb-b', 'half');
+    await p.selectOption('#pb-c', 'yes');
+    return /32\.75 in Inseam/.test(await p.textContent('[data-result]')) && /b=half/.test(p.url());
   }
 };
 

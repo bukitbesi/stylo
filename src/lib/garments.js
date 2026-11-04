@@ -1,63 +1,161 @@
 /*! SimplyStylo garment illustrations. (c) SimplyStylo. All rights reserved. */
-// Flat-lay garment silhouettes drawn as inline SVG in any color, so every outfit and capsule result shows the
-// exact pieces in the exact colors (a photo can't be recolored per result). 64 × 64 viewBox.
+// Bespoke tailored garment illustrations drawn as multi-layered inline SVG in any color, with subtle fabric highlights,
+// drop shadows, stitch lines, and hardware accents so every outfit and capsule result looks like an editorial lookbook.
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
   else root.SSGarment = factory();
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  // Each shape: filled body paths, plus optional detail strokes drawn darker on top.
+  // Each shape: filled body paths, optional secondary/collar fills, sole paths, and tailored stitch/fold detail strokes.
   var SHAPES = {
-    tee: { body: ['M20 10 L27 8 Q32 13 37 8 L44 10 L56 20 L50 28 L46 25 L46 56 L18 56 L18 25 L14 28 L8 20 Z'] },
-    shirt: { body: ['M22 8 L28 6 L32 12 L36 6 L42 8 L52 14 L58 44 L51 46 L46 24 L46 58 L18 58 L18 24 L13 46 L6 44 L12 14 Z'],
-      detail: ['M32 12 L32 58', 'M28 6 L32 14 L36 6'] },
-    sweater: { body: ['M22 8 Q32 15 42 8 L52 13 L58 46 L51 48 L46 24 L46 56 L18 56 L18 24 L13 48 L6 46 L12 13 Z'],
-      detail: ['M18 52 L46 52', 'M7 42 L13 44', 'M57 42 L51 44'] },
-    turtleneck: { body: ['M26 3 H38 V10 H26 Z', 'M22 9 L26 9 Q32 12 38 9 L42 9 L52 13 L58 46 L51 48 L46 24 L46 56 L18 56 L18 24 L13 48 L6 46 L12 13 Z'],
-      detail: ['M18 52 L46 52', 'M26 6 H38'] },
-    tank: { body: ['M23 6 L27 6 Q32 20 37 6 L41 6 L44 22 L46 56 L18 56 L20 22 Z'] },
-    polo: { body: ['M20 10 L27 8 Q32 13 37 8 L44 10 L56 20 L50 28 L46 25 L46 56 L18 56 L18 25 L14 28 L8 20 Z'],
-      detail: ['M27 8 L32 16 L37 8', 'M32 13 L32 22'] },
-    trousers: { body: ['M18 6 H46 L50 60 H37 L32 22 L27 60 H14 Z'], detail: ['M18 11 H46', 'M32 11 V22'] },
-    jeans: { body: ['M18 6 H46 L50 60 H37 L32 22 L27 60 H14 Z'], detail: ['M18 11 H46', 'M32 11 V22', 'M21 14 Q24 20 28 14', 'M36 14 Q40 20 43 14'] },
-    shorts: { body: ['M16 12 H48 L52 44 H36 L32 28 L28 44 H12 Z'], detail: ['M16 17 H48'] },
-    skirt: { body: ['M22 8 H42 L52 56 H12 Z'], detail: ['M22 13 H42'] },
-    dress: { body: ['M24 4 L28 4 Q32 10 36 4 L40 4 L42 18 L38 24 L52 60 H12 L26 24 L22 18 Z'], detail: ['M26 24 H38'] },
-    gown: { body: ['M25 3 L28 3 Q32 9 36 3 L39 3 L41 17 L37 23 L56 62 H8 L27 23 L23 17 Z'], detail: ['M27 23 H37'] },
-    jumpsuit: { body: ['M22 4 L27 4 Q32 10 37 4 L42 4 L44 26 L48 60 H36 L32 34 L28 60 H16 L20 26 Z'], detail: ['M20 26 H44'] },
-    jacket: { body: ['M20 7 L32 26 L44 7 L54 13 L58 50 L51 52 L47 28 L47 58 L17 58 L17 28 L13 52 L6 50 L10 13 Z'],
-      detail: ['M20 7 L27 22 L32 26', 'M44 7 L37 22 L32 26', 'M32 26 L32 58', 'M21 44 H28'] },
-    coat: { body: ['M20 5 L32 24 L44 5 L54 11 L58 54 L51 56 L47 28 L48 62 L16 62 L17 28 L13 56 L6 54 L10 11 Z'],
-      detail: ['M20 5 L27 20 L32 24', 'M44 5 L37 20 L32 24', 'M32 24 L32 62', 'M17 40 H47'] },
-    cardigan: { body: ['M22 8 L32 30 L42 8 L52 13 L58 46 L51 48 L46 24 L46 56 L18 56 L18 24 L13 48 L6 46 L12 13 Z'],
-      detail: ['M32 30 L32 56', 'M18 52 L46 52'] },
-    vest: { body: ['M22 6 L32 26 L42 6 L46 10 L46 56 L18 56 L18 10 Z'], detail: ['M32 26 L32 56'] },
-    // Shoes are drawn side-on (heel left, toe right) with a sole in a separate tone so they read as shoes at 36 px.
-    sneakers: { body: ['M7 45 L7 31 Q7 26 12 26 L16 26 Q19 31 23 29 L26 24 Q30 23 31 26 L36 33 Q49 35 56 39 Q59 41 59 45 Z'],
-      sole: ['M5 44 H60 Q61 50 57 51 H8 Q5 51 5 47 Z'], tone: 'light',
-      detail: ['M27 30 L31 28', 'M30 33 L34 31', 'M14 41 Q26 34 40 40', 'M47 36 Q50 41 59 43', 'M5 48 H60'] },
-    loafers: { body: ['M6 45 Q6 37 12 36 Q20 35 27 37 Q38 34 50 37 Q58 40 59 45 Z'],
-      sole: ['M5 45 H60 V47 Q60 49 57 49 H18 V53 H7 V49 Q5 49 5 47 Z'], tone: 'dark',
-      detail: ['M30 37 Q40 33 52 39', 'M31 40 H45', 'M36 40 V42 H40 V40'] },
-    heels: { body: ['M9 25 Q12 24 13 27 Q22 37 38 39 Q52 40 58 44 Q60 46 58 48 L38 48 Q22 44 10 36 Z'],
-      sole: ['M9 35 L15 38.5 L14 58 L11 58 Z', 'M36 47 Q48 48.5 59 47 Q60 49 58 50.5 Q48 51 36 49.5 Z'], tone: 'dark',
-      detail: ['M13 27 Q20 33 26 36'] },
-    boots: { body: ['M14 16 H32 V37 Q46 38 54 42 Q59 44 59 48 H13 Z'],
-      sole: ['M12 48 H60 V51 Q60 53 58 53 H24 V57 H12 Z'], tone: 'dark',
-      detail: ['M22 17 Q22 29 29 36', 'M14 44 H59'] },
-    sandals: { body: ['M8 44 Q8 34 14 32 L26 30 L27 33 L16 35 Q12 37 12 44 Z', 'M34 44 Q38 34 50 36 Q56 38 56 44 H51 Q51 40 47 40 Q41 40 39 44 Z'],
-      sole: ['M5 47 Q4 44 9 44 H55 Q60 44 60 47 Q60 50 56 50 H9 Q5 50 5 47 Z', 'M7 50 H17 V55 H7 Z'], tone: 'tan' },
-    bag: { body: ['M12 24 H52 L55 58 H9 Z'], detail: ['M24 24 Q24 10 32 10 Q40 10 40 24', 'M12 32 H52'] },
-    scarf: { body: ['M24 6 H40 V34 L46 58 H36 L32 40 L28 58 H18 L24 34 Z'], detail: ['M19 54 H27', 'M37 54 H45'] },
-    tie: { body: ['M28 6 H36 L38 13 L35 16 L40 50 L32 58 L24 50 L29 16 L26 13 Z'], detail: ['M26 13 H38'] },
-    square: { body: ['M14 26 H50 V56 H14 Z', 'M20 26 L26 10 L32 22 L38 8 L44 26 Z'] },
-    belt: { body: ['M4 26 H60 V38 H4 Z'], detail: ['M22 24 H32 V40 H22 Z', 'M27 32 H38'] },
-    watch: { body: ['M26 4 H38 V20 H26 Z', 'M26 44 H38 V60 H26 Z', 'M32 18 A14 14 0 1 1 31.9 18 Z'], detail: ['M32 26 V32 L36 35'] },
-    sunglasses: { body: ['M6 26 H28 V34 Q28 44 17 44 Q6 44 6 34 Z', 'M36 26 H58 V34 Q58 44 47 44 Q36 44 36 34 Z'], detail: ['M28 29 Q32 26 36 29'] },
-    gloves: { body: ['M18 60 V30 L14 18 Q13 14 16 14 L20 24 V8 Q20 5 23 5 Q26 5 26 8 V22 V6 Q26 3 29 3 Q32 3 32 6 V22 V7 Q32 4 35 4 Q38 4 38 7 V23 V11 Q38 8 41 8 Q44 8 44 11 V40 L42 60 Z'] },
-    socks: { body: ['M24 4 H38 V36 L48 46 Q54 52 48 58 Q44 62 38 58 L26 46 Q24 44 24 40 Z'], detail: ['M24 10 H38'] },
-    jewelry: { body: ['M32 52 L38 44 L32 36 L26 44 Z'], detail: ['M12 8 Q32 46 52 8'] }
+    tee: {
+      body: ['M21 9 Q32 13 43 9 L55 18 L50 28 L45 24 L45 56 Q32 57 19 56 L19 24 L14 28 L9 18 Z'],
+      detail: ['M23 9.5 Q32 15.5 41 9.5', 'M21 9 Q32 13 43 9', 'M19 52.5 Q32 53.5 45 52.5', 'M14 26 L18.5 22.5', 'M50 26 L45.5 22.5', 'M24 34 Q25 46 24 54']
+    },
+    shirt: {
+      body: ['M21 9 L26 7 L32 13 L38 7 L43 9 L53 15 L58 46 L51 48 L46 23 L46 57 Q32 58.5 18 57 L18 23 L13 48 L6 46 L11 15 Z'],
+      collar: ['M26 7 L32 13 L28 17 L23 11 Z', 'M38 7 L32 13 L36 17 L41 11 Z'],
+      detail: ['M32 13 V57', 'M35 28 H42 V36 H35 Z', 'M7 43 L13.5 45', 'M57 43 L50.5 45', 'M32 20 V20.5', 'M32 28 V28.5', 'M32 36 V36.5', 'M32 44 V44.5']
+    },
+    sweater: {
+      body: ['M21 9 Q32 14 43 9 L53 15 L58 47 L51 49 L46 24 L46 56 H18 L18 24 L13 49 L6 47 L11 15 Z'],
+      detail: ['M23 9.5 Q32 16 41 9.5', 'M18 51 H46', 'M22 51 V56', 'M27 51 V56', 'M32 51 V56', 'M37 51 V56', 'M42 51 V56', 'M7 44 L13.5 46', 'M57 44 L50.5 46']
+    },
+    turtleneck: {
+      body: ['M25 4 Q32 5 39 4 L40 10 Q32 12 24 10 Z', 'M21 10 L24 10 Q32 12 40 10 L43 10 L53 15 L58 47 L51 49 L46 24 L46 56 H18 L18 24 L13 49 L6 47 L11 15 Z'],
+      detail: ['M25 7 Q32 8 39 7', 'M18 52 H46', 'M7 44 L13.5 46', 'M57 44 L50.5 46', 'M28 4 V10', 'M32 4.5 V10.5', 'M36 4 V10']
+    },
+    tank: {
+      body: ['M23 6 L27 6 Q32 19 37 6 L41 6 Q41 18 45 22 L46 56 Q32 57 18 56 L19 22 Q23 18 23 6 Z'],
+      detail: ['M25 6 Q32 21 39 6', 'M18 52.5 Q32 53.5 46 52.5']
+    },
+    polo: {
+      body: ['M21 9 L26 7 L32 12 L38 7 L43 9 L55 18 L50 28 L45 24 L45 56 Q32 57 19 56 L19 24 L14 28 L9 18 Z'],
+      collar: ['M26 7 L32 12 L28 16 L23 10 Z', 'M38 7 L32 12 L36 16 L41 10 Z'],
+      detail: ['M30 12 H34 V24 H30 Z', 'M32 16 V16.5', 'M32 20 V20.5', 'M14 26 L18.5 22.5', 'M50 26 L45.5 22.5']
+    },
+    trousers: {
+      body: ['M18 6 H46 L49 59 H36.5 L32 23 L27.5 59 H15 Z'],
+      detail: ['M18 11 H46', 'M32 11 V23', 'M24 6 V11', 'M39 6 V11', 'M18 14 L23 21', 'M46 14 L41 21', 'M22.5 16 V56', 'M41.5 16 V56', 'M15 56 H27.5', 'M36.5 56 H49']
+    },
+    jeans: {
+      body: ['M18 6 H46 L49 59 H36.5 L32 23 L27.5 59 H15 Z'],
+      detail: ['M18 11 H46', 'M32 11 V23', 'M32 11 Q35 17 32 21', 'M18 15 Q23 19 25 11', 'M46 15 Q41 19 39 11', 'M24 6 V11', 'M40 6 V11', 'M15 55.5 H27.5', 'M36.5 55.5 H49']
+    },
+    shorts: {
+      body: ['M17 11 H47 L51 43 H35.5 L32 27 L28.5 43 H13 Z'],
+      detail: ['M17 16 H47', 'M32 16 V27', 'M17 19 L22 25', 'M47 19 L42 25', 'M13.5 40 H28.5', 'M35.5 40 H50.5']
+    },
+    skirt: {
+      body: ['M22 7 H42 L53 56 Q32 59 11 56 Z'],
+      detail: ['M22 12 H42', 'M27 12 L22 54', 'M32 12 V55', 'M37 12 L42 54']
+    },
+    dress: {
+      body: ['M23 5 L27 5 Q32 12 37 5 L41 5 L43 17 L39 24 L54 59 Q32 62 10 59 L25 24 L21 17 Z'],
+      detail: ['M25 24 H39', 'M28 24 L20 56', 'M32 24 V57', 'M36 24 L44 56']
+    },
+    gown: {
+      body: ['M24 4 L28 4 Q32 10 36 4 L40 4 L42 16 L38 22 L57 61 Q32 64 7 61 L26 22 L22 16 Z'],
+      detail: ['M26 22 H38', 'M29 22 L17 59', 'M32 22 V60', 'M35 22 L47 59']
+    },
+    jumpsuit: {
+      body: ['M22 5 L27 5 Q32 11 37 5 L42 5 L44 24 L48 59 H36 L32 33 L28 59 H16 L20 24 Z'],
+      detail: ['M20 24 H44', 'M32 11 V24', 'M22 28 L26 33', 'M42 28 L38 33']
+    },
+    jacket: {
+      body: ['M20 7 L27 6 L32 26 L37 6 L44 7 L54 13 L58 50 L51 52 L47 26 L47 58 L33 58 L32 46 L31 58 L17 58 L17 26 L13 52 L6 50 L10 13 Z'],
+      collar: ['M25 6.5 L20 14 L25 16 L23 20 L32 26 L27 6 Z', 'M39 6.5 L44 14 L39 16 L41 20 L32 26 L37 6 Z'],
+      detail: ['M32 26 V46', 'M20 43 H27 V46 H20 Z', 'M37 43 H44 V46 H37 Z', 'M36 21 H42', 'M32 31 V31.5', 'M32 37 V37.5']
+    },
+    coat: {
+      body: ['M19 5 L26 4 L32 23 L38 4 L45 5 L54 11 L58 53 L51 55 L47 26 L49 61 H15 L17 26 L13 55 L6 53 L10 11 Z'],
+      collar: ['M24 4.5 L18 13 L24 15 L22 19 L32 23 L26 4 Z', 'M40 4.5 L46 13 L40 15 L42 19 L32 23 L38 4 Z'],
+      detail: ['M32 23 V61', 'M16 37 H48 V41 H16 Z', 'M29 36 H35 V42 H29 Z', 'M28 29 V29.5', 'M36 29 V29.5', 'M28 47 V47.5', 'M36 47 V47.5']
+    },
+    cardigan: {
+      body: ['M21 8 L26 7 L32 28 L38 7 L43 8 L53 14 L58 47 L51 49 L46 24 L46 56 H18 L18 24 L13 49 L6 47 L11 14 Z'],
+      detail: ['M26 7 L32 28 L38 7', 'M32 28 V56', 'M18 52 H46', 'M21 42 H28 V48 H21 Z', 'M36 42 H43 V48 H36 Z', 'M32 34 V34.5', 'M32 40 V40.5', 'M32 46 V46.5']
+    },
+    vest: {
+      body: ['M22 6 L26 5 L32 25 L38 5 L42 6 L46 18 L46 54 L39 58 L32 53 L25 58 L18 54 L18 18 Z'],
+      detail: ['M26 5 L32 25 L38 5', 'M32 25 V53', 'M21 42 H28', 'M36 42 H43', 'M32 30 V30.5', 'M32 36 V36.5', 'M32 42 V42.5', 'M32 48 V48.5']
+    },
+    // Footwear: sculpted side profiles with realistic lasts, welts, heels, and hardware/stitch lines.
+    sneakers: {
+      body: ['M7 44 L8 30 Q8.5 25 13 26 L17 29 Q21 32 25 28 L28 23 Q31 22 33 25 L41 33 Q49 34 56 38 Q60 40 59 44 Z'],
+      sole: ['M5 44 H60 Q61 48 59 50 Q56 51 8 51 Q5 51 5 47 Z'],
+      tone: 'light',
+      detail: ['M8 35 Q16 35 20 44', 'M24 34 Q34 39 39 44', 'M29 27 L33 25', 'M32 30 L36 28', 'M35 33 L39 31', 'M48 36 Q51 41 58 42', 'M5 47.5 H60']
+    },
+    loafers: {
+      body: ['M7 44 Q6.5 34 11 31 L16 32 Q22 36 29 33 L32 29 Q35 28 38 31 Q46 35 55 37 Q60 39 59 44 Z'],
+      sole: ['M5 44 H60 V46.5 Q60 48 57 48 H21 V52 H7 V48 Q5 48 5 46 Z'],
+      tone: 'dark',
+      detail: ['M15 35 Q28 41 49 38', 'M28 33 L35 38', 'M31 31 H37 V34 H31 Z', 'M7 38 Q12 39 14 44']
+    },
+    heels: {
+      body: ['M9 22 Q13 21 15 26 Q21 37 33 41 Q41 42 46 39 Q53 39 58 44 Q60 46 57 48 L36 48 Q23 44 10 34 Z'],
+      sole: ['M9 33 L14.5 36.5 L13.5 56 H11 L10.5 36 Z', 'M10 34 Q23 44 36 48 L57 48 Q59 49.5 56 50 L35 50 Q22 46 10 35.5 Z'],
+      tone: 'dark',
+      detail: ['M14 25 Q22 36 34 41', 'M45 40 Q51 42 56 46']
+    },
+    boots: {
+      body: ['M15 13 H19 V10 H23 V13 H32 L33 33 Q44 36 54 39 Q60 41 59 46 H13 L14 28 Z'],
+      sole: ['M11 46 H60 V49 Q60 51 57 51 H25 V55 H11 V49 Z'],
+      tone: 'dark',
+      detail: ['M21 13 H28 V29 Q28 33 24.5 33 Q21 33 21 29 Z', 'M14 38 Q22 39 26 46', 'M12 46 H59']
+    },
+    sandals: {
+      body: ['M9 44 Q8 34 15 31 L27 29 L28 32.5 L16 34.5 Q12.5 36.5 12.5 44 Z', 'M14 29 H30 V32 H14 Z', 'M41 44 Q43 35 51 36 Q57 37 57 44 H53 Q53 40 49.5 40 Q45.5 40 45 44 Z'],
+      sole: ['M5 44 H59 Q61 44 61 46.5 Q61 49 58 49 H20 V53 H7 V49 Q5 49 5 46.5 Z'],
+      tone: 'tan',
+      detail: ['M21 28.5 H25 V32.5 H21 Z']
+    },
+    bag: {
+      body: ['M12 24 H52 L56 56 Q56 59 53 59 H11 Q8 59 8 56 Z'],
+      collar: ['M12 24 H52 L50 36 Q32 39 14 36 Z'],
+      detail: ['M23 24 V15 Q23 8 32 8 Q41 8 41 15 V24', 'M29 35 H35 V40 H29 Z', 'M15 28 V55', 'M49 28 V55']
+    },
+    scarf: {
+      body: ['M22 7 Q32 5 42 7 V32 L48 56 H36 L32 37 L28 56 H16 L22 32 Z'],
+      detail: ['M22 22 H42', 'M20 31 H44', 'M17 53 V58', 'M21 53 V58', 'M25 53 V58', 'M38 53 V58', 'M42 53 V58', 'M46 53 V58']
+    },
+    tie: {
+      body: ['M27 6 H37 L39 13 L35 17 L41 49 L32 59 L23 49 L29 17 L25 13 Z'],
+      detail: ['M25 13 H39', 'M29 17 H35', 'M32 17 V26', 'M27 36 L37 30', 'M26 44 L38 38']
+    },
+    square: {
+      body: ['M14 28 H50 V56 Q50 58 48 58 H16 Q14 58 14 56 Z'],
+      collar: ['M18 28 L25 11 L32 22 L39 9 L46 28 Z'],
+      detail: ['M14 33 H50', 'M25 16 L31 28', 'M39 14 L34 28']
+    },
+    belt: {
+      body: ['M5 27 H59 Q61 32 59 37 H5 Z'],
+      collar: ['M21 24 H33 V40 H21 Z'],
+      detail: ['M24 27 H30 V37 H24 Z', 'M28 32 H36', 'M43 32 H43.5', 'M47 32 H47.5', 'M51 32 H51.5']
+    },
+    watch: {
+      body: ['M26 4 H38 V18 H26 Z', 'M26 46 H38 V60 H26 Z'],
+      collar: ['M32 17 A15 15 0 1 1 31.9 17 Z'],
+      detail: ['M32 20 A12 12 0 1 1 31.9 20 Z', 'M32 24 V32 L37 35', 'M47 30 V34', 'M29 10 H35', 'M29 52 H35']
+    },
+    sunglasses: {
+      body: ['M5 24 H28 L27 36 Q26 43 16.5 43 Q7 43 6 36 Z', 'M36 24 H59 L58 36 Q57 43 47.5 43 Q38 43 37 36 Z'],
+      detail: ['M3 24 H61', 'M27 28 Q32 25 37 28', 'M10 28 L15 38', 'M41 28 L46 38']
+    },
+    gloves: {
+      body: ['M18 59 V32 L13 20 Q11.5 15 15.5 14.5 L20 23 V9 Q20 5 23 5 Q26 5 26 9 V21 V6.5 Q26 3 29 3 Q32 3 32 6.5 V21 V7.5 Q32 4 35 4 Q38 4 38 7.5 V22 V11 Q38 8 41 8 Q44 8 44 11 V39 L42 59 Z'],
+      detail: ['M18 53 H42', 'M25 32 V45', 'M30 31 V46', 'M35 32 V45']
+    },
+    socks: {
+      body: ['M23 5 H38 V35 L49 45 Q55 51 49 57 Q44 62 37 57 L24 45 Q22 42 23 37 Z'],
+      detail: ['M23 11 H38', 'M23 15 H38', 'M23 36 Q31 36 33 44', 'M43 49 Q46 53 43 57']
+    },
+    jewelry: {
+      body: ['M32 54 L39 44 L32 34 L25 44 Z'],
+      detail: ['M12 8 Q32 44 52 8', 'M25 44 H39', 'M32 34 V54']
+    }
   };
 
   var MATCH = [
@@ -99,25 +197,29 @@
     return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
   }
 
-  // Sole tone contrasts with the upper: a white sneaker gets a grey sole, a black boot a brown one.
+  // Sole tone contrasts with the upper: a white sneaker gets a warm rubber sole, a black boot gets an espresso leather welt.
   function soleFor(tone, fill) {
     var l = lum(fill);
-    if (tone === 'light') return l > 0.85 ? '#C9C4B8' : '#F4F1EA';
+    if (tone === 'light') return l > 0.85 ? '#D4CFC3' : '#F6F3EC';
     if (tone === 'tan') return l > 0.55 && l < 0.75 ? '#8A6A4A' : '#C9A27A';
-    return l < 0.2 ? '#6B4A33' : '#2A2522';
+    return l < 0.2 ? '#5E422F' : '#26211E';
   }
 
   // label is used as the accessible name; decorative=true hides it from screen readers (text is next to it).
   function svg(name, hex, size, decorative) {
     var s = SHAPES[shapeFor(name)];
     var fill = /^#[0-9A-F]{6}$/i.test(hex || '') ? hex.toUpperCase() : '#B8A58D';
-    var line = lum(fill) < 0.3 ? shade(fill, 1.9) : shade(fill, 0.62);
+    var l = lum(fill);
+    var line = l < 0.25 ? shade(fill, 1.95) : shade(fill, 0.58);
+    var collarFill = l < 0.25 ? shade(fill, 1.35) : shade(fill, 0.91);
     var px = size || 64;
     return '<svg class="garment" width="' + px + '" height="' + px + '" viewBox="0 0 64 64"' +
       (decorative ? ' aria-hidden="true"' : ' role="img" aria-label="' + String(name).replace(/"/g, '') + '"') + '>' +
-      s.body.map(function (d) { return '<path d="' + d + '" fill="' + fill + '" stroke="' + line + '" stroke-width="1.5" stroke-linejoin="round"/>'; }).join('') +
+      '<ellipse cx="32" cy="60.5" rx="18" ry="1.8" fill="rgba(17,17,16,0.08)"/>' +
+      s.body.map(function (d) { return '<path d="' + d + '" fill="' + fill + '" stroke="' + line + '" stroke-width="1.4" stroke-linejoin="round"/>'; }).join('') +
+      (s.collar || []).map(function (d) { return '<path d="' + d + '" fill="' + collarFill + '" stroke="' + line + '" stroke-width="1.2" stroke-linejoin="round"/>'; }).join('') +
       (s.sole || []).map(function (d) { return '<path d="' + d + '" fill="' + soleFor(s.tone, fill) + '" stroke="' + line + '" stroke-width="1.2" stroke-linejoin="round"/>'; }).join('') +
-      (s.detail || []).map(function (d) { return '<path d="' + d + '" fill="none" stroke="' + line + '" stroke-width="1.5" stroke-linecap="round"/>'; }).join('') +
+      (s.detail || []).map(function (d) { return '<path d="' + d + '" fill="none" stroke="' + line + '" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>'; }).join('') +
       '</svg>';
   }
 

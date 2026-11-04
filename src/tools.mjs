@@ -35,7 +35,11 @@ export const TOOLS = [
   { id: 'packing-list', name: 'Packing List Generator', path: '/tools/packing-list-generator/', icon: 'suitcase',
     blurb: 'Get a printable packing list sized to your trip: days, trip type, weather and laundry, with outfit count.' },
   { id: 'dress-code', name: 'Dress Code Guide', path: '/tools/dress-code-guide/', icon: 'bowtie',
-    blurb: 'See exactly what to wear for white tie, black tie, cocktail, business and casual dress codes, for women and men.' }
+    blurb: 'See exactly what to wear for white tie, black tie, cocktail, business and casual dress codes, for women and men.' },
+  { id: 'face-shape', name: 'Face Shape and Sunglasses Finder', path: '/tools/face-shape-sunglasses/', icon: 'glasses',
+    blurb: 'Enter forehead, cheekbone, jawline and face length measurements to find your face shape, best sunglasses frames, haircuts and necklines.' },
+  { id: 'pant-break', name: 'Pant Break and Trouser Hem Calculator', path: '/tools/pant-break-guide/', icon: 'trousers',
+    blurb: 'Calculate your exact trouser inseam, break offset, leg opening width and cuff height for no break, quarter break, half break and full break.' }
 ];
 
 // Bundle = UI helpers + engines + the tool's UI, in dependency order.
@@ -55,7 +59,9 @@ export const BUNDLES = {
   'dress-designer': ['src/ui/common.js', 'src/lib/color-core.js', 'src/lib/season-core.js', 'src/lib/palette-core.js', 'src/lib/dress-core.js', 'src/ui/dress-designer.js'],
   'wedding-guest': ['src/ui/common.js', 'src/lib/dresscode-core.js', 'src/lib/wedguest-core.js', 'src/lib/dress-core.js', 'src/lib/garments.js', 'src/ui/wedding-guest.js'],
   'bridesmaid-palette': ['src/ui/common.js', 'src/lib/color-core.js', 'src/lib/bridesmaid-core.js', 'src/lib/dress-core.js', 'src/lib/garments.js', 'src/ui/bridesmaid-palette.js'],
-  'dress-code': ['src/ui/common.js', 'src/lib/dresscode-core.js', 'src/lib/garments.js', 'src/ui/dress-code.js']
+  'dress-code': ['src/ui/common.js', 'src/lib/dresscode-core.js', 'src/lib/garments.js', 'src/ui/dress-code.js'],
+  'face-shape': ['src/ui/common.js', 'src/lib/face-core.js', 'src/ui/face-shape.js'],
+  'pant-break': ['src/ui/common.js', 'src/lib/pant-core.js', 'src/ui/pant-break.js']
 };
 
 export const related = (id, n = 3) => TOOLS.filter((t) => t.id !== id).slice(0, n);

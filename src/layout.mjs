@@ -41,14 +41,16 @@ export const ICONS = {
   whatsapp: '<path d="M4 20l1.2-3.9A8.5 8.5 0 1 1 8 18.9z"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l.8-1.6-2-1-1 .9a5 5 0 0 1-2.6-2.6l.9-1-1-2z"/>',
   mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>',
   link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
-  swatch: '<rect x="3" y="3" width="8" height="18" rx="2"/><path d="m11 7 5-3 4 7-9 6"/><circle cx="7" cy="17" r="1"/>'
+  swatch: '<rect x="3" y="3" width="8" height="18" rx="2"/><path d="m11 7 5-3 4 7-9 6"/><circle cx="7" cy="17" r="1"/>',
+  glasses: '<circle cx="6.5" cy="14" r="4"/><circle cx="17.5" cy="14" r="4"/><path d="M10.5 14h3M2.5 14 4 8M21.5 14 20 8"/>',
+  trousers: '<path d="M6 3h12l2 18h-5.5L12 10 9.5 21H4z"/><path d="M6 7h12"/>'
 };
 export const icon = (name, size = 24) =>
   `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
 
 // ---------- content blocks ----------
 export const faqBlock = (faq) => `<section class="faq" aria-labelledby="faq"><h2 id="faq">Frequently asked questions</h2>${faq
-  .map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</section>`;
+  .map(([q, a], i) => `<details id="faq-${i + 1}"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</section>`;
 
 export const steps = (items) => `<ol class="steps">${items.map((s) => `<li>${s}</li>`).join('')}</ol>`;
 
@@ -119,7 +121,7 @@ export function titleCase(str) {
 }
 
 // The brand mark: an ink tile with a hand-drawn "S" stroke and the 60/30/10 palette bar the tools are built on.
-export const MARK = (size) => `<svg width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#171717"/><path d="M42 17.5c-2.6-3-6.2-4.5-10.4-4.5-6.2 0-10.6 3.4-10.6 8.6 0 11.8 22 7.4 22 19.2 0 5.6-4.8 9.2-11.4 9.2-4.6 0-8.6-1.8-11.6-5" fill="none" stroke="#F5F1E9" stroke-width="5.6" stroke-linecap="round"/><rect x="12" y="54" width="24" height="4" rx="2" fill="#B98A57"/><rect x="38" y="54" width="9" height="4" rx="2" fill="#9CAF94"/><rect x="49" y="54" width="3" height="4" rx="1.5" fill="#E8B9B0"/></svg>`;
+export const MARK = (size) => `<svg width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#111110"/><path d="M42 17.5c-2.6-3-6.2-4.5-10.4-4.5-6.2 0-10.6 3.4-10.6 8.6 0 11.8 22 7.4 22 19.2 0 5.6-4.8 9.2-11.4 9.2-4.6 0-8.6-1.8-11.6-5" fill="none" stroke="#FAF8F5" stroke-width="5.6" stroke-linecap="round"/><rect x="12" y="54" width="24" height="4" rx="2" fill="#B98A57"/><rect x="38" y="54" width="9" height="4" rx="2" fill="#1C2D22"/><rect x="49" y="54" width="3" height="4" rx="1.5" fill="#E8B9B0"/></svg>`;
 
 function graph(page, url, crumbs) {
   const org = {
@@ -173,8 +175,8 @@ export function render(page, scriptSrc) {
 <meta name="description" content="${esc(page.description)}">
 <link rel="canonical" href="${url}">
 ${page.noindex ? '<meta name="robots" content="noindex">' : '<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">'}
-<meta name="theme-color" content="#F5F1E9" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#151514" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FAF8F5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E0F0E" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -192,6 +194,7 @@ ${page.noindex ? '<meta name="robots" content="noindex">' : '<meta name="robots"
 <meta name="twitter:card" content="summary_large_image">
 <style>${css}</style>
 <script type="application/ld+json">${graph(page, url, crumbs)}</script>
+<script type="speculationrules">{"prerender":[{"where":{"href_matches":"/*"},"eagerness":"moderate"}]}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
