@@ -84,15 +84,19 @@ app.use((req, res) => {
   }
 });
 
-app.listen(PORT, HOST, () => {
+const server = app.listen(PORT, HOST, () => {
   console.log(`SimplyStylo server running on http://${HOST}:${PORT}`);
 });
 
-if (process.env.PORT && String(process.env.PORT) !== '3000') {
-  const altPort = parseInt(process.env.PORT, 10);
-  if (!isNaN(altPort) && altPort !== PORT) {
-    app.listen(altPort, HOST, () => {
-      console.log(`SimplyStylo server also listening on http://${HOST}:${altPort}`);
-    });
-  }
-}
+server.on('error', (err) => {
+  console.error('SimplyStylo server error:', err);
+});
+
+process.on('SIGTERM', () => {
+  server.close();
+});
+
+process.on('SIGINT', () => {
+  server.close();
+});
+
