@@ -26,7 +26,7 @@ function home() {
   const toolMap = Object.fromEntries(TOOLS.map((t) => [t.id, t]));
   const featured = ['color-analysis', 'color-combination', 'size-converter', 'pant-break'].map((id) => toolMap[id]);
   const colorTools = ['color-analysis', 'color-combination', 'photo-palette', 'selfie-analysis', 'wardrobe-colors'].map((id) => toolMap[id]);
-  const tailoringTools = ['body-proportion', 'pant-break', 'face-shape', 'size-converter', 'body-shape', 'ring-size'].map((id) => toolMap[id]);
+  const tailoringTools = ['body-proportion', 'pant-break', 'face-shape', 'size-converter', 'body-shape', 'ring-size', 'necklace-length', 'hat-size', 'glove-size'].map((id) => toolMap[id]);
   const eventTools = ['wedding-guest', 'bridesmaid-palette', 'dress-code', 'dress-designer', 'wedding-dress', 'prom-dress'].map((id) => toolMap[id]);
   const wardrobeTools = ['capsule-wardrobe', 'outfit-generator', 'packing-list', 'cost-per-wear'].map((id) => toolMap[id]);
 

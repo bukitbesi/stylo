@@ -42,6 +42,9 @@ export const ICONS = {
   mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>',
   link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
   swatch: '<rect x="3" y="3" width="8" height="18" rx="2"/><path d="m11 7 5-3 4 7-9 6"/><circle cx="7" cy="17" r="1"/>',
+  hat: '<path d="M3 17c0-1.5 3-2.5 9-2.5s9 1 9 2.5-3 2.5-9 2.5-9-1-9-2.5z"/><path d="M6.5 15.2 7.5 7c.3-2 2.3-3 4.5-3s4.2 1 4.5 3l1 8.2"/><path d="M7.2 11.5c3 1 6.6 1 9.6 0"/>',
+  glove: '<path d="M8 21v-5l-3.5-4.5c-.8-1 .4-2.3 1.5-1.4L8 12V5c0-1.2 2-1.2 2 0v6V3.5c0-1.2 2-1.2 2 0V11V4.5c0-1.2 2-1.2 2 0V11V6.5c0-1.2 2-1.2 2 0V15c0 2-1 3.5-2 4.5V21z"/><path d="M8 18h8"/>',
+  necklace: '<path d="M5 3c0 7 3 11 7 11s7-4 7-11"/><path d="m12 14 2.5 3-2.5 3.5L9.5 17z"/>',
   glasses: '<circle cx="6.5" cy="14" r="4"/><circle cx="17.5" cy="14" r="4"/><path d="M10.5 14h3M2.5 14 4 8M21.5 14 20 8"/>',
   trousers: '<path d="M6 3h12l2 18h-5.5L12 10 9.5 21H4z"/><path d="M6 7h12"/>',
   proportion: '<rect x="6" y="2" width="12" height="20" rx="3"/><line x1="6" y1="9" x2="18" y2="9"/><line x1="6" y1="16" x2="18" y2="16"/><circle cx="12" cy="9" r="1.5" fill="currentColor"/>'
@@ -107,7 +110,7 @@ const header = (nav) => `<header class="site-head"><div class="wrap site-head__i
 <dialog class="search" id="search" aria-label="Search ${site.brand}"><form class="search__form" action="/search/" role="search">${icon('search', 22)}<label class="sr" for="search-q">Search tools and guides</label><input id="search-q" name="q" type="search" placeholder="Search tools and guides" autocomplete="off" enterkeyhint="search"><button type="button" class="icon-btn" data-search-close aria-label="Close search">${icon('close', 22)}</button></form><ul class="search__results" data-search-results></ul></dialog>`;
 
 const footer = () => `<footer class="site-foot"><div class="wrap"><div class="foot-grid">
-<section class="foot-col" aria-label="About ${site.brand}"><a class="logo" href="/" aria-label="${site.brand} home">${MARK(30)}<span>Simply<i>Stylo</i></span></a><p>${esc(site.tagline)} Free tools for personal color analysis, capsule wardrobes, outfit planning, and US/UK size conversion. Everything runs in your browser: no sign-up, no uploads.</p><p><a class="btn btn--ghost" href="/contact/">Work with us</a></p></section>
+<section class="foot-col" aria-label="About ${site.brand}"><a class="logo" href="/" aria-label="${site.brand} home">${MARK(30)}<span>Simply<i>Stylo</i></span></a><p>${esc(site.tagline)} Free tools for personal color analysis, capsule wardrobes, outfit planning, and US/UK size conversion. Everything runs in your browser: no sign-up, no uploads.</p><p class="foot-social"><a class="btn btn--ghost" href="/contact/">Work with us</a>${site.sameAs.filter((u) => u.includes('pinterest.')).map((u) => `<a class="icon-btn" href="${u}" rel="me noopener" target="_blank" aria-label="${site.brand} on Pinterest">${icon('pinterest', 22)}</a>`).join('')}</p></section>
 <nav class="foot-col" aria-labelledby="foot-tools"><h2 class="foot-h" id="foot-tools">Popular tools</h2>${linkList([...TOOLS.slice(0, 7).map((t) => [t.name, t.path]), ['All tools', '/tools/']])}</nav>
 <nav class="foot-col" aria-labelledby="foot-guides"><h2 class="foot-h" id="foot-guides">Guides and company</h2>${linkList([...GUIDES.slice(0, 2), ['Wedding guest outfits', '/wedding-guest/spring/'], ...COMPANY])}</nav>
 </div><div class="foot-bar"><p>© ${site.founded} ${site.brand}. All rights reserved.</p><p>Independent · No paid placement in tool results</p></div></div></footer>`;

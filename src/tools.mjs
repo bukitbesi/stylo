@@ -41,7 +41,13 @@ export const TOOLS = [
   { id: 'pant-break', name: 'Pant Break and Trouser Hem Calculator', path: '/tools/pant-break-guide/', icon: 'trousers',
     blurb: 'Calculate your exact trouser inseam, break offset, leg opening width and cuff height for no break, quarter break, half break and full break.' },
   { id: 'body-proportion', name: 'Body Proportion and Golden Ratio Calculator', path: '/tools/body-proportion-calculator/', icon: 'proportion',
-    blurb: 'Calculate your leg-to-torso ratio, golden 1:2 thirds rule, optimal trouser rise, tucking strategy and jacket length.' }
+    blurb: 'Calculate your leg-to-torso ratio, golden 1:2 thirds rule, optimal trouser rise, tucking strategy and jacket length.' },
+  { id: 'necklace-length', name: 'Necklace Length Visualizer', path: '/tools/necklace-length-visualizer/', icon: 'necklace',
+    blurb: 'See exactly where a 16, 18, 22 or 30 inch necklace falls on the body, layer up to six chains and check their spacing.' },
+  { id: 'hat-size', name: 'Hat Size Calculator', path: '/tools/hat-size-calculator/', icon: 'hat',
+    blurb: 'Turn your head circumference into a US fitted and EU hat size, or a US size into centimeters, with a full size chart.' },
+  { id: 'glove-size', name: 'Glove Size Calculator', path: '/tools/glove-size-calculator/', icon: 'glove',
+    blurb: 'Find your glove size from hand circumference and length with the EN ISO 21420 standard sizes 6 to 11.' }
 ];
 
 // Bundle = UI helpers + engines + the tool's UI, in dependency order.
@@ -64,7 +70,10 @@ export const BUNDLES = {
   'dress-code': ['src/ui/common.js', 'src/lib/dresscode-core.js', 'src/lib/garments.js', 'src/ui/dress-code.js'],
   'face-shape': ['src/ui/common.js', 'src/lib/face-core.js', 'src/ui/face-shape.js'],
   'pant-break': ['src/ui/common.js', 'src/lib/pant-core.js', 'src/ui/pant-break.js'],
-  'body-proportion': ['src/ui/common.js', 'src/lib/proportion-core.js', 'src/ui/body-proportion.js']
+  'body-proportion': ['src/ui/common.js', 'src/lib/proportion-core.js', 'src/ui/body-proportion.js'],
+  'hat-size': ['src/ui/common.js', 'src/lib/hat-core.js', 'src/ui/hat-size.js'],
+  'glove-size': ['src/ui/common.js', 'src/lib/glove-core.js', 'src/ui/glove-size.js'],
+  'necklace-length': ['src/ui/common.js', 'src/lib/necklace-core.js', 'src/ui/necklace-length.js']
 };
 
 export const related = (id, n = 3) => TOOLS.filter((t) => t.id !== id).slice(0, n);

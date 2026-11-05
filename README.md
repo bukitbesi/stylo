@@ -14,6 +14,9 @@ tiny Worker (`worker/`) that only handles the contact form at `/api/contact`. ©
 | Body Shape Calculator | `/tools/body-shape-calculator/` | `src/lib/body-core.js` | `tests/body.test.mjs` |
 | Photo Color Palette | `/tools/photo-color-palette/` | `src/lib/palette-core.js` | `tests/palette.test.mjs` |
 | Ring Size Converter | `/tools/ring-size-converter/` | `src/lib/ring-core.js` | `tests/ring.test.mjs` |
+| Hat Size Calculator | `/tools/hat-size-calculator/` | `src/lib/hat-core.js` | `tests/accessories.test.mjs` |
+| Glove Size Calculator | `/tools/glove-size-calculator/` | `src/lib/glove-core.js` | `tests/accessories.test.mjs` |
+| Necklace Length Visualizer | `/tools/necklace-length-visualizer/` | `src/lib/necklace-core.js` | `tests/accessories.test.mjs` |
 | Cost Per Wear Calculator | `/tools/cost-per-wear-calculator/` | `src/lib/cpw-core.js` | `tests/cpw.test.mjs` |
 | Selfie Color Analysis | `/tools/selfie-color-analysis/` | `src/lib/selfie-core.js` | `tests/selfie.test.mjs` |
 | Wardrobe Color Checker | `/tools/wardrobe-color-checker/` | `src/lib/wardrobe-core.js` | `tests/wardrobe.test.mjs` |
@@ -127,6 +130,6 @@ result, aria-live and the verified date.
 ## Upkeep
 
 - **Every content change:** bump `dateModified` in `src/site.json` (drives sitemap `lastmod` and "Method verified").
-- **Yearly:** re-check the size sources in `size-core.js` `FACTS` and the retailer charts on the size page.
+- **Yearly:** re-check the size sources in `size-core.js` `FACTS` and the retailer charts on the size page. Also re-check EN ISO 21420 (glove sizes) and the necklace length guides in `necklace-core.js`.
 - **When adding ads or affiliate links:** update the CSP in `scripts/build.mjs`, the privacy policy and add a visible
   disclosure next to every affiliate block. Keep tool results free of paid placement.
