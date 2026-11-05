@@ -112,6 +112,11 @@ const footer = () => `<footer class="site-foot"><div class="wrap"><div class="fo
 <nav class="foot-col" aria-labelledby="foot-guides"><h2 class="foot-h" id="foot-guides">Guides and company</h2>${linkList([...GUIDES.slice(0, 2), ['Wedding guest outfits', '/wedding-guest/spring/'], ...COMPANY])}</nav>
 </div><div class="foot-bar"><p>© ${site.founded} ${site.brand}. All rights reserved.</p><p>Independent · No paid placement in tool results</p></div></div></footer>`;
 
+const relLum = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+  .map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)).reduce((a, c, i) => a + c * [0.2126, 0.7152, 0.0722][i], 0);
+const ratio = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+const readableOn = (hex) => (ratio(relLum(hex), relLum('#111110')) >= ratio(relLum(hex), relLum('#FAF8F5')) ? '#111110' : '#FAF8F5');
+
 // ---------- page shell ----------
 const NAV = [['Tools', '/tools/'], ['Colors', '/colors/'], ['Seasons', '/seasons/'], ['Color Analysis', '/tools/color-analysis/']];
 
@@ -169,7 +174,11 @@ export function render(page, scriptSrc) {
   const fullTitle = page.path === '/' ? title : `${title} | ${site.brand}`;
   const ogTitle = page.ogTitle ? titleCase(page.ogTitle) : fullTitle;
   const ogDesc = page.ogDescription || page.description;
-  const body = page.body.replace(/<h1([^>]*)>([^<]*)<\/h1>/, (m, a, t) => `<h1${a}>${titleCase(t)}</h1>`);
+  const body = page.body.replace(/<h1([^>]*)>([^<]*)<\/h1>/, (m, a, t) => `<h1${a}>${titleCase(t)}</h1>`)
+    // Labeled palette bars: pick ink or ivory text per segment so every label passes WCAG AA contrast.
+    .replace(/style="flex:(\d+);background:(#[0-9A-Fa-f]{6})"/g, (m, f, hex) => `style="flex:${f};background:${hex};color:${readableOn(hex)};text-shadow:none"`)
+    // Pin images get a "Save to Pinterest" panel beside them (fills the space next to the tall image on wide screens).
+    .replace(/(<figure class="pin"><img src="([^"]+)"[^>]*>)<figcaption>([\s\S]*?)<\/figcaption>/, (m, img, src, cap) => `${img}<figcaption><b>Save it for later</b><span>${cap}</span><a class="btn" href="${esc(`https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(url)}&media=${encodeURIComponent(abs(src))}&description=${encodeURIComponent(page.description)}`)}" target="_blank" rel="noopener nofollow">${icon('pinterest', 20)} Save to Pinterest</a></figcaption>`);
   const nav = NAV.map(([n, p]) => `<a href="${p}"${page.path === p ? ' aria-current="page"' : ''}>${n}</a>`).join('');
   const crumbHtml = crumbs.length > 1 ? `<nav class="crumbs" aria-label="Breadcrumb"><ol>${crumbs
     .map(([n, p], i) => (i === crumbs.length - 1 ? `<li aria-current="page">${esc(n)}</li>` : `<li><a href="${p}">${esc(n)}</a></li>`)).join('')}</ol></nav>` : '';

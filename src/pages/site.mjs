@@ -39,7 +39,7 @@ function home() {
   const lookbookHtml = `<div class="lookbook-studio" data-lookbook aria-label="Editorial lookbook style studio">
 <div class="lookbook-header">
 <span class="lookbook-header__title">Editorial Lookbook Studio · 60-30-10 Science</span>
-<div class="lookbook-tabs" role="tablist" aria-label="Curated style looks">
+<div class="lookbook-tabs" role="group" aria-label="Curated style looks">
 <button type="button" class="lookbook-tab" data-lookbook-tab="savile" aria-pressed="true">Look 01 · Savile Bespoke</button>
 <button type="button" class="lookbook-tab" data-lookbook-tab="mayfair" aria-pressed="false">Look 02 · Mayfair Cashmere</button>
 <button type="button" class="lookbook-tab" data-lookbook-tab="riviera" aria-pressed="false">Look 03 · Riviera Linen</button>
@@ -52,7 +52,7 @@ ${G.figureSvg(look.id, 220, 360)}
 </div>
 <div class="lookbook-meta">
 <div class="lookbook-meta__head">
-<h3>${look.name}</h3>
+<h2>${look.name}</h2>
 <p>${look.subhead} · Color Season: <a href="${look.seasonLink}">${look.season}</a></p>
 </div>
 <div class="lookbook-palette" role="img" aria-label="${look.palette.map((p) => p.role + ' ' + p.name).join(', ')}">
