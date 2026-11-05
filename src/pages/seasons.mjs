@@ -62,8 +62,10 @@ ${faqBlock(faq)}
 <section class="related" aria-labelledby="rel"><h2 id="rel">Related tools</h2>${cards(TOOLS.filter((t) => ['color-analysis', 'color-combination', 'capsule-wardrobe'].includes(t.id)))}</section>`;
   return {
     path: `/seasons/${id}/`, type: 'article', title: `${s.name} Color Palette: Colors, Makeup and Outfits`, crumb: s.name,
+    ogTitle: `${s.name} Color Analysis Palette: Best Colors, Neutrals & Outfits`,
     crumbs: [['Color Seasons', '/seasons/']],
-    description: `${s.name} color palette: best colors such as ${best.slice(0, 3).join(', ')}, plus neutrals, colors to avoid, metals, makeup and outfits.`,
+    description: `${s.name} color analysis palette: best colors like ${best.slice(0, 3).join(', ')}, capsule wardrobe neutrals, shades to avoid, makeup, and outfit ideas.`,
+    ogDescription: `Explore the ${s.name} personal color analysis palette: 10 best clothing colors, 4 capsule wardrobe neutrals, jewelry metals, makeup, and outfit formulas.`,
     faq, body, datePublished: PUBLISHED, dateModified: site.dateModified, image: pinPath(id),
     about: { '@type': 'Thing', name: `${s.name} seasonal color palette` },
     llms: `${s.name} (${s.family} family): ${s.traits}. Best colors: ${s.palette.join(' ')} (${best.join(', ')}). Neutrals: ${s.neutrals.join(' ')}. Avoid near face: ${avoid.join(', ')}. Metals: ${g.metals} Sister season: ${sister.name}.`
@@ -84,7 +86,9 @@ ${table('Season traits at a glance', ['Season', 'Strongest trait', 'Sister seaso
 <p class="callout">Seasonal color analysis is a styling guide, not a science. Use the palettes as a starting point and trust what you see in daylight.</p>`;
   return {
     path: '/seasons/', type: 'collection', title: 'The 12 Color Seasons: Palettes and Guides', crumb: 'Color Seasons',
-    description: 'All 12 color seasons explained: Spring, Summer, Autumn and Winter palettes with best colors, neutrals, makeup and outfit ideas for each.',
+    ogTitle: 'The 12 Color Analysis Seasons: Palettes, Neutrals & Capsule Guides',
+    description: 'All 12 personal color analysis seasons explained: Spring, Summer, Autumn, and Winter palettes with capsule wardrobe neutrals, makeup, and outfit ideas.',
+    ogDescription: 'Compare all 12 personal color analysis seasons across Spring, Summer, Autumn, and Winter with best clothing colors, capsule neutrals, and outfit guides.',
     body, datePublished: PUBLISHED, dateModified: site.dateModified, itemList: IDS.map((id) => [SE.SEASONS[id].name, `/seasons/${id}/`]),
     llms: `12 color seasons index: ${IDS.map((id) => SE.SEASONS[id].name).join(', ')}. Traits: temperature, value, chroma.`
   };

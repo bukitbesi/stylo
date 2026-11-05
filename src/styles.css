@@ -104,6 +104,18 @@ main{display:block;padding-bottom:48px}
 .lookbook-link{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;color:var(--accent);text-decoration:none;margin-top:2px}
 .lookbook-link:hover{text-decoration:underline}
 
+/* US & UK Seasonal Trend Forecast */
+.trend-forecast{margin:36px 0 24px}
+.trend-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));margin:16px 0}
+.trend-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;display:flex;flex-direction:column;gap:12px}
+.trend-card__top{border-bottom:1px solid var(--line);padding-bottom:8px}
+.trend-card__meta{display:block;font:600 .7rem/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.trend-card__title{font:600 1.08rem/1.25 var(--serif);margin:0;color:var(--text)}
+.trend-card__desc{font-size:.86rem;color:var(--text-2);margin:0;line-height:1.48;flex:1}
+.trend-card__links{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding-top:8px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted)}
+.trend-card__links a{font-weight:600;color:var(--accent);text-decoration:none}
+.trend-card__links a:hover{text-decoration:underline}
+
 /* Capsule Wardrobe Foundation Matrix */
 .capsule-preview{margin:36px 0 20px}
 .capsule-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));margin:16px 0}

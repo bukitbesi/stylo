@@ -193,8 +193,10 @@ ${faqBlock(faq)}
 ${relatedBlock('color-analysis')}`;
   return {
     path: '/tools/color-analysis/', type: 'tool', title: 'Personal Color Analysis Quiz: Find Your Season', crumb: 'Personal Color Analysis',
+    ogTitle: 'Free Personal Color Analysis Quiz: Find Your 12-Season Palette',
     crumbs: [['Tools', '/tools/']],
-    description: 'Free 8-question personal color analysis quiz. Find your color season out of 12 and get your best colors, neutrals and colors to avoid.',
+    description: 'Free 8-question personal color analysis quiz. Discover your 12-season palette, best clothing colors, neutrals, and capsule wardrobe shades in 2 minutes.',
+    ogDescription: 'Take our free 8-question personal color analysis quiz to find your color season out of 12, with 10 best clothing colors, 4 neutrals, and shades to avoid.',
     bundle: 'color-analysis', faq, body, datePublished: PUBLISHED, dateModified: MODIFIED,
     app: { name: tool('color-analysis').name, description: tool('color-analysis').blurb, features: ['12-season result', '10 best colors', '4 neutrals', 'Colors to avoid near the face'] },
     about: { '@type': 'Thing', name: 'Seasonal color analysis' },
@@ -239,9 +241,11 @@ ${sources([
 ${faqBlock(faq)}
 ${relatedBlock('capsule-wardrobe')}`;
   return {
-    path: '/tools/capsule-wardrobe/', type: 'tool', title: 'Capsule Wardrobe Planner: Free Printable Checklist', crumb: 'Capsule Wardrobe Planner',
+    path: '/tools/capsule-wardrobe/', type: 'tool', title: 'Capsule Wardrobe Planner & Outfit Checklist', crumb: 'Capsule Wardrobe Planner',
+    ogTitle: 'Free Capsule Wardrobe Planner & Printable Outfit Checklist (US & UK)',
     crumbs: [['Tools', '/tools/']],
-    description: `Plan a 15, 25 or 35 piece capsule wardrobe for women or men. 25 pieces = ${w25.outfits} outfits. Printable checklist, color palette and climate options.`,
+    description: `Plan a 15, 25 or 35 piece capsule wardrobe for women or men. 25 pieces = ${w25.outfits} outfits. Free outfit planner, 60-30-10 color palette and checklist.`,
+    ogDescription: `Build a custom 15, 25, or 35-piece capsule wardrobe for work, casual, or travel. Generates ${w25.outfits} outfits from 25 pieces with a printable checklist.`,
     bundle: 'capsule-wardrobe', faq, body, datePublished: PUBLISHED, dateModified: MODIFIED,
     app: { name: tool('capsule-wardrobe').name, description: tool('capsule-wardrobe').blurb, features: ["Women's and men's capsules", '15, 25 or 35 pieces', 'Climate and lifestyle options', 'Outfit count', 'Printable checklist'] },
     about: { '@type': 'Thing', name: 'Capsule wardrobe' },
@@ -281,9 +285,11 @@ ${sources([
 ${faqBlock(faq)}
 ${relatedBlock('outfit-generator')}`;
   return {
-    path: '/tools/outfit-generator/', type: 'tool', title: 'Outfit Generator: What Should I Wear Today?', crumb: 'Outfit Generator',
+    path: '/tools/outfit-generator/', type: 'tool', title: 'Outfit Planner & Generator: What to Wear Today', crumb: 'Outfit Generator',
+    ogTitle: 'Free Daily Outfit Planner & Generator for Women and Men',
     crumbs: [['Tools', '/tools/']],
-    description: 'Free outfit generator for womenswear and menswear. Pick the occasion, temperature and a color to get a complete outfit with matching neutrals.',
+    description: 'Free daily outfit planner and generator for womenswear and menswear. Pick the occasion, weather temperature, and color to build a complete 60-30-10 outfit.',
+    ogDescription: 'Plan what to wear for any occasion and temperature (°F or °C) with our free daily outfit planner and color-matched wardrobe generator.',
     bundle: 'outfit-generator', faq, body, datePublished: PUBLISHED, dateModified: MODIFIED,
     app: { name: tool('outfit-generator').name, description: tool('outfit-generator').blurb, features: ['Womenswear and menswear', '5 occasions', 'Temperature in °C or °F', 'Color matching', 'Shareable outfit links'] },
     about: { '@type': 'Thing', name: 'Outfit ideas' },
@@ -1038,8 +1044,10 @@ ${cards(TOOLS)}
 <h2>Color guides</h2>
 <p class="prose">Looking for what goes with one specific color? Our <a href="/colors/">color guides</a> cover the most-worn clothing colors with outfit formulas.</p>`;
   return {
-    path: '/tools/', type: 'collection', title: 'Free Style Tools: Colors, Sizes and Outfits', crumb: 'Tools',
-    description: 'Free style tools: color combination finder, size converter, color analysis quiz, capsule wardrobe planner, face shape calculator and outfit generator.',
+    path: '/tools/', type: 'collection', title: 'Free Style Tools: Color Analysis & Outfit Planner', crumb: 'Tools',
+    ogTitle: '20 Free Style Tools: Color Analysis, Capsule Wardrobe & Outfit Planner',
+    description: 'Explore 20 free style tools: personal color analysis quiz, capsule wardrobe planner, daily outfit planner, US/UK/EU size converter, and tailoring guides.',
+    ogDescription: 'Use all 20 free browser-based style tools: 12-season color analysis, capsule wardrobe planner, outfit planner, international size converter, and more.',
     body, datePublished: PUBLISHED, dateModified: MODIFIED, itemList: TOOLS.map((t) => [t.name, t.path]),
     llms: `Tools index: ${TOOLS.map((t) => t.name).join(', ')}.`
   };

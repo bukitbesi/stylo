@@ -1,6 +1,6 @@
 {
   "name": "SimplyStylo - Free Style Tools for Colors, Sizes, and Outfits",
-  "description": "Free privacy-first style utilities: color season analysis, color combinations, size converter, wardrobe palette, capsule wardrobe, dress designer, and wedding guest outfit guides.",
+  "description": "Free personal color analysis quiz, capsule wardrobe planner, daily outfit planner, and US/UK/EU size converter. Private, browser-based fashion tools.",
   "capabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
   ]

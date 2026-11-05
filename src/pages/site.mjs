@@ -127,14 +127,128 @@ ${G.svg('sneakers', '#F6F3EC', 44, true)}
 </div>
 </section>`;
 
+  const trendSectionHtml = `<section class="trend-forecast" aria-labelledby="trend-title">
+<div class="section-head">
+<h2 id="trend-title">US &amp; UK Style Forecast: Wearable Macro-Trends</h2>
+<a href="/tools/outfit-generator/">Open Outfit Planner &rarr;</a>
+</div>
+<p class="lede">Forget disposable fast-fashion fads. These four transatlantic macro-trends from London and New York runways are engineered with 60-30-10 color ratios so you can test them immediately in our capsule wardrobe and outfit planner tools.</p>
+<div class="trend-grid">
+<article class="trend-card">
+<div class="trend-card__top">
+<span class="trend-card__meta">London Heritage · Autumn / Winter</span>
+<h3 class="trend-card__title">Oxblood, Espresso &amp; Camel</h3>
+</div>
+<div class="lookbook-palette" role="img" aria-label="60% Camel, 30% Espresso Brown, 10% Oxblood Burgundy">
+<span style="flex:6;background:#B98A57">60% Camel</span>
+<span style="flex:3;background:#3E2C23">30% Espresso</span>
+<span style="flex:1;background:#6D1F2E">10%</span>
+</div>
+<div class="capsule-card__garments">
+${G.svg('coat', '#B98A57', 40, true)}
+${G.svg('sweater', '#FAF8F5', 40, true)}
+${G.svg('trousers', '#3E2C23', 40, true)}
+${G.svg('boots', '#6D1F2E', 40, true)}
+</div>
+<p class="trend-card__desc">Rich burgundy and espresso anchor tailored camel outerwear—the signature Mayfair and Upper East Side tonal formula for <a href="/seasons/deep-autumn/">Deep Autumn</a> and <a href="/seasons/deep-winter/">Deep Winter</a> palettes.</p>
+<div class="trend-card__links">
+<a href="/colors/burgundy/">Burgundy Guide</a>
+<span aria-hidden="true">·</span>
+<a href="/tools/outfit-generator/">Plan Outfit</a>
+<span aria-hidden="true">·</span>
+<a href="/tools/capsule-wardrobe/">Build Capsule</a>
+</div>
+</article>
+
+<article class="trend-card">
+<div class="trend-card__top">
+<span class="trend-card__meta">New York Minimalist · Transitional</span>
+<h3 class="trend-card__title">Olive Utility &amp; Ecru Denim</h3>
+</div>
+<div class="lookbook-palette" role="img" aria-label="60% Ecru Ivory, 30% Olive Green, 10% Saddle Tan">
+<span style="flex:6;background:#EAE5D9;color:#111110;text-shadow:none">60% Ecru</span>
+<span style="flex:3;background:#556B2F">30% Olive</span>
+<span style="flex:1;background:#8A6A4A">10%</span>
+</div>
+<div class="capsule-card__garments">
+${G.svg('jacket', '#556B2F', 40, true)}
+${G.svg('tshirt', '#FAF8F5', 40, true)}
+${G.svg('jeans', '#EAE5D9', 40, true)}
+${G.svg('loafers', '#8A6A4A', 40, true)}
+</div>
+<p class="trend-card__desc">Military olive paired with high-twist ecru denim softens contrast for effortless Soho &amp; Shoreditch daywear. Ideal for <a href="/seasons/soft-autumn/">Soft Autumn</a> and <a href="/seasons/warm-autumn/">Warm Autumn</a>.</p>
+<div class="trend-card__links">
+<a href="/colors/olive-green/">Olive Guide</a>
+<span aria-hidden="true">·</span>
+<a href="/tools/color-combination/">Test 60-30-10</a>
+<span aria-hidden="true">·</span>
+<a href="/tools/wardrobe-color-checker/">Audit Closet</a>
+</div>
+</article>
+
+<article class="trend-card">
+<div class="trend-card__top">
+<span class="trend-card__meta">Transatlantic Resort · Spring / Summer</span>
+<h3 class="trend-card__title">Coastal Navy, Chambray &amp; Chalk</h3>
+</div>
+<div class="lookbook-palette" role="img" aria-label="60% Chalk White, 30% Navy, 10% Sky Chambray">
+<span style="flex:6;background:#F6F3EC;color:#111110;text-shadow:none">60% Chalk</span>
+<span style="flex:3;background:#1F2A44">30% Navy</span>
+<span style="flex:1;background:#8BA3C0">10%</span>
+</div>
+<div class="capsule-card__garments">
+${G.svg('shirt', '#F6F3EC', 40, true)}
+${G.svg('blazer', '#1F2A44', 40, true)}
+${G.svg('trousers', '#8BA3C0', 40, true)}
+${G.svg('loafers', '#4A3326', 40, true)}
+</div>
+<p class="trend-card__desc">High-breathability linen and poplin in cool maritime tones. Built for Hamptons, Cotswolds, and Mediterranean travel for <a href="/seasons/light-summer/">Light Summer</a> and <a href="/seasons/cool-summer/">Cool Summer</a>.</p>
+<div class="trend-card__links">
+<a href="/colors/navy/">Navy Guide</a>
+<span aria-hidden="true">·</span>
+<a href="/tools/packing-list-generator/">Packing List</a>
+<span aria-hidden="true">·</span>
+<a href="/tools/color-analysis/">Color Quiz</a>
+</div>
+</article>
+
+<article class="trend-card">
+<div class="trend-card__top">
+<span class="trend-card__meta">Savile Row &amp; Soho · Tailoring Standard</span>
+<h3 class="trend-card__title">1:2 Rule of Thirds &amp; Quarter Break</h3>
+</div>
+<div class="lookbook-palette" role="img" aria-label="60% Charcoal Slate, 30% Chalk Poplin, 10% Espresso Calf">
+<span style="flex:6;background:#363B40">60% Charcoal</span>
+<span style="flex:3;background:#E6E1D8;color:#111110;text-shadow:none">30% Stone</span>
+<span style="flex:1;background:#261F1A">10%</span>
+</div>
+<div class="capsule-card__garments">
+${G.svg('blazer', '#363B40', 40, true)}
+${G.svg('shirt', '#E6E1D8', 40, true)}
+${G.svg('trousers', '#363B40', 40, true)}
+${G.svg('shoes', '#261F1A', 40, true)}
+</div>
+<p class="trend-card__desc">Modern US &amp; UK tailoring favors a higher natural rise (the golden 1:2 vertical proportion) and a clean quarter break over Goodyear-welted loafers or oxfords.</p>
+<div class="trend-card__links">
+<a href="/tools/body-proportion-calculator/">Proportion Tool</a>
+<span aria-hidden="true">·</span>
+<a href="/tools/pant-break-guide/">Pant Break</a>
+<span aria-hidden="true">·</span>
+<a href="/tools/size-converter/">US/UK Sizes</a>
+</div>
+</article>
+</div>
+</section>`;
+
   const body = `<section class="hero hero--split">
 <div>
-<p class="hero-tag">Bespoke Style Architecture · 100% Private</p>
+<p class="hero-tag">Bespoke Style Architecture · US, UK &amp; Global</p>
 <h1>Find your style. Wear it better.</h1>
-<p class="lede">Free interactive tools that eliminate fashion guesswork: discover your color season, calculate your face and body proportions, convert international sizes, and build timeless capsule wardrobes. Tested formulas, no accounts, running entirely in your browser.</p>
+<p class="lede">Free interactive tools for personal color analysis, capsule wardrobe planning, daily outfit planning, and US/UK/EU size conversion. Tested formulas, no accounts, running privately in your browser.</p>
 <div class="hero-cta">
-<a class="btn" href="/tools/color-analysis/">Find your color season</a>
-<a class="btn btn--ghost" href="/tools/pant-break-guide/">Calculate pant break</a>
+<a class="btn" href="/tools/color-analysis/">Color analysis quiz</a>
+<a class="btn btn--ghost" href="/tools/capsule-wardrobe/">Capsule wardrobe planner</a>
+<a class="btn btn--ghost" href="/tools/outfit-generator/">Outfit planner</a>
 </div>
 </div>
 ${lookbookHtml}
@@ -144,10 +258,12 @@ ${lookbookHtml}
 <div class="trust-item"><b>20</b><span>Style Engines</span></div>
 <div class="trust-item"><b>100%</b><span>Private &amp; Local</span></div>
 <div class="trust-item"><b>Oklab &amp; CIE</b><span>Color Science</span></div>
-<div class="trust-item"><b>ISO &amp; Savile Row</b><span>Tailoring Standards</span></div>
+<div class="trust-item"><b>US, UK &amp; EU</b><span>Tailoring Standards</span></div>
 </div>
 
-<p class="answer">SimplyStylo is a free style toolkit: ${TOOLS.length} interactive tools and ${Object.keys(COLOR_GUIDES).length} color guides. Example answers: a UK 8 shoe is about a US men's ${uk8.usMen}, and a 25-piece capsule wardrobe makes ${w25.outfits} outfits.</p>
+<p class="answer">SimplyStylo is a free style toolkit: ${TOOLS.length} interactive tools for personal color analysis, capsule wardrobes, and outfit planning, plus ${Object.keys(COLOR_GUIDES).length} color guides. Example answers: a UK 8 shoe is a US men's ${uk8.usMen}, and a 25-piece capsule wardrobe makes ${w25.outfits} outfits.</p>
+
+${trendSectionHtml}
 
 ${capsulePreviewHtml}
 
@@ -192,26 +308,29 @@ ${cards(wardrobeTools)}
 
 <h2>Why SimplyStylo</h2>
 <div class="grid2">
-<div class="panel"><h3>Decisions, not trends</h3><p>We do not publish fast fashion gossip. Every page answers a practical question with a clear mathematical result.</p></div>
+<div class="panel"><h3>Wearable math, not fast-fashion hype</h3><p>Instead of disposable micro-trends, every page translates enduring style into clear color ratios, proportion math, and capsule formulas.</p></div>
 <div class="panel"><h3>Transparent methods</h3><p>Every number comes from a published formula or rule, explained on the page and in our <a href="/methodology/">methodology</a>.</p></div>
 <div class="panel"><h3>Private by design</h3><p>The tools run in your browser. We never upload photos, demand accounts or store personal details.</p></div>
 </div>
 ${faqBlock(faq)}`;
 
   return {
-    path: '/', type: 'home', title: 'SimplyStylo: Free Style Tools, Color Analysis and Size Converter',
-    description: 'Free style tools for personal color analysis, outfit color combinations, international shoe and dress size conversion, capsule wardrobes, and tailoring guides.',
+    path: '/', type: 'home',
+    title: 'SimplyStylo: Color Analysis, Capsule Wardrobe and Outfit Planner',
+    ogTitle: 'SimplyStylo: Free Color Analysis, Capsule Wardrobe & Outfit Planner (US & UK)',
+    description: 'Free personal color analysis quiz, capsule wardrobe planner, daily outfit planner, and US/UK/EU size converter. Private tools in your browser.',
+    ogDescription: 'Discover your 12-season color palette, build a 25-piece capsule wardrobe, plan daily outfits, and convert US, UK, and EU shoe and dress sizes instantly.',
     body, faq, datePublished: PUBLISHED, dateModified: M, itemList: TOOLS.map((t) => [t.name, t.path]),
-    llms: `SimplyStylo (simplystylo.com) is a free, privacy-first style toolkit with ${TOOLS.length} browser-based tools (${TOOLS.map((t) => t.name).join(', ')}) and color guides. All tools run client-side with published formulas.`
+    llms: `SimplyStylo (simplystylo.com) is a free, privacy-first style toolkit with ${TOOLS.length} browser-based tools (${TOOLS.map((t) => t.name).join(', ')}) for personal color analysis, capsule wardrobes, outfit planning, and US/UK/EU size conversion. All tools run client-side with published formulas.`
   };
 }
 
 function about() {
   const body = `<h1>About SimplyStylo</h1>
-<p class="answer">SimplyStylo is an independent website that helps people make everyday fashion decisions with free, interactive tools: matching colors, finding a color season, converting sizes, planning a capsule wardrobe and choosing an outfit.</p>
+<p class="answer">SimplyStylo is an independent website that helps people make everyday fashion decisions with free, interactive tools: personal color analysis, capsule wardrobe planning, daily outfit planning, color matching, and international US/UK/EU size conversion.</p>
 <div class="prose">
 <h2>What we do</h2>
-<p>Fashion media is mostly news and trends. We focus on the questions people actually ask before getting dressed or buying something: <em>what goes with this, what size am I, what suits me?</em> Each tool gives a clear answer, explains how it got there and links to its sources.</p>
+<p>Fashion media is mostly news and fleeting gossip. We focus on the questions people actually ask before getting dressed or buying something: <em>what goes with this, what size am I in US or UK brands, and which color season suits me?</em> Each tool gives a clear answer, explains how it got there and links to its sources.</p>
 <h2>How we work</h2>
 <ul>
 <li><b>Published methods.</b> Size conversions follow the published formulas for each system; color tools use standard color science (WCAG contrast, the Oklab color space and color-wheel harmonies). See the <a href="/methodology/">methodology</a>.</li>
@@ -224,7 +343,9 @@ function about() {
 </div>`;
   return {
     path: '/about/', type: 'about', title: 'About SimplyStylo', crumb: 'About',
-    description: 'SimplyStylo is an independent site with free, transparent style tools for colors, sizes and outfits. Learn how we work and how to contact us.',
+    ogTitle: 'About SimplyStylo: Independent Color Analysis & Capsule Wardrobe Tools',
+    description: 'SimplyStylo builds free, transparent tools for personal color analysis, capsule wardrobe planning, outfit combinations, and US/UK size conversion.',
+    ogDescription: 'Learn how SimplyStylo builds free, privacy-first browser tools for 12-season color analysis, capsule wardrobes, outfit planning, and US/UK sizing.',
     body, datePublished: PUBLISHED, dateModified: M,
     llms: 'About: independent, privacy-first site; tools run in the browser; methods and sources are published; no paid placement in results.'
   };
@@ -273,7 +394,9 @@ function methodology() {
 </div>`;
   return {
     path: '/methodology/', type: 'page', title: 'Methodology: How Our Style Tools Work', crumb: 'Methodology',
-    description: 'How SimplyStylo calculates size conversions, color combinations, color seasons, capsule wardrobes and outfits, with formulas and sources.',
+    ogTitle: 'Methodology: Color Analysis, Capsule Wardrobe & Size Formulas',
+    description: 'How SimplyStylo calculates personal color analysis, capsule wardrobe outfits, 60-30-10 outfit palettes, and US/UK/EU size conversions with sources.',
+    ogDescription: 'Explore the published color science, Munsell seasonal scoring, capsule wardrobe math, and international US/UK/EU sizing standards behind SimplyStylo.',
     body, datePublished: PUBLISHED, dateModified: M,
     llms: `Methodology: shoe sizes via foot length (UK ≈ 3 × in − 23; US men UK + 1; US women UK + 2 to 2.5; EU ≈ 1.5 × cm + 2; Mondopoint mm). Colors: WCAG contrast, Oklab distance, HSL harmonies. Seasons: Munsell hue/value/chroma scoring. Capsules: tops × bottoms + dresses.`
   };
@@ -320,7 +443,9 @@ function contact() {
 </div>`;
   return {
     path: '/contact/', type: 'contact', title: 'Contact SimplyStylo and Work With Us', crumb: 'Contact', bundle: 'contact', noshare: true,
-    description: 'Contact SimplyStylo: corrections, tool ideas, advertising, affiliate partnerships and press enquiries. We reply within two working days.',
+    ogTitle: 'Contact SimplyStylo: Brand Partnerships, Press & Tool Feedback',
+    description: 'Contact SimplyStylo: corrections, color analysis and capsule wardrobe tool ideas, brand partnerships, and press enquiries in the US, UK, and globally.',
+    ogDescription: 'Get in touch with SimplyStylo for editorial press data, US/UK fashion partnerships, sponsorships, or feedback on our color analysis and outfit tools.',
     body, datePublished: PUBLISHED, dateModified: M
   };
 }
@@ -335,7 +460,7 @@ const sent = () => ({
 const search = () => ({
   path: '/search/', type: 'page', title: 'Search SimplyStylo', crumb: 'Search', noindex: true, nositemap: true,
   datePublished: PUBLISHED, dateModified: M,
-  description: 'Search every SimplyStylo tool and guide: colors, sizes, wedding outfits, dresses, color seasons and more.',
+  description: 'Search SimplyStylo tools and guides: personal color analysis, capsule wardrobe planner, outfit planner, US/UK size converter, and wedding outfits.',
   body: `<h1>Search SimplyStylo</h1><div class="search-page" data-search-page><form class="search__form" action="/search/" role="search">${icon('search', 22)}<label class="sr" for="sp-q">Search tools and guides</label><input id="sp-q" name="q" type="search" placeholder="Search tools and guides" autocomplete="off"></form><ul class="search__results" data-search-results>${TOOLS.slice(0, 6).map((t) => `<li><a href="${t.path}"><b>${esc(t.name)}</b><span>Tool · ${esc(t.blurb)}</span></a></li>`).join('')}</ul></div>`
 });
 
@@ -353,7 +478,7 @@ const privacy = () => simple('/privacy/', 'Privacy Policy', 'SimplyStylo privacy
 <h2>Your rights and contact</h2>
 <p>Because we do not hold personal data from the tools, there is usually nothing to access or delete. For any privacy question, email <a href="mailto:${site.email}">${site.email}</a>.</p>`);
 
-const terms = () => simple('/terms/', 'Terms of Use', 'Terms of use for SimplyStylo: free style tools provided as guidance, copyright notice and limitation of liability.', 'Terms of Use',
+const terms = () => simple('/terms/', 'Terms of Use', 'Terms of use for SimplyStylo: free color analysis, capsule wardrobe, and outfit planner tools provided as guidance, copyright and liability notice.', 'Terms of Use',
   `<p class="meta-line">Last updated ${longDate(M)}</p>
 <p class="answer">SimplyStylo's tools and guides are free general guidance. They are not professional styling, fitting or color-draping services, and results should be checked against brand size charts and in real light.</p>
 <h2>Copyright</h2>
@@ -366,7 +491,7 @@ const terms = () => simple('/terms/', 'Terms of Use', 'Terms of use for SimplySt
 function notFound() {
   return {
     path: '/404.html', type: 'page', title: 'Page Not Found', crumb: 'Not found', noindex: true, nositemap: true,
-    description: 'This page does not exist or has moved. Try one of our free style tools for colors, sizes and outfits.', datePublished: PUBLISHED, dateModified: M,
+    description: 'This page does not exist or has moved. Try our free tools for personal color analysis, capsule wardrobe planning, and outfit ideas.', datePublished: PUBLISHED, dateModified: M,
     body: `<h1>Page not found</h1><p class="lede">This page does not exist or has moved. Try one of our free style tools:</p>${cards(TOOLS)}`
   };
 }

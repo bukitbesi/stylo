@@ -45,8 +45,10 @@ ${faqBlock(faq)}
 <section class="related" aria-labelledby="rel"><h2 id="rel">Related tools</h2>${cards(TOOLS.filter((t) => ['color-combination', 'color-analysis', 'capsule-wardrobe'].includes(t.id)))}</section>`;
   return {
     path: `/colors/${slug}/`, type: 'article', title: `What Colors Go With ${Title}? Outfit Ideas`, crumb: name,
+    ogTitle: `What Colors Go With ${Title}? 60-30-10 Outfit Planner & Capsule Guide`,
     crumbs: [['Colors', '/colors/']],
-    description: `What colors go with ${lower}? ${name} pairs with ${pairs.slice(0, 4).map((x) => x.name.toLowerCase()).join(', ')}. Outfit formulas, a 60-30-10 palette and color-wheel matches.`,
+    description: `What colors go with ${lower}? ${name} pairs with ${pairs.slice(0, 4).map((x) => x.name.toLowerCase()).join(', ')}. Capsule neutrals, 60-30-10 outfits, and color matches.`,
+    ogDescription: `See what colors go with ${lower} clothes: best capsule wardrobe neutrals, 60-30-10 outfit planner formulas, and color-wheel combinations.`,
     faq, body, datePublished: PUBLISHED, dateModified: site.dateModified,
     about: { '@type': 'Thing', name: `${name} clothing` },
     llms: `What colors go with ${lower}: ${pairs.map((x) => x.name.toLowerCase()).join(', ')}. ${g.intro} Outfits: ${g.outfits.join(' ')} Tip: ${g.tip}`
@@ -64,7 +66,9 @@ function index() {
   }).join('')}</ul>`;
   return {
     path: '/colors/', type: 'collection', title: 'Clothing Color Guides: What Goes With What', crumb: 'Colors',
-    description: `What colors go with navy, black, beige, olive, burgundy and more: ${slugs.length} clothing color guides with outfit formulas and palettes.`,
+    ogTitle: 'Clothing Color Guides: Capsule Wardrobe Palettes & Outfit Combinations',
+    description: `What colors go with navy, black, beige, olive, and burgundy: ${slugs.length} clothing color guides with 60-30-10 outfit planner formulas and capsule palettes.`,
+    ogDescription: `Browse ${slugs.length} clothing color combination guides with 60-30-10 outfit formulas, best neutrals, and capsule wardrobe pairings.`,
     body, datePublished: PUBLISHED, dateModified: site.dateModified, itemList: slugs.map((s) => [C.bySlug(s).name, `/colors/${s}/`]),
     llms: `Color guides index: ${slugs.map((s) => C.bySlug(s).name).join(', ')}.`
   };

@@ -2,12 +2,12 @@
   "origin": "https://simplystylo.com",
   "brand": "SimplyStylo",
   "tagline": "Find your style. Wear it better.",
-  "description": "Free style tools that help you choose colors, sizes and outfits with confidence.",
+  "description": "Free personal color analysis, capsule wardrobe planner, outfit planner, and US/UK/EU size converter tools running privately in your browser.",
   "lang": "en-US",
   "email": "hello@simplystylo.com",
   "founded": "2026",
-  "dateModified": "2026-11-03",
+  "dateModified": "2026-11-04",
   "indexNowKey": "1925afb764dbbcb16acec46b107cd0c4",
-  "ogImage": { "url": "/og.png", "width": 1200, "height": 630, "alt": "SimplyStylo: free style tools for colors, sizes and outfits" },
+  "ogImage": { "url": "/og.png", "width": 1200, "height": 630, "alt": "SimplyStylo: free personal color analysis, capsule wardrobe planner, outfit planner, and US/UK size converter" },
   "sameAs": []
 }

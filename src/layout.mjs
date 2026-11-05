@@ -107,7 +107,7 @@ const header = (nav) => `<header class="site-head"><div class="wrap site-head__i
 <dialog class="search" id="search" aria-label="Search ${site.brand}"><form class="search__form" action="/search/" role="search">${icon('search', 22)}<label class="sr" for="search-q">Search tools and guides</label><input id="search-q" name="q" type="search" placeholder="Search tools and guides" autocomplete="off" enterkeyhint="search"><button type="button" class="icon-btn" data-search-close aria-label="Close search">${icon('close', 22)}</button></form><ul class="search__results" data-search-results></ul></dialog>`;
 
 const footer = () => `<footer class="site-foot"><div class="wrap"><div class="foot-grid">
-<section class="foot-col" aria-label="About ${site.brand}"><a class="logo" href="/" aria-label="${site.brand} home">${MARK(30)}<span>Simply<i>Stylo</i></span></a><p>${esc(site.tagline)} Free tools for colors, sizes, outfits and dresses. Everything runs in your browser: no sign-up, no uploads.</p><p><a class="btn btn--ghost" href="/contact/">Work with us</a></p></section>
+<section class="foot-col" aria-label="About ${site.brand}"><a class="logo" href="/" aria-label="${site.brand} home">${MARK(30)}<span>Simply<i>Stylo</i></span></a><p>${esc(site.tagline)} Free tools for personal color analysis, capsule wardrobes, outfit planning, and US/UK size conversion. Everything runs in your browser: no sign-up, no uploads.</p><p><a class="btn btn--ghost" href="/contact/">Work with us</a></p></section>
 <nav class="foot-col" aria-labelledby="foot-tools"><h2 class="foot-h" id="foot-tools">Popular tools</h2>${linkList([...TOOLS.slice(0, 7).map((t) => [t.name, t.path]), ['All tools', '/tools/']])}</nav>
 <nav class="foot-col" aria-labelledby="foot-guides"><h2 class="foot-h" id="foot-guides">Guides and company</h2>${linkList([...GUIDES.slice(0, 2), ['Wedding guest outfits', '/wedding-guest/spring/'], ...COMPANY])}</nav>
 </div><div class="foot-bar"><p>© ${site.founded} ${site.brand}. All rights reserved.</p><p>Independent · No paid placement in tool results</p></div></div></footer>`;
@@ -127,9 +127,13 @@ export const MARK = (size) => `<svg width="${size}" height="${size}" viewBox="0 
 function graph(page, url, crumbs) {
   const org = {
     '@type': 'Organization', '@id': abs('/#org'), name: site.brand, url: abs('/'), logo: abs('/icon-512.png'),
-    email: site.email, foundingDate: site.founded, ...(site.sameAs.length ? { sameAs: site.sameAs } : {})
+    email: site.email, foundingDate: site.founded, areaServed: ['US', 'GB', 'CA', 'AU'], ...(site.sameAs.length ? { sameAs: site.sameAs } : {})
   };
-  const website = { '@type': 'WebSite', '@id': abs('/#website'), url: abs('/'), name: site.brand, description: site.description, publisher: { '@id': abs('/#org') }, inLanguage: site.lang };
+  const website = {
+    '@type': 'WebSite', '@id': abs('/#website'), url: abs('/'), name: site.brand, description: site.description,
+    keywords: 'color analysis, capsule wardrobe, outfit planner, international size converter, 12 color seasons, wardrobe color palette',
+    publisher: { '@id': abs('/#org') }, inLanguage: site.lang
+  };
   const webpage = {
     '@type': page.type === 'collection' || page.type === 'home' ? 'CollectionPage' : page.type === 'about' ? 'AboutPage' : page.type === 'contact' ? 'ContactPage' : 'WebPage',
     '@id': url + '#webpage', url, name: page.title, description: page.description, isPartOf: { '@id': abs('/#website') },
@@ -163,6 +167,8 @@ export function render(page, scriptSrc) {
   const crumbs = page.path === '/' ? [['Home', '/']] : [['Home', '/'], ...(page.crumbs || []), [page.crumb || page.h1 || page.title, page.path]];
   const title = titleCase(page.title);
   const fullTitle = page.path === '/' ? title : `${title} | ${site.brand}`;
+  const ogTitle = page.ogTitle ? titleCase(page.ogTitle) : fullTitle;
+  const ogDesc = page.ogDescription || page.description;
   const body = page.body.replace(/<h1([^>]*)>([^<]*)<\/h1>/, (m, a, t) => `<h1${a}>${titleCase(t)}</h1>`);
   const nav = NAV.map(([n, p]) => `<a href="${p}"${page.path === p ? ' aria-current="page"' : ''}>${n}</a>`).join('');
   const crumbHtml = crumbs.length > 1 ? `<nav class="crumbs" aria-label="Breadcrumb"><ol>${crumbs
@@ -185,15 +191,20 @@ ${page.noindex ? '<meta name="robots" content="noindex">' : '<meta name="robots"
 <link rel="alternate" type="application/rss+xml" title="${site.brand}" href="/feed.xml">
 <meta property="og:site_name" content="${site.brand}">
 <meta property="og:type" content="${page.type === 'article' ? 'article' : 'website'}">
-<meta property="og:title" content="${esc(page.ogTitle || title)}">
-<meta property="og:description" content="${esc(page.description)}">
+<meta property="og:title" content="${esc(ogTitle)}">
+<meta property="og:description" content="${esc(ogDesc)}">
 <meta property="og:url" content="${url}">
 <meta property="og:image" content="${abs(site.ogImage.url)}">
 <meta property="og:image:width" content="${site.ogImage.width}">
 <meta property="og:image:height" content="${site.ogImage.height}">
 <meta property="og:image:alt" content="${esc(site.ogImage.alt)}">
 <meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="en_GB">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${esc(ogTitle)}">
+<meta name="twitter:description" content="${esc(ogDesc)}">
+<meta name="twitter:image" content="${abs(site.ogImage.url)}">
+<meta name="twitter:image:alt" content="${esc(site.ogImage.alt)}">
 <style>${css}</style>
 <script type="application/ld+json">${graph(page, url, crumbs)}</script>
 <script type="speculationrules">{"prerender":[{"where":{"href_matches":"/*"},"eagerness":"moderate"}]}</script>
