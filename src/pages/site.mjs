@@ -27,8 +27,8 @@ function home() {
   const featured = ['color-analysis', 'color-combination', 'size-converter', 'pant-break'].map((id) => toolMap[id]);
   const colorTools = ['color-analysis', 'color-combination', 'photo-palette', 'selfie-analysis', 'wardrobe-colors'].map((id) => toolMap[id]);
   const tailoringTools = ['body-proportion', 'pant-break', 'face-shape', 'size-converter', 'body-shape', 'ring-size', 'necklace-length', 'hat-size', 'glove-size'].map((id) => toolMap[id]);
-  const eventTools = ['wedding-guest', 'bridesmaid-palette', 'dress-code', 'dress-designer', 'wedding-dress', 'prom-dress'].map((id) => toolMap[id]);
-  const wardrobeTools = ['capsule-wardrobe', 'outfit-generator', 'packing-list', 'cost-per-wear'].map((id) => toolMap[id]);
+  const eventTools = ['wedding-guest', 'bridesmaid-palette', 'dress-code', 'dress-designer', 'wedding-dress', 'prom-dress', 'circle-skirt'].map((id) => toolMap[id]);
+  const wardrobeTools = ['capsule-wardrobe', 'outfit-generator', 'packing-list', 'cost-per-wear', 'care-label'].map((id) => toolMap[id]);
 
   const faq = [
     ['Is SimplyStylo free to use?', 'Yes. Every tool is 100% free, works with zero sign-up or accounts, and runs directly in your browser. Your photos and the measurements you type are processed on your device, not uploaded.'],

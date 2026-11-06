@@ -47,7 +47,11 @@ export const TOOLS = [
   { id: 'hat-size', name: 'Hat Size Calculator', path: '/tools/hat-size-calculator/', icon: 'hat',
     blurb: 'Turn your head circumference into a US fitted and EU hat size, or a US size into centimeters, with a full size chart.' },
   { id: 'glove-size', name: 'Glove Size Calculator', path: '/tools/glove-size-calculator/', icon: 'glove',
-    blurb: 'Find your glove size from hand circumference and length with the EN ISO 21420 standard sizes 6 to 11.' }
+    blurb: 'Find your glove size from hand circumference and length with the EN ISO 21420 standard sizes 6 to 11.' },
+  { id: 'care-label', name: 'Laundry Symbol Decoder', path: '/tools/laundry-symbols/', icon: 'tag',
+    blurb: 'Pick the symbols on any care label to see what they mean: wash temperature and cycle, bleach, tumble dry, iron and dry cleaning.' },
+  { id: 'circle-skirt', name: 'Circle Skirt Calculator', path: '/tools/circle-skirt-calculator/', icon: 'skirt',
+    blurb: 'Draft a full, half or quarter circle skirt: waist radius, cutting lines and how much fabric to buy for your fabric width.' }
 ];
 
 // Bundle = UI helpers + engines + the tool's UI, in dependency order.
@@ -73,7 +77,9 @@ export const BUNDLES = {
   'body-proportion': ['src/ui/common.js', 'src/lib/proportion-core.js', 'src/ui/body-proportion.js'],
   'hat-size': ['src/ui/common.js', 'src/lib/hat-core.js', 'src/ui/hat-size.js'],
   'glove-size': ['src/ui/common.js', 'src/lib/glove-core.js', 'src/ui/glove-size.js'],
-  'necklace-length': ['src/ui/common.js', 'src/lib/necklace-core.js', 'src/ui/necklace-length.js']
+  'necklace-length': ['src/ui/common.js', 'src/lib/necklace-core.js', 'src/ui/necklace-length.js'],
+  'care-label': ['src/ui/common.js', 'src/lib/care-core.js', 'src/ui/care-label.js'],
+  'circle-skirt': ['src/ui/common.js', 'src/lib/skirt-core.js', 'src/ui/circle-skirt.js']
 };
 
 export const related = (id, n = 3) => TOOLS.filter((t) => t.id !== id).slice(0, n);
