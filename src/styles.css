@@ -306,3 +306,9 @@ ul.chips{list-style:none;padding:0;margin:12px 0}
 tr.is-match th,tr.is-match td{background:var(--warn-bg);font-weight:600}
 .split>div:first-child:has(>.figure--fluid){width:min(100%,300px);margin:0 auto}
 @media (min-width:760px){.split>div:first-child:has(>.figure--fluid){width:clamp(220px,30%,320px);margin:0;flex:none}}
+.care-sym{flex:none;color:var(--text)}
+.care-label{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--surface);border:1px dashed var(--muted);border-radius:var(--r-md);padding:12px 14px;margin:0 0 14px;max-width:max-content}
+.care-list{list-style:none;padding:0;margin:0 0 12px;display:grid;gap:8px}
+.care-list li{display:flex;gap:12px;align-items:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-md);padding:10px 12px}
+.care-chart td:first-child,.care-chart th:first-child{white-space:nowrap}
+.figure--wide{max-width:420px}

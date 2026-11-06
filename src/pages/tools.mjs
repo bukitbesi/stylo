@@ -49,6 +49,10 @@ const GloveCore = require('../lib/glove-core.js');
 const GloveUI = require('../ui/glove-size.js');
 const NeckCore = require('../lib/necklace-core.js');
 const NeckUI = require('../ui/necklace-length.js');
+const CareCore = require('../lib/care-core.js');
+const CareUI = require('../ui/care-label.js');
+const SkirtCore = require('../lib/skirt-core.js');
+const SkirtUI = require('../ui/circle-skirt.js');
 
 const PUBLISHED = '2026-11-01';
 const MODIFIED = site.dateModified;
@@ -1194,6 +1198,99 @@ ${relatedBlock('necklace-length')}`;
   };
 }
 
-export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), selfieAnalysis(), wardrobeColors(), packingList(), dressCode(), dressDesigner(), weddingDress(), promDress(), weddingGuest(), bridesmaidPalette(), faceShape(), pantBreak(), bodyProportion(), hatSize(), gloveSize(), necklaceLength(), toolsIndex()];
+// ---------- Laundry Symbol Decoder ----------
+function careLabel() {
+  const sym = (g, o) => CareCore.svg(g.shape, o[3], 36, g.name + ': ' + o[1]);
+  const faq = [
+    ['What do the dots on a laundry symbol mean?', `On the iron, dots set the maximum temperature: ${CareCore.FACTS.iron.replace('Ironing dots: ', '')}. In the tumble dryer square, one dot means low heat and two dots normal heat. Some US labels also use dots in the washtub instead of a number: 1 dot 30 °C, 2 dots 40 °C, 3 dots 50 °C, 4 dots 60 °C.`],
+    ['What does a line under the washing symbol mean?', 'One bar under the washtub means a mild process (an easy-care or synthetics cycle with reduced agitation and spin); two bars mean a very mild process for wool and delicates. No bar means a normal cycle.'],
+    ['What does the triangle symbol mean on clothes?', 'The triangle is bleaching. An empty triangle allows any bleach, including chlorine; a triangle with two diagonal lines allows only oxygen (non-chlorine) bleach; a crossed-out triangle means do not bleach.'],
+    ['What is the maximum temperature for hand wash?', 'The hand-in-tub symbol means wash by hand only, at no more than 40 °C, according to ISO 3758. Squeeze gently rather than rubbing or wringing.'],
+    ['What do P, F and W in a circle mean?', 'The circle is professional care. P means dry cleaning in tetrachloroethylene (perc) or hydrocarbon solvents, F means hydrocarbon solvents only, and W means professional wet cleaning. A bar underneath asks for a milder process.'],
+    ['What does a square with a circle inside mean?', 'A circle inside a square means tumble drying is allowed: one dot for low heat, two dots for normal heat. Crossed out, it means do not tumble dry. A square with lines but no circle is a natural drying symbol, such as line or flat drying.'],
+    ['Can I wash clothes at a lower temperature than the label says?', 'Yes. The number is a maximum, and a milder treatment than the one shown is always acceptable: 30 °C is fine for a 40 °C label, and a mild cycle is fine for a normal one.']
+  ];
+  const body = `<p class="eyebrow">Free care label tool</p>
+<h1>Laundry Symbol Decoder: What Your Care Label Means</h1>
+<p class="answer">A washtub with 40 and one bar means machine wash at up to 40 °C on a mild cycle; an iron with two dots means up to 150 °C; a triangle with two lines means non-chlorine bleach only, and a cross over any symbol means do not. Pick the symbols on your label below to decode them all at once.</p>
+${verifiedLine(CareCore.FACTS.verified)}
+${toolShell('care-label', 'Laundry symbol decoder', CareUI.controls(CareUI.DEFAULT), CareUI.result(CareUI.DEFAULT))}
+<h2>How to read a care label</h2>
+${steps([
+    `<b>Read left to right:</b> ${esc(CareCore.FACTS.order)}.`,
+    `<b>Washing:</b> ${esc(CareCore.FACTS.wash)}.`,
+    `<b>Dots mean heat:</b> ${esc(CareCore.FACTS.iron)}; in the tumble dryer square, one dot is low heat and two dots normal heat.`,
+    '<b>A cross means do not:</b> a cross over any symbol means that treatment must not be used.',
+    `<b>Milder is fine:</b> ${esc(CareCore.FACTS.milder)}.`])}
+<h2>Laundry symbols chart</h2>
+<div class="table-wrap"><table class="care-chart"><caption>Care label symbols and their meanings (ISO 3758)</caption><thead><tr><th scope="col">Symbol</th><th scope="col">Meaning</th></tr></thead><tbody>${CareCore.GROUPS.map((g) => g.list.map((o) =>
+    `<tr><td>${sym(g, o)}</td><td><b>${esc(g.name)}: ${esc(o[1])}</b><br>${esc(o[2])}</td></tr>`).join('')).join('')}</tbody></table></div>
+${callout(esc(CareCore.FACTS.natural) + ' ' + esc(CareCore.FACTS.us) + ' ' + esc(CareCore.FACTS.trademark))}
+${sources([
+    ['ISO 3758:2012 Textiles: care labelling code using symbols (preview, Table 1)', 'https://standards.iteh.ai/catalog/standards/iso/3fbbb179-3349-433c-b5c3-f8776e7f239d/iso-3758-2012', 'washing temperatures and processes; hand wash 40 °C'],
+    ['The worldwide care labelling system (GINETEX)', 'https://www.ginetex.net/userfiles/files/gin_bro_gb_rz_brochure_web.pdf', 'symbol order, bars, dots and the St Andrew\'s cross'],
+    ['Laundry symbol (Wikipedia)', 'https://en.wikipedia.org/wiki/Laundry_symbol', 'ironing at 110, 150 and 200 °C; P, F and W'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('care-label')}`;
+  return {
+    path: '/tools/laundry-symbols/', type: 'tool', title: 'Laundry Symbols Decoder: Care Label Meanings', crumb: 'Laundry Symbol Decoder',
+    crumbs: [['Tools', '/tools/']],
+    description: 'Decode any care label: washing temperatures and bars, bleach triangles, tumble dry and iron dots, and P, F, W dry cleaning circles, with a full symbols chart.',
+    bundle: 'care-label', faq, body, datePublished: '2026-11-06', dateModified: MODIFIED,
+    app: { name: tool('care-label').name, description: tool('care-label').blurb, features: ['All ISO 3758 washing symbols', 'Bleaching, tumble drying, ironing and professional care', 'Your label drawn symbol by symbol', 'Plain-English care instructions'] },
+    about: { '@type': 'Thing', name: 'Laundry symbol' },
+    llms: `Laundry Symbol Decoder: ${CareCore.FACTS.order}. ${CareCore.FACTS.wash}; hand wash max 40 °C. Bleach: empty triangle any bleach, two lines non-chlorine only. Tumble: one dot low, two dots normal. ${CareCore.FACTS.iron}. Professional: P perc or hydrocarbon, F hydrocarbon, W wet cleaning; bar = milder. Cross = do not. ${CareCore.FACTS.milder}.`
+  };
+}
+
+// ---------- Circle Skirt Calculator ----------
+function circleSkirt() {
+  const base = { waist: 70, length: 60, seam: 1.5, hem: 2.5, width: 150 };
+  const full = SkirtCore.calc({ ...base, type: 'full' }), half = SkirtCore.calc({ ...base, type: 'half' }), quarter = SkirtCore.calc({ ...base, type: 'quarter' });
+  const narrow = SkirtCore.calc({ ...base, type: 'full', width: 110 }), inch = SkirtCore.calc({ waist: 28, length: 24, type: 'full', seam: 0.625, hem: 1, width: 60 });
+  const faq = [
+    ['How do I calculate the waist radius for a circle skirt?', `Divide the waist measurement by 2π (6.283) for a full circle, by π for a half circle and by π ÷ 2 for a quarter circle. A 70 cm waist gives ${full.r} cm for a full circle, ${half.r} cm for a half circle and ${quarter.r} cm for a quarter circle.`],
+    ['How much fabric do I need for a full circle skirt?', `For a 70 cm waist and 60 cm length with 1.5 cm seam and 2.5 cm hem allowances, the hem is cut ${full.outer} cm from the center, so you need about ${full.fabric} cm of 150 cm wide fabric, cut in one piece. On 110 cm wide fabric it takes two half-circle pieces and about ${narrow.fabric} cm.`],
+    ['What is the difference between a full, half and quarter circle skirt?', 'The fraction is how much of a circle the skirt makes when laid flat. A full circle has the most swing and volume, a half circle drapes in soft folds, and a quarter circle is close to an A-line with the least fabric.'],
+    ['Why do I subtract the seam allowance from the waist radius?', 'The waist radius gives the sewing line. Cutting the waistline smaller by the seam allowance leaves fabric to sew the waistband on, so the finished waist matches your measurement.'],
+    ['How do I calculate a circle skirt in inches?', `Use the same formulas with inches. A 28 in waist gives a ${inch.r} in waist radius for a full circle; with a 24 in length, ⅝ in seam and 1 in hem, you need about ${inch.fabric} in of 60 in wide fabric.`],
+    ['Why does my circle skirt hem look uneven?', 'Circle skirts stretch on the bias. Hang the sewn skirt for 24 hours before hemming, then level the hem from the floor up and trim before turning it.'],
+    ['How long is the hem of a full circle skirt?', `The hem circumference is 2π × (waist radius + length). For a 70 cm waist and 60 cm length that is about ${full.hemSweep} cm, which is why a narrow rolled hem or bias tape is easier than a deep folded hem.`]
+  ];
+  const body = `<p class="eyebrow">Free sewing tool</p>
+<h1>Circle Skirt Calculator: Waist Radius and Fabric Needed</h1>
+<p class="answer">For a full circle skirt, the waist radius is your waist ÷ 2π: a 70 cm waist gives ${full.r} cm, and with a 60 cm length you cut the hem ${full.outer} cm from the center and need about ${full.fabric} cm of 150 cm wide fabric. Enter your waist, length and skirt type below for the full pattern and fabric amount.</p>
+${verifiedLine(SkirtCore.FACTS.verified)}
+${toolShell('circle-skirt', 'Circle skirt calculator', SkirtUI.controls(SkirtUI.DEFAULT), SkirtUI.result(SkirtUI.DEFAULT))}
+<h2>How the circle skirt calculator works</h2>
+${steps([
+    `<b>Waist radius:</b> ${esc(SkirtCore.FACTS.radius)}.`,
+    `<b>Cutting lines:</b> ${esc(SkirtCore.FACTS.cut)}.`,
+    `<b>Fabric:</b> ${esc(SkirtCore.FACTS.fabric)}.`,
+    '<b>Draw it:</b> fold the fabric, pin a tape measure at the corner and mark the waist and hem arcs at the two cutting radii.'])}
+<h2>Circle skirt waist radius chart</h2>
+${table('Waist radius by waist measurement and skirt type (cm)', ['Waist', 'Full circle', 'Three-quarter', 'Half circle', 'Quarter circle'],
+    [60, 65, 70, 75, 80, 85, 90, 100].map((w) => [w + ' cm', ...['full', 'three', 'half', 'quarter'].map((t) => SkirtCore.calc({ waist: w, length: 50, type: t, seam: 0, hem: 0, width: 300 }).r + ' cm')]))}
+${callout(esc(SkirtCore.FACTS.limits) + ' Pre-wash the fabric before cutting.')}
+${sources([
+    ['Circle skirt calculator (Omni Calculator)', 'https://www.omnicalculator.com/everyday-life/circle-skirt', 'waist radius and fabric length formulas'],
+    ['Circle skirt calculator (calculate.co.nz)', 'https://www.calculate.co.nz/circle-skirt-calculator.php', 'radius = waist ÷ (2π × circle fraction)'],
+    ['Circle skirt formula (The Creative Curator)', 'https://www.thecreativecurator.com/circle-skirt-formula/', 'seam allowance taken off the waist radius'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('circle-skirt')}`;
+  return {
+    path: '/tools/circle-skirt-calculator/', type: 'tool', title: 'Circle Skirt Calculator: Waist Radius and Fabric', crumb: 'Circle Skirt Calculator',
+    crumbs: [['Tools', '/tools/']],
+    description: `Calculate a circle skirt pattern: waist radius, cutting lines and fabric needed for full, half and quarter circles. A 70 cm waist needs a ${full.r} cm radius.`,
+    bundle: 'circle-skirt', faq, body, datePublished: '2026-11-06', dateModified: MODIFIED,
+    app: { name: tool('circle-skirt').name, description: tool('circle-skirt').blurb, features: ['Full, three-quarter, half and quarter circles', 'Seam and hem allowances', 'Fabric length for your fabric width', 'Pattern drawing', 'Centimeters or inches'] },
+    about: { '@type': 'Thing', name: 'Circle skirt' },
+    llms: `Circle Skirt Calculator: ${SkirtCore.FACTS.radius}. ${SkirtCore.FACTS.cut}. 70 cm waist: full ${full.r} cm, half ${half.r} cm, quarter ${quarter.r} cm radius; full circle 60 cm long needs ${full.fabric} cm of 150 cm fabric. 28 in waist full circle = ${inch.r} in radius.`
+  };
+}
+
+export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), selfieAnalysis(), wardrobeColors(), packingList(), dressCode(), dressDesigner(), weddingDress(), promDress(), weddingGuest(), bridesmaidPalette(), faceShape(), pantBreak(), bodyProportion(), hatSize(), gloveSize(), necklaceLength(), careLabel(), circleSkirt(), toolsIndex()];
 export { icon };
 

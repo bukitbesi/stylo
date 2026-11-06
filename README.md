@@ -17,6 +17,8 @@ tiny Worker (`worker/`) that only handles the contact form at `/api/contact`. ©
 | Hat Size Calculator | `/tools/hat-size-calculator/` | `src/lib/hat-core.js` | `tests/accessories.test.mjs` |
 | Glove Size Calculator | `/tools/glove-size-calculator/` | `src/lib/glove-core.js` | `tests/accessories.test.mjs` |
 | Necklace Length Visualizer | `/tools/necklace-length-visualizer/` | `src/lib/necklace-core.js` | `tests/accessories.test.mjs` |
+| Laundry Symbol Decoder | `/tools/laundry-symbols/` | `src/lib/care-core.js` | `tests/sewing-care.test.mjs` |
+| Circle Skirt Calculator | `/tools/circle-skirt-calculator/` | `src/lib/skirt-core.js` | `tests/sewing-care.test.mjs` |
 | Cost Per Wear Calculator | `/tools/cost-per-wear-calculator/` | `src/lib/cpw-core.js` | `tests/cpw.test.mjs` |
 | Selfie Color Analysis | `/tools/selfie-color-analysis/` | `src/lib/selfie-core.js` | `tests/selfie.test.mjs` |
 | Wardrobe Color Checker | `/tools/wardrobe-color-checker/` | `src/lib/wardrobe-core.js` | `tests/wardrobe.test.mjs` |

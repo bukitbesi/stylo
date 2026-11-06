@@ -70,6 +70,17 @@ const interactions = {
     const t = await p.textContent('[data-result]');
     return /30 in \(76 cm\): Opera/.test(t) && /overlap and tangle/.test(t) && /l=16_17_30/.test(p.url());
   },
+  '/tools/laundry-symbols/': async (p) => {
+    await p.selectOption('#cl-w', '30vm'); await p.selectOption('#cl-i', 'no');
+    const t = await p.textContent('[data-result]');
+    return /very mild \(wool or delicates\)/.test(t) && /Do not iron or steam/.test(t) && /w=30vm/.test(p.url()) && (await p.locator('[data-result] .care-label svg').count()) === 5;
+  },
+  '/tools/circle-skirt-calculator/': async (p) => {
+    await p.selectOption('#sk-t', 'half');
+    const a = /waist radius of 22.28 cm/.test(await p.textContent('[data-result]'));
+    await p.selectOption('#sk-u', 'in');
+    return a && (await p.inputValue('#sk-w')) === '27.56' && /t=half/.test(p.url());
+  },
   '/tools/ring-size-converter/': async (p) => {
     await p.fill('#rs-v', '8');
     const a = /EU\/ISO 57/.test(await p.textContent('[data-result]'));
