@@ -26,9 +26,9 @@ function home() {
   const toolMap = Object.fromEntries(TOOLS.map((t) => [t.id, t]));
   const featured = ['color-analysis', 'color-combination', 'size-converter', 'pant-break'].map((id) => toolMap[id]);
   const colorTools = ['color-analysis', 'color-combination', 'photo-palette', 'selfie-analysis', 'wardrobe-colors'].map((id) => toolMap[id]);
-  const tailoringTools = ['body-proportion', 'pant-break', 'face-shape', 'size-converter', 'body-shape', 'ring-size', 'necklace-length', 'hat-size', 'glove-size'].map((id) => toolMap[id]);
+  const tailoringTools = ['body-proportion', 'pant-break', 'jeans-fit', 'bra-size', 'face-shape', 'size-converter', 'body-shape', 'ring-size', 'necklace-length', 'hat-size', 'glove-size'].map((id) => toolMap[id]);
   const eventTools = ['wedding-guest', 'bridesmaid-palette', 'dress-code', 'dress-designer', 'wedding-dress', 'prom-dress', 'circle-skirt'].map((id) => toolMap[id]);
-  const wardrobeTools = ['capsule-wardrobe', 'outfit-generator', 'packing-list', 'cost-per-wear', 'care-label'].map((id) => toolMap[id]);
+  const wardrobeTools = ['capsule-wardrobe', 'outfit-generator', 'fabric-gsm', 'packing-list', 'cost-per-wear', 'care-label'].map((id) => toolMap[id]);
 
   const faq = [
     ['Is SimplyStylo free to use?', 'Yes. Every tool is 100% free, works with zero sign-up or accounts, and runs directly in your browser. Your photos and the measurements you type are processed on your device, not uploaded.'],
@@ -255,7 +255,7 @@ ${lookbookHtml}
 </section>
 
 <div class="trust-strip">
-<div class="trust-item"><b>20</b><span>Style Engines</span></div>
+<div class="trust-item"><b>${TOOLS.length}</b><span>Style Engines</span></div>
 <div class="trust-item"><b>100%</b><span>Private &amp; Local</span></div>
 <div class="trust-item"><b>Oklab &amp; CIE</b><span>Color Science</span></div>
 <div class="trust-item"><b>US, UK &amp; EU</b><span>Tailoring Standards</span></div>
@@ -389,6 +389,8 @@ function methodology() {
 <p>Garments follow the dress code guide (Emily Post Institute). Colors are chosen per season and time of day and are tested to stay clearly away from white and ivory. Etiquette notes follow wedding guides from The Knot and Zola: no white, ivory, cream or beige unless the couple asks; block heels on grass; flat shoes on sand.</p>
 <h2>Bridesmaid color palette</h2>
 <p>Colors are calculated in HSL. Ombre spreads the main hue in even lightness steps (±22 points); mix-and-match uses a five-color palette of the main color, its neighbors 25° either side on the color wheel, a light tint and a deep shade; moods clamp saturation and lightness. The groomsmen suit is the classic suit color that contrasts most with the main color.</p>
+<h2>Jeans rise, bra sizing and fabric GSM</h2>
+<p>The jeans fit calculator combines leg-to-height vertical proportion with the ASTM hip-to-waist drop (flagging a curvy pattern block at ≥10 in / 25.4 cm difference). The bra calculator uses the anatomical +0 underbust band method and maps cup volumes across UK, US, EU (EN 13402) and AU systems plus sister sizes. The fabric analyzer converts GSM and oz/yd² via ISO 3801 (1 oz/yd² = 33.9057 g/m²) and silk momme (1 momme = 4.3056 GSM).</p>
 <h2>Testing</h2>
 <p>Every engine has automated tests whose worked examples match the numbers quoted in our FAQs, and every page is checked for accessibility, mobile layout and speed before publishing.</p>
 </div>`;

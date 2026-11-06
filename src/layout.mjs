@@ -49,7 +49,10 @@ export const ICONS = {
   necklace: '<path d="M5 3c0 7 3 11 7 11s7-4 7-11"/><path d="m12 14 2.5 3-2.5 3.5L9.5 17z"/>',
   glasses: '<circle cx="6.5" cy="14" r="4"/><circle cx="17.5" cy="14" r="4"/><path d="M10.5 14h3M2.5 14 4 8M21.5 14 20 8"/>',
   trousers: '<path d="M6 3h12l2 18h-5.5L12 10 9.5 21H4z"/><path d="M6 7h12"/>',
-  proportion: '<rect x="6" y="2" width="12" height="20" rx="3"/><line x1="6" y1="9" x2="18" y2="9"/><line x1="6" y1="16" x2="18" y2="16"/><circle cx="12" cy="9" r="1.5" fill="currentColor"/>'
+  proportion: '<rect x="6" y="2" width="12" height="20" rx="3"/><line x1="6" y1="9" x2="18" y2="9"/><line x1="6" y1="16" x2="18" y2="16"/><circle cx="12" cy="9" r="1.5" fill="currentColor"/>',
+  denim: '<path d="M6 3h12l1.5 18h-5L12 11 9.5 21h-5z"/><path d="M6 6.5h12M12 6.5V11"/><path d="M6.5 10c2 0 3-1.5 3-3.5M17.5 10c-2 0-3-1.5-3-3.5"/>',
+  bra: '<path d="M3 14c0-3.5 2.5-6 5.5-6 2 0 3.5 1.5 3.5 3.5 0-2 1.5-3.5 3.5-3.5 3 0 5.5 2.5 5.5 6v2H3z"/><path d="M6 8V4M18 8V4"/>',
+  fabric: '<path d="M4 6c4-2 6 2 10 0s6 2 6 2v10s-2-2-6 0-6-2-10 0z"/><path d="M4 11c4-2 6 2 10 0s6 2 6 2"/>'
 };
 export const icon = (name, size = 24) =>
   `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
@@ -71,7 +74,7 @@ export const callout = (html) => `<p class="callout">${html}</p>`;
 
 export const toolShell = (id, label, controls, result, extra = '') => `<section class="tool" data-tool="${id}" aria-label="${esc(label)}">
 ${controls}
-<div class="actions no-print">${extra}<button type="button" class="btn btn--ghost" data-copy>Copy link</button><button type="button" class="btn btn--ghost" data-print>Print</button></div>
+<div class="actions no-print">${extra}<button type="button" class="btn btn--ghost" data-card>Save card (PNG)</button><button type="button" class="btn btn--ghost" data-copy>Copy link</button><button type="button" class="btn btn--ghost" data-print>Print</button></div>
 <p class="sr" aria-live="polite" data-live></p>
 <div class="result" data-result>${result}</div>
 </section>`;

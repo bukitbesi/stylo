@@ -51,7 +51,13 @@ export const TOOLS = [
   { id: 'care-label', name: 'Laundry Symbol Decoder', path: '/tools/laundry-symbols/', icon: 'tag',
     blurb: 'Pick the symbols on any care label to see what they mean: wash temperature and cycle, bleach, tumble dry, iron and dry cleaning.' },
   { id: 'circle-skirt', name: 'Circle Skirt Calculator', path: '/tools/circle-skirt-calculator/', icon: 'skirt',
-    blurb: 'Draft a full, half or quarter circle skirt: waist radius, cutting lines and how much fabric to buy for your fabric width.' }
+    blurb: 'Draft a full, half or quarter circle skirt: waist radius, cutting lines and how much fabric to buy for your fabric width.' },
+  { id: 'jeans-fit', name: 'Jeans Rise and Denim Fit Calculator', path: '/tools/jeans-fit-calculator/', icon: 'denim',
+    blurb: 'Calculate your ideal front rise, curvy vs straight hip block, and exact hem inseam for straight, wide-leg, barrel, and bootcut jeans.' },
+  { id: 'bra-size', name: 'Bra Size and Sister Size Calculator', path: '/tools/bra-size-calculator/', icon: 'bra',
+    blurb: 'Calculate your anatomical UK, US, EU, and AU bra size from underbust and bust measurements, with sister sizes up and down.' },
+  { id: 'fabric-gsm', name: 'Fabric Weight (GSM) and Drape Analyzer', path: '/tools/fabric-weight-gsm-calculator/', icon: 'fabric',
+    blurb: 'Convert fabric weight between GSM and oz/yd², and check temperature range, breathability, opacity, and drape for wool, cotton, linen, silk, and denim.' }
 ];
 
 // Bundle = UI helpers + engines + the tool's UI, in dependency order.
@@ -79,7 +85,10 @@ export const BUNDLES = {
   'glove-size': ['src/ui/common.js', 'src/lib/glove-core.js', 'src/ui/glove-size.js'],
   'necklace-length': ['src/ui/common.js', 'src/lib/necklace-core.js', 'src/ui/necklace-length.js'],
   'care-label': ['src/ui/common.js', 'src/lib/care-core.js', 'src/ui/care-label.js'],
-  'circle-skirt': ['src/ui/common.js', 'src/lib/skirt-core.js', 'src/ui/circle-skirt.js']
+  'circle-skirt': ['src/ui/common.js', 'src/lib/skirt-core.js', 'src/ui/circle-skirt.js'],
+  'jeans-fit': ['src/ui/common.js', 'src/lib/denim-core.js', 'src/ui/jeans-fit.js'],
+  'bra-size': ['src/ui/common.js', 'src/lib/bra-core.js', 'src/ui/bra-size.js'],
+  'fabric-gsm': ['src/ui/common.js', 'src/lib/fabric-core.js', 'src/ui/fabric-gsm.js']
 };
 
 export const related = (id, n = 3) => TOOLS.filter((t) => t.id !== id).slice(0, n);

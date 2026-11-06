@@ -53,6 +53,12 @@ const CareCore = require('../lib/care-core.js');
 const CareUI = require('../ui/care-label.js');
 const SkirtCore = require('../lib/skirt-core.js');
 const SkirtUI = require('../ui/circle-skirt.js');
+const DenimCore = require('../lib/denim-core.js');
+const DenimUI = require('../ui/jeans-fit.js');
+const BraCore = require('../lib/bra-core.js');
+const BraUI = require('../ui/bra-size.js');
+const FabricCore = require('../lib/fabric-core.js');
+const FabricUI = require('../ui/fabric-gsm.js');
 
 const PUBLISHED = '2026-11-01';
 const MODIFIED = site.dateModified;
@@ -1054,10 +1060,10 @@ ${cards(TOOLS)}
 <h2>Color guides</h2>
 <p class="prose">Looking for what goes with one specific color? Our <a href="/colors/">color guides</a> cover the most-worn clothing colors with outfit formulas.</p>`;
   return {
-    path: '/tools/', type: 'collection', title: 'Free Style Tools: Color Analysis & Outfit Planner', crumb: 'Tools',
-    ogTitle: '20 Free Style Tools: Color Analysis, Capsule Wardrobe & Outfit Planner',
-    description: 'Explore 20 free style tools: personal color analysis quiz, capsule wardrobe planner, daily outfit planner, US/UK/EU size converter, and tailoring guides.',
-    ogDescription: 'Use all 20 free browser-based style tools: 12-season color analysis, capsule wardrobe planner, outfit planner, international size converter, and more.',
+    path: '/tools/', type: 'collection', title: 'Free Style Tools: Color Analysis and Outfit Planner', crumb: 'Tools',
+    ogTitle: `${TOOLS.length} Free Style Tools: Color Analysis, Capsule Wardrobe & Outfit Planner`,
+    description: `Explore ${TOOLS.length} free style tools: personal color analysis quiz, capsule wardrobe planner, daily outfit planner, US/UK/EU size converter, and tailoring guides.`,
+    ogDescription: `Use all ${TOOLS.length} free browser-based style tools: 12-season color analysis, capsule wardrobe planner, outfit planner, international size converter, and more.`,
     body, datePublished: PUBLISHED, dateModified: MODIFIED, itemList: TOOLS.map((t) => [t.name, t.path]),
     llms: `Tools index: ${TOOLS.map((t) => t.name).join(', ')}.`
   };
@@ -1296,6 +1302,150 @@ ${relatedBlock('circle-skirt')}`;
   };
 }
 
-export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), selfieAnalysis(), wardrobeColors(), packingList(), dressCode(), dressDesigner(), weddingDress(), promDress(), weddingGuest(), bridesmaidPalette(), faceShape(), pantBreak(), bodyProportion(), hatSize(), gloveSize(), necklaceLength(), careLabel(), circleSkirt(), toolsIndex()];
+// ---------- Jeans Rise, Cut & Denim Fit Calculator ----------
+function jeansFit() {
+  const ex = DenimUI.summary(DenimUI.norm(DenimUI.DEFAULT));
+  const cuts = Object.entries(DenimCore.CUTS);
+  const faq = [
+    ['How do I know what jeans rise is best for my body?', 'Compare your inseam to your total height (inseam ÷ height). If your leg ratio is under 46%, you have a longer torso and shorter legs, so a high rise (10.5 to 12 in / 26.5 to 30.5 cm) raises your visual waistline to restore the 1:2 Rule of Thirds. If your leg ratio is over 49.5%, a mid rise (9 to 10 in) avoids crowding a shorter torso.'],
+    ['Why do my jeans gap at the back of the waist?', 'Waist gapping happens when your hip-to-waist difference is 10 inches (25.4 cm) or more and you buy a standard straight-cut denim block (built for a 7 to 9 in drop). Switch to a curvy-fit block or contoured 2-piece yoke, which grades an extra 2 inches into the seat without widening the waistband.'],
+    ['What is the difference between straight, barrel-leg, wide-leg, and bootcut jeans?', 'Straight-leg jeans fall vertically from the knee to a 15.5 in (39.5 cm) leg opening; barrel-leg (horseshoe) jeans bow outward through the knee and taper to the ankle; wide-leg jeans release from the hip to a 20 to 22 in (51 to 56 cm) sweep; and bootcut jeans stay fitted to the knee before flaring to 18.5 in (47 cm).'],
+    ['How long should my jeans inseam be for wide-leg vs straight jeans?', 'Wide-leg and bootcut jeans look longest when hemmed at floor-graze length—your barefoot floor inseam plus your shoe heel height minus 0.5 in (1.3 cm)—so the hem skims the top of your shoe without dragging. Straight and slim jeans work best at ankle-bone length (−1.5 in) or a classic shoe-vamp touch (−0.5 in).'],
+    ['What is a gusset rise measurement on jeans?', 'Front rise is measured from the four-way crotch intersection seam straight up the front fly to the top edge of the waistband. Back rise is measured from the same crotch seam up the rear seat seam and typically runs 3.5 to 4.5 in (9 to 11.5 cm) longer than the front rise.'],
+    ['Should I buy 100% rigid cotton denim or stretch denim?', '100% cotton rigid or selvedge denim (12 to 15 oz / 400 to 500 GSM) holds its shape for years and molds to your body over 20 to 30 wears, making it ideal for straight, wide-leg, and barrel cuts. If you have a curvy hip-to-waist ratio above 10 inches or prefer slim/bootcut fits, 98–99% cotton with 1–2% elastane prevents waist gapping and knee bagging.'],
+    ['Do Levi’s and UK/US denim waist sizes match actual inches?', 'Most contemporary US and UK denim brands use vanity sizing, where a tagged size 28 or 30 measures 1 to 1.5 inches larger around the top of the waistband than the number on the leather patch. Always check the garment’s flat waistband measurement multiplied by two against your natural waist.']
+  ];
+  const body = `<p class="eyebrow">Free denim tailoring tool</p>
+<h1>Jeans Rise, Cut and Denim Fit Calculator</h1>
+<p class="answer">Your ideal jeans front rise and cut depend on your leg-to-height ratio and hip-to-waist drop: a hip-to-waist difference of 10 in (25.4 cm) or more needs a curvy block to stop back-waist gapping, while wide-leg and bootcut hems need floor-graze inseams. Example: ${esc(ex)} Enter your measurements below for exact denim specs and a live pattern diagram.</p>
+${verifiedLine(DenimCore.FACTS.verified)}
+${toolShell('jeans-fit', 'Jeans rise, cut and denim fit calculator', DenimUI.controls(DenimUI.norm(DenimUI.DEFAULT)), DenimUI.result(DenimUI.norm(DenimUI.DEFAULT)))}
+<h2>How the jeans rise and denim fit calculator works</h2>
+${steps([
+    '<b>Front and back rise</b> are calculated from your height and vertical leg-to-torso ratio so the waistband hits your anatomical sweet spot.',
+    '<b>Hip-to-waist drop</b> subtracts your waist from your fullest hip measurement: 10 in (25.4 cm) or more flags a curvy pattern block to eliminate back gapping.',
+    '<b>Cut and leg opening</b> maps five classic silhouettes (straight, wide-leg, barrel, bootcut, slim taper) with exact knee-to-hem circumference specs.',
+    '<b>Shoe heel and hem break</b> computes your exact tailor inseam for ankle-crop, classic vamp break, or full-length floor-graze hems.'])}
+<h2>Denim silhouettes and leg openings chart</h2>
+${table('All 5 denim cuts, leg openings, and styling strengths', ['Denim cut', 'Leg opening (circumference)', 'Best for', 'Pocket & proportion tip'], cuts.map(([, c]) => [
+    esc(c.name), `${c.openingIn} in (${Math.round(c.openingIn * 2.54 * 10) / 10} cm)`, esc(c.bestFor), esc(c.pocketTip)]))}
+${callout('Always wash new denim inside out in cold water and line dry before taking it to a tailor for hemming—even sanforized cotton jeans can shrink 0.5 to 0.75 in (1.3 to 2 cm) in length on the first wash.')}
+${sources([
+    ['ASTM D5585 / D6192 Standard Tables of Body Measurements for Apparel Sizing', 'https://www.astm.org/', 'hip-to-waist drop grading between straight and curvy blocks'],
+    ['Denim construction, rise and selvedge weight guide (Heddels)', 'https://www.heddels.com/', 'front rise, back rise and warp-faced twill shrinkage'],
+    ['SimplyStylo methodology', '/methodology/', 'how every tool is built and checked']])}
+${faqBlock(faq)}
+${relatedBlock('jeans-fit')}`;
+  return {
+    path: '/tools/jeans-fit-calculator/', type: 'tool', title: 'Jeans Rise Calculator: Best Denim Cut and Inseam', crumb: 'Jeans Fit Calculator',
+    ogTitle: 'Jeans Rise, Cut & Denim Fit Calculator (US & UK Sizing)',
+    crumbs: [['Tools', '/tools/']],
+    description: 'Calculate your ideal jeans front rise, curvy vs straight hip fit, leg opening width, and exact hem inseam for straight, wide-leg, barrel, and bootcut denim.',
+    ogDescription: 'Find your exact front rise, back rise, curvy vs straight hip block, and hem inseam for straight, wide-leg, barrel, and bootcut jeans.',
+    bundle: 'jeans-fit', faq, body, datePublished: '2026-11-06', dateModified: MODIFIED,
+    app: { name: tool('jeans-fit').name, description: tool('jeans-fit').blurb, features: ['Front and back rise in inches and cm', 'Curvy vs straight hip-gapping detector', '5 denim silhouettes with leg-opening specs', 'Hem inseam adjusted for shoe heel height', 'Live SVG denim block diagram'] },
+    about: { '@type': 'Thing', name: 'Jeans', sameAs: 'https://en.wikipedia.org/wiki/Jeans' },
+    llms: `Jeans Rise and Denim Fit Calculator: calculates optimal front rise, back rise, curvy vs straight hip block (hip − waist > 11 in = curvy block), leg opening circumference, and finished inseam from height, waist, hips, barefoot inseam, cut (straight, wide, barrel, bootcut, slim), and footwear. Example: ${ex}`
+  };
+}
+
+// ---------- Bra & Band Sister-Size Calculator ----------
+function braSize() {
+  const ex = BraUI.summary(BraUI.norm(BraUI.DEFAULT));
+  const faq = [
+    ['How do I measure my bra size accurately at home?', 'Use a soft measuring tape with two numbers: first, measure your snug underbust horizontally around your ribcage directly beneath your breasts after breathing out normally. Second, measure your standing bust loosely across the fullest part of your bust without compressing tissue. Enter both in inches or centimeters.'],
+    ['Why does this bra calculator not add 4 inches (+4 method) to my band size?', 'The legacy "+4 inches" rule dates from before modern elastane fabrics and puts most wearers into a band two sizes too loose and a cup two letters too small, causing the back band to ride up and straps to dig in. Modern UK and US fitting (ABraThatFits / ISO 8559) sets the band directly from your snug underbust rounded to the nearest even inch.'],
+    ['What is a sister size in bras and how does it work?', 'Sister sizes share the exact same cup volume on a different band length. When you go down one band size (for example from 34C to 32D), you go up one cup letter to keep the same breast volume; when you go up one band size (from 34C to 36B), you go down one cup letter.'],
+    ['How do UK and US bra cup sizes differ after D cup?', 'UK and US bra sizes are identical from AA through D cup. Above D, UK sizing uses double letters (DD, E, F, FF, G, GG, H), whereas standard US sizing progresses single-letter after DDD (DD/E, DDD/F, G, H, I, J). An 8-inch bust difference is a UK FF cup but a US H cup.'],
+    ['How do I convert UK or US bra sizes to EU and Australian sizes?', 'EU band sizes equal approximately (US/UK band in inches − 4) × 2.5 in centimeters (so a 32 band is EU 70, 34 is EU 75, and 36 is EU 80), and EU cups increment in 2 cm steps without double letters (A, B, C, D, E, F, G, H). Australian and New Zealand dress-sized bands map 30 → AU 8, 32 → AU 10, 34 → AU 12, 36 → AU 14, and 38 → AU 16.'],
+    ['How should the center gore and underwire sit when a bra fits properly?', 'The center gore (the small bridge between the cups) should tack flat against your sternum, the underwire should follow your inframammary fold without sitting on breast tissue at the sides, and a new bra should feel snug on the loosest hook so you can move to tighter hooks as the elastic relaxes over 6 to 12 months.'],
+    ['Are my measurements private when I use this calculator?', 'Yes. Like every SimplyStylo tool, the bra size and sister-size calculator runs 100% inside your browser with zero uploads, accounts, or server storage.']
+  ];
+  const body = `<p class="eyebrow">Free anatomical fitting tool</p>
+<h1>Bra Size and Sister Size Calculator (UK, US, EU &amp; AU)</h1>
+<p class="answer">Your true bra band size is your snug underbust measurement in inches rounded to the nearest even number (the direct-underbust +0 method), and each inch of difference between your fullest bust and band adds one cup volume. Example: ${esc(ex)} Enter your underbust and bust below for UK, US, EU, and AU sizes plus sister sizes.</p>
+${verifiedLine(BraCore.FACTS.verified)}
+${toolShell('bra-size', 'Bra size and sister size calculator', BraUI.controls(BraUI.norm(BraUI.DEFAULT)), BraUI.result(BraUI.norm(BraUI.DEFAULT)))}
+<h2>How the anatomical bra size calculator works</h2>
+${steps([
+    '<b>Direct-underbust band (+0 method)</b> rounds your snug ribcage measurement in inches to the nearest even band size (28 to 48) so the band provides 80% of the support.',
+    '<b>Cup volume index</b> subtracts your band size from your fullest bust in inches: 1 in = A, 2 in = B, 3 in = C, 4 in = D, 5 in = DD, 6 in = UK E / US DDD.',
+    '<b>International conversion</b> maps your exact band and cup index across UK, US, European (EN 13402 cm), and Australian/NZ dress-band systems.',
+    '<b>Sister-size geometry</b> calculates the equivalent cup volume on one band smaller (−2 in band, +1 cup) and one band larger (+2 in band, −1 cup).'])}
+<h2>UK, US, EU and AU cup progression chart</h2>
+${table('International bra cup equivalents by bust-to-band difference', ['Bust − band (in)', 'Bust − band (cm)', 'UK cup', 'US cup', 'EU cup'],
+    BraCore.tableRows().map((r) => [`${r.diffIn} in`, `${r.diffCm} cm`, r.uk, r.us, r.eu]))}
+${callout('Only step one band size away when using sister sizes—jumping two band sizes changes the underwire width and strap placement too much to hold the bust securely.')}
+${sources([
+    ['EN 13402-3 / ISO 8559 Size Designation of Clothes', 'https://en.wikipedia.org/wiki/EN_13402', 'underbust and bust anthropometric intervals'],
+    ['Bra size and international cup conversion (Wikipedia)', 'https://en.wikipedia.org/wiki/Bra_size', 'UK double-letter vs US single-letter progression above D cup'],
+    ['SimplyStylo methodology', '/methodology/', 'how every tool is built and checked']])}
+${faqBlock(faq)}
+${relatedBlock('bra-size')}`;
+  return {
+    path: '/tools/bra-size-calculator/', type: 'tool', title: 'Bra Size Calculator: UK, US, EU and Sister Sizes', crumb: 'Bra Size Calculator',
+    ogTitle: 'Bra Size & Sister Size Calculator (UK, US, EU & AU +0 Method)',
+    crumbs: [['Tools', '/tools/']],
+    description: 'Calculate your UK, US, EU, and AU bra size from underbust and bust measurements using the anatomical +0 method, with sister sizes up and down.',
+    ogDescription: 'Find your true UK, US, EU, and AU bra size and sister sizes from snug underbust and bust measurements in inches or centimeters.',
+    bundle: 'bra-size', faq, body, datePublished: '2026-11-06', dateModified: MODIFIED,
+    app: { name: tool('bra-size').name, description: tool('bra-size').blurb, features: ['Anatomical +0 underbust band sizing', 'UK, US, EU and AU/NZ conversions', 'Sister size down and up', 'Inches and centimeters', 'Live SVG fit & sister-size matrix'] },
+    about: { '@type': 'Thing', name: 'Bra size', sameAs: 'https://en.wikipedia.org/wiki/Bra_size' },
+    llms: `Bra Size and Sister Size Calculator: ${BraCore.FACTS.method}. Converts UK, US, EU, and AU bra sizes and computes sister sizes (−1 band/+1 cup and +1 band/−1 cup). Example: ${ex}`
+  };
+}
+
+// ---------- Fabric Weight (GSM), Drape & Season Analyzer ----------
+function fabricGsm() {
+  const ex = FabricUI.summary(FabricUI.norm(FabricUI.DEFAULT));
+  const faq = [
+    ['What does GSM mean in fabric and clothing?', 'GSM stands for grams per square meter (g/m²), the international ISO 3801 standard for measuring how much one square meter of fabric weighs. A higher GSM means a denser, heavier textile: a summer poplin shirt is 110 to 140 GSM, an everyday T-shirt is 160 to 190 GSM, a four-season suit is 240 to 280 GSM, and a wool overcoat is 450 to 600 GSM.'],
+    ['How do I convert GSM to ounces per square yard (oz/yd²)?', 'Divide the GSM by 33.9057 to get ounces per square yard (oz/yd²), or multiply oz/yd² by 33.9057 to get GSM. For example, 180 GSM equals 5.3 oz/yd², and 14 oz raw selvedge denim equals 475 GSM.'],
+    ['What is a good GSM for a heavyweight T-shirt or hoodie?', 'A standard midweight T-shirt is 160 to 190 GSM (4.7 to 5.6 oz/yd²); a true heavyweight luxury T-shirt that hangs cleanly without clinging is 220 to 280 GSM (6.5 to 8.3 oz/yd²). Premium French terry and fleece hoodies run from 350 to 500 GSM.'],
+    ['What fabric weight is best for a year-round suit or trousers?', 'Savile Row tailors recommend 250 to 300 GSM (7.5 to 9 oz) high-twist worsted wool for a four-season suit in the UK and US. Below 230 GSM (tropical wool or linen) breathes best in summer heat above 24 °C (75 °F) but creases more easily, while flannel and tweed above 340 GSM (10 to 12 oz) are built for autumn and winter.'],
+    ['How does silk momme weight relate to GSM?', 'Silk is traditionally measured in momme (mm), where 1 momme equals 4.3056 GSM (about 0.127 oz/yd²). A 19-momme silk blouse or pillowcase is 82 GSM, and heavy 22-momme luxury charmeuse is 95 GSM.'],
+    ['Does higher GSM always mean a warmer garment?', 'Mostly, yes—within the same fiber and weave, higher GSM traps more insulating air. However, fiber structure matters: a 260 GSM brushed cashmere or merino knit is significantly warmer than a tightly woven 260 GSM cotton chino twill because crimped wool fibers trap still air pockets.'],
+    ['Why do white shirts and summer dresses look see-through at low GSM?', 'Woven cotton or linen under 130 GSM (3.8 oz/yd²) has an open yarn spacing that lets light pass through, especially in white or ivory. For an opaque white shirt or unlined dress without an undershirt, look for at least 145 to 170 GSM in twill, pinpoint oxford, or lined linen.']
+  ];
+  const body = `<p class="eyebrow">Free textile &amp; tailoring tool</p>
+<h1>Fabric Weight (GSM) to oz/yd² Converter and Drape Analyzer</h1>
+<p class="answer">Fabric weight in GSM (grams per square meter) converts to ounces per square yard by dividing by 33.9057 (1 oz/yd² = 33.91 GSM). Example: ${esc(ex)} Enter any fabric weight in GSM or oz/yd² and choose the fiber below to check temperature comfort, drape, opacity, and silk momme equivalent.</p>
+${verifiedLine(FabricCore.FACTS.verified)}
+${toolShell('fabric-gsm', 'Fabric weight GSM and drape analyzer', FabricUI.controls(FabricUI.norm(FabricUI.DEFAULT)), FabricUI.result(FabricUI.norm(FabricUI.DEFAULT)))}
+<h2>How the fabric weight and drape analyzer works</h2>
+${steps([
+    `<b>Exact unit conversion:</b> ${esc(FabricCore.FACTS.conversion)}, plus silk momme equivalent (1 momme = 4.3056 GSM).`,
+    '<b>5 textile weight tiers</b> classify your cloth from ultra-lightweight voile (<130 GSM) through heavyweight overcoating and raw denim (400–850 GSM).',
+    '<b>Thermal comfort range</b> estimates the outdoor temperature window in °C and °F where the fabric weight feels comfortable.',
+    '<b>Fiber drape & care profile</b> adjusts breathability and crease behavior for cotton, linen, merino/worsted wool, denim, silk, and cashmere.'])}
+<h2>Clothing fabric weight (GSM &amp; oz/yd²) reference chart</h2>
+${table('Standard GSM and oz/yd² weights for shirts, suits, denim, and coats', ['Weight tier', 'GSM range', 'oz/yd² range', 'Comfort temperature', 'Typical garments'],
+    FabricCore.TIERS.map((t, i) => {
+      const minG = i === 0 ? 50 : FabricCore.TIERS[i - 1].maxGsm + 1;
+      const minOz = (minG / 33.9057).toFixed(1), maxOz = (t.maxGsm / 33.9057).toFixed(1);
+      return [esc(t.name), `${minG}–${t.maxGsm} GSM`, `${minOz}–${maxOz} oz/yd²`, esc(t.tempC), esc(t.garments)];
+    }))}
+${callout('When shopping online for T-shirts, suits, or bedding, GSM is the single fastest quality signal: brands that publish their exact GSM or oz/yd² rarely cut corners on yarn density.')}
+${sources([
+    ['ISO 3801 / ASTM D3776 Determination of Mass per Unit Area of Woven Fabrics', 'https://www.iso.org/standard/9346.html', '1 oz/yd² = 33.9057 g/m² conversion standard'],
+    ['Suiting cloth weights in ounces and grams (Permanent Style)', 'https://www.permanentstyle.com/', 'Savile Row tropical, midweight worsted, and winter overcoat weights'],
+    ['SimplyStylo methodology', '/methodology/', 'how every tool is built and checked']])}
+${faqBlock(faq)}
+${relatedBlock('fabric-gsm')}`;
+  return {
+    path: '/tools/fabric-weight-gsm-calculator/', type: 'tool', title: 'Fabric Weight Calculator: GSM to oz/yd² and Drape', crumb: 'Fabric Weight Calculator',
+    ogTitle: 'Fabric Weight (GSM to oz/yd²) Converter & Drape Analyzer',
+    crumbs: [['Tools', '/tools/']],
+    description: 'Convert fabric weight between GSM and oz/yd² (1 oz/yd² = 33.91 GSM). Check temperature range, drape, opacity, and momme for cotton, wool, linen, and denim.',
+    ogDescription: 'Convert GSM to oz/yd² and momme instantly, and see the ideal temperature range, opacity, and drape for T-shirts, Savile Row suits, linen, and raw denim.',
+    bundle: 'fabric-gsm', faq, body, datePublished: '2026-11-06', dateModified: MODIFIED,
+    app: { name: tool('fabric-gsm').name, description: tool('fabric-gsm').blurb, features: ['GSM to oz/yd² and silk momme conversion', '5 garment weight tiers', 'Comfort temperature in °C and °F', '6 natural fibers (cotton, linen, wool, denim, silk, cashmere)', 'Live SVG weave & thermal spectrum diagram'] },
+    about: { '@type': 'Thing', name: 'Grammage', sameAs: 'https://en.wikipedia.org/wiki/Grammage' },
+    llms: `Fabric Weight (GSM) and Drape Analyzer: ${FabricCore.FACTS.conversion}; 1 momme = 4.3056 GSM. Classifies 5 weight tiers (<130 GSM ultralight, 131–200 light, 201–300 medium, 301–400 medium-heavy, 401–850 heavy) with temperature range and fiber drape. Example: ${ex}`
+  };
+}
+
+export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), selfieAnalysis(), wardrobeColors(), packingList(), dressCode(), dressDesigner(), weddingDress(), promDress(), weddingGuest(), bridesmaidPalette(), faceShape(), pantBreak(), bodyProportion(), hatSize(), gloveSize(), necklaceLength(), careLabel(), circleSkirt(), jeansFit(), braSize(), fabricGsm(), toolsIndex()];
 export { icon };
+
 
