@@ -70,5 +70,5 @@
     if (Object.keys(h).length) draw(false);
   }
 
-  return { DEFAULT: DEFAULT, norm: norm, controls: controls, result: result, summary: summary, mount: mount };
+  return { DEFAULT: DEFAULT, norm: norm, controls: controls, result: result, summary: summary, mount: mount, figure: figure };
 });

@@ -1089,6 +1089,7 @@ ${steps([
 <h2>Hat size chart</h2>
 ${table('US fitted hat sizes with head circumference', ['US fitted size', 'Circumference (cm)', 'Circumference (in)', 'EU size'],
     HatCore.table().map((r) => [esc(r.usLabel), r.cm, esc(r.inchLabel), r.eu]))}
+<figure class="pin"><img src="/pins/hat-size-calculator.jpg" width="1000" height="1500" loading="lazy" decoding="async" alt="Hat size chart: head circumference 54 to 61 cm with US fitted sizes 6¾ to 7⅝ and where to measure"><figcaption>Save this hat size chart for your next hat.</figcaption></figure>
 ${callout('Hat sizes vary by brand, style and material. Use this as a starting point and check the maker\'s own chart, especially for stretch-fit caps and S/M/L sizing.')}
 ${sources([
     ['Hat size (Wikipedia)', 'https://en.wikipedia.org/wiki/Hat_size', 'US size = head diameter in inches; circumference in cm ÷ 8'],
@@ -1133,6 +1134,7 @@ ${steps([
     `<b>Letter sizes left out:</b> ${esc(GloveCore.FACTS.letters)}`])}
 <h2>Glove size chart</h2>
 ${table('EN ISO 21420 glove sizes', ['Size', 'Hand circumference', 'Hand length'], t.map((r) => [r.size, `${r.circ} mm (${r.inches} in)`, `${r.len} mm`]))}
+<figure class="pin"><img src="/pins/glove-size-calculator.jpg" width="1000" height="1500" loading="lazy" decoding="async" alt="Glove size chart: EN ISO 21420 sizes 6 to 11 by hand circumference, with where to measure"><figcaption>Save this glove size chart for winter shopping.</figcaption></figure>
 ${callout('Fit varies by glove model, material and lining. Leather stretches a little with wear, while ski and work gloves are cut roomier; check the maker\'s own chart.')}
 ${sources([
     ['EN ISO 21420 glove size guide (Ejendals TEGERA)', 'https://www.ejendals.com/pt/tegera-safety-gloves/gloves-size-guide/', 'sizes 6 to 11: circumference and hand length'],
@@ -1178,6 +1180,7 @@ ${steps([
 <h2>Necklace length chart</h2>
 ${table('Standard necklace lengths and where they fall', ['Length', 'Range', 'Where it falls', 'Best with'],
     NeckCore.TYPES.map((t) => [esc(t.name), esc(t.range), esc(t.where), esc(t.best)]))}
+<figure class="pin"><img src="/pins/necklace-length-visualizer.jpg" width="1000" height="1500" loading="lazy" decoding="async" alt="Necklace length guide: 16, 18, 22, 30 and 36 inch necklaces drawn where they fall on the body"><figcaption>Save this necklace length guide for jewelry shopping.</figcaption></figure>
 ${callout(esc(NeckCore.FACTS.neck) + ' Pendants add their own drop below the chain.')}
 ${sources([
     ['Necklace length chart (Blue Nile)', 'https://www.bluenile.com/blog/fashion/necklace-length-chart', 'choker, princess, matinee, opera and rope'],
@@ -1225,6 +1228,7 @@ ${steps([
 <h2>Laundry symbols chart</h2>
 <div class="table-wrap"><table class="care-chart"><caption>Care label symbols and their meanings (ISO 3758)</caption><thead><tr><th scope="col">Symbol</th><th scope="col">Meaning</th></tr></thead><tbody>${CareCore.GROUPS.map((g) => g.list.map((o) =>
     `<tr><td>${sym(g, o)}</td><td><b>${esc(g.name)}: ${esc(o[1])}</b><br>${esc(o[2])}</td></tr>`).join('')).join('')}</tbody></table></div>
+<figure class="pin"><img src="/pins/laundry-symbols.jpg" width="1000" height="1500" loading="lazy" decoding="async" alt="Laundry symbols explained: 15 common care label symbols for washing, bleaching, drying, ironing and dry cleaning"><figcaption>Save this laundry symbols cheat sheet for laundry day.</figcaption></figure>
 ${callout(esc(CareCore.FACTS.natural) + ' ' + esc(CareCore.FACTS.us) + ' ' + esc(CareCore.FACTS.trademark))}
 ${sources([
     ['ISO 3758:2012 Textiles: care labelling code using symbols (preview, Table 1)', 'https://standards.iteh.ai/catalog/standards/iso/3fbbb179-3349-433c-b5c3-f8776e7f239d/iso-3758-2012', 'washing temperatures and processes; hand wash 40 °C'],
@@ -1272,6 +1276,7 @@ ${steps([
 <h2>Circle skirt waist radius chart</h2>
 ${table('Waist radius by waist measurement and skirt type (cm)', ['Waist', 'Full circle', 'Three-quarter', 'Half circle', 'Quarter circle'],
     [60, 65, 70, 75, 80, 85, 90, 100].map((w) => [w + ' cm', ...['full', 'three', 'half', 'quarter'].map((t) => SkirtCore.calc({ waist: w, length: 50, type: t, seam: 0, hem: 0, width: 300 }).r + ' cm')]))}
+<figure class="pin"><img src="/pins/circle-skirt-calculator.jpg" width="1000" height="1500" loading="lazy" decoding="async" alt="Circle skirt pattern math: full, half and quarter circle patterns for a 70 cm waist with the radius formulas"><figcaption>Save these circle skirt formulas for your next sewing project.</figcaption></figure>
 ${callout(esc(SkirtCore.FACTS.limits) + ' Pre-wash the fabric before cutting.')}
 ${sources([
     ['Circle skirt calculator (Omni Calculator)', 'https://www.omnicalculator.com/everyday-life/circle-skirt', 'waist radius and fabric length formulas'],

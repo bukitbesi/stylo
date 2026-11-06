@@ -16,11 +16,16 @@ const DR = require('../src/lib/dress-core.js');
 const WG = require('../src/lib/wedguest-core.js');
 const BM = require('../src/lib/bridesmaid-core.js');
 const C = require('../src/lib/color-core.js');
+const NK = require('../src/lib/necklace-core.js'), NKU = require('../src/ui/necklace-length.js');
+const HT = require('../src/lib/hat-core.js'), HTU = require('../src/ui/hat-size.js');
+const GV = require('../src/lib/glove-core.js'), GVU = require('../src/ui/glove-size.js');
+const CR = require('../src/lib/care-core.js');
+const SK = require('../src/lib/skirt-core.js'), SKU = require('../src/ui/circle-skirt.js');
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.join(root, 'static');
 const serif = "'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif";
 const sans = 'system-ui,-apple-system,Segoe UI,Roboto,sans-serif';
-const only = process.argv[2]; // optional: "icons" | "pins"
+const only = process.argv[2]; // optional: "icons" | "pins" | "tool-pins" (only the accessory, care and sewing pins)
 
 fs.writeFileSync(path.join(out, 'favicon.svg'), MARK(64).replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ').replace(' aria-hidden="true"', ''));
 
@@ -105,6 +110,54 @@ ${rows.map(([c, style, vibe, label], r) => {
   }).join('')}`, '/tools/bridesmaid-color-palette/');
 }
 
+// ---------- accessory, care and sewing tool pins ----------
+const card = (inner, extra = '') => `<div style="background:#FFFFFF;border-radius:22px;padding:22px;${extra}">${inner}</div>`;
+const big = (svg, w) => svg.replace(/width="\d+" height="\d+"/, `width="${w}" height="${Math.round(w * (+svg.match(/viewBox="0 0 (\d+) (\d+)"/)[2] / +svg.match(/viewBox="0 0 (\d+) (\d+)"/)[1]))}"`).replace(/class="[^"]*"/, '');
+const rowList = (rows) => rows.map(([a, b]) => `<div style="display:flex;justify-content:space-between;gap:16px;padding:20px 0;border-bottom:1px solid #E6E1D8;font:500 34px/1.2 ${sans}"><b style="font-weight:600">${a}</b><span style="color:#4E4B46;text-align:right">${b}</span></div>`).join('');
+
+function necklacePin() {
+  const s = NK.stack(['16', '18', '22', '30', '36'], 'in');
+  return frame(`<div style="font:600 76px/1.05 ${serif};margin:48px 0 10px;letter-spacing:-2px">Necklace Length<br>Guide</div>
+<div style="font:400 30px/1.35 ${sans};color:#4E4B46;margin-bottom:24px">Where every length falls, from choker to rope</div>
+<div style="display:flex;gap:26px;align-items:flex-start">${card(big(NKU.figure(s), 470), 'padding:14px')}
+<div style="flex:1">${rowList(s.items.map((i) => [i.inches + ' in', i.type.name]))}<div style="font:400 24px/1.4 ${sans};color:#4E4B46;margin-top:18px">Layer chains about 2 in (5 cm) apart so they don't tangle.</div></div></div>
+${card(`<div style="font:600 34px/1.3 ${serif}">Doubled, a 36 in chain wears as an 18 in princess.</div>`, 'margin-top:28px')}`, '/tools/necklace-length-visualizer/');
+}
+
+function hatPin() {
+  return frame(`<div style="font:600 80px/1.05 ${serif};margin:48px 0 10px;letter-spacing:-2px">What's My<br>Hat Size?</div>
+<div style="font:400 30px/1.35 ${sans};color:#4E4B46;margin-bottom:24px">Measure around your head, 1 cm above the ears</div>
+<div style="display:flex;gap:26px;align-items:flex-start">${card(big(HTU.figure(HT.convert('cm', 57)), 400), 'padding:14px')}
+<div style="flex:1">${rowList([54, 55, 56, 57, 58, 59, 60, 61].map((c) => { const r = HT.convert('cm', c); return [c + ' cm', 'US ' + r.usLabel]; }))}</div></div>
+${card(`<div style="font:600 34px/1.3 ${serif}">US hat size = head size in cm ÷ 8</div><div style="font:400 28px/1.4 ${sans};color:#4E4B46;margin-top:10px">Between sizes? Choose the larger one and add a sizing strip.</div>`, 'margin-top:28px')}`, '/tools/hat-size-calculator/');
+}
+
+function glovePin() {
+  return frame(`<div style="font:600 80px/1.05 ${serif};margin:48px 0 10px;letter-spacing:-2px">Glove Size<br>Chart</div>
+<div style="font:400 30px/1.35 ${sans};color:#4E4B46;margin-bottom:24px">Measure around the palm below the knuckles, thumb out</div>
+<div style="display:flex;gap:26px;align-items:flex-start">${card(big(GVU.figure(GV.size(203, 182)), 380), 'padding:14px')}
+<div style="flex:1">${rowList(GV.table().map((t) => ['Size ' + t.size, t.circ / 10 + ' cm · ' + t.inches + ' in']))}<div style="font:400 24px/1.4 ${sans};color:#4E4B46;margin-top:18px">EN ISO 21420 hand sizes 6 to 11.</div></div></div>
+${card(`<div style="font:600 34px/1.3 ${serif}">Glove size ≈ hand size in inches</div><div style="font:400 28px/1.4 ${sans};color:#4E4B46;margin-top:10px">Measure your dominant hand at the end of the day.</div>`, 'margin-top:28px')}`, '/tools/glove-size-calculator/');
+}
+
+function carePin() {
+  const pick = [['w', '40'], ['w', '30m'], ['w', '30vm'], ['w', 'hand'], ['w', 'no'], ['b', 'oxygen'], ['b', 'no'], ['t', 'low'], ['t', 'no'], ['i', 'low'], ['i', 'medium'], ['i', 'high'], ['p', 'P'], ['p', 'W'], ['p', 'no']];
+  const cell = ([k, code]) => {
+    const g = CR.GROUPS.find((x) => x.key === k), o = CR.find(g, code);
+    return `<div style="background:#FFFFFF;border-radius:18px;padding:12px 8px;text-align:center;color:#171717;font:500 23px/1.25 ${sans}">${CR.svg(g.shape, o[3], 104)}<div style="margin-top:6px">${o[1]}</div></div>`;
+  };
+  return frame(`<div style="font:600 76px/1.05 ${serif};margin:44px 0 10px;letter-spacing:-2px">Laundry Symbols<br>Explained</div>
+<div style="font:400 30px/1.35 ${sans};color:#4E4B46;margin-bottom:22px">Bars = gentler cycle · dots = heat · a cross = do not</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">${pick.map(cell).join('')}</div>`, '/tools/laundry-symbols/');
+}
+
+function skirtPin() {
+  const cell = (t, label) => { const r = SK.calc({ waist: 70, length: 60, type: t, seam: 1.5, hem: 2.5, width: 300 }); return card(`<div style="font:600 30px/1.2 ${serif};margin-bottom:6px">${label}</div>${big(SKU.pattern(r, 'cm'), 400)}<div style="font:500 24px/1.3 ${sans};color:#4E4B46">Waist radius ${r.r} cm</div>`, 'padding:16px'); };
+  return frame(`<div style="font:600 76px/1.05 ${serif};margin:44px 0 10px;letter-spacing:-2px">Circle Skirt<br>Pattern Math</div>
+<div style="font:400 30px/1.35 ${sans};color:#4E4B46;margin-bottom:22px">Waist radius = waist ÷ 2π for a full circle (70 cm waist shown)</div>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px">${cell('full', 'Full circle')}${cell('half', 'Half circle')}${cell('quarter', 'Quarter circle')}${card(`<div style="font:600 30px/1.2 ${serif};margin-bottom:12px">The formulas</div><div style="font:400 26px/1.55 ${sans}">Full: waist ÷ 2π<br>Half: waist ÷ π<br>Quarter: waist ÷ (π/2)<br><br>Cut the waist at the radius minus the seam allowance.</div>`, 'padding:22px')}</div>`, '/tools/circle-skirt-calculator/');
+}
+
 const browser = await chromium.launch();
 const shot = async (html, w, h, file, type = 'png') => {
   const page = await browser.newPage({ viewport: { width: w, height: h } });
@@ -113,7 +166,7 @@ const shot = async (html, w, h, file, type = 'png') => {
   await page.screenshot({ path: path.join(out, file), type, ...(type === 'jpeg' ? { quality: 82 } : {}) });
   await page.close();
 };
-if (only !== 'pins') {
+if (only !== 'pins' && only !== 'tool-pins') {
   await shot(og, 1200, 630, 'og.png');
   await shot(icon(512, 52), 512, 512, 'icon-512.png');
   await shot(icon(192, 20), 192, 192, 'icon-192.png');
@@ -121,7 +174,7 @@ if (only !== 'pins') {
   await shot(`<body style="margin:0">${MARK(48)}</body>`, 48, 48, 'favicon-48.png');
   console.log('wrote favicon.svg, favicon-48.png, icons and og.png');
 }
-if (only !== 'icons') {
+if (only !== 'icons' && only !== 'tool-pins') {
   for (const id of Object.keys(SE.SEASONS)) await shot(seasonPin(id), 1000, 1500, `pins/season-${id}.jpg`, 'jpeg');
   for (const slug of Object.keys(COLOR_GUIDES)) await shot(colorPin(slug), 1000, 1500, `pins/color-${slug}.jpg`, 'jpeg');
   await shot(dressPin(), 1000, 1500, 'pins/dress-designer.jpg', 'jpeg');
@@ -131,5 +184,13 @@ if (only !== 'icons') {
   await shot(bridesmaidPin(), 1000, 1500, 'pins/bridesmaid-color-palette.jpg', 'jpeg');
   for (const s of ['spring', 'summer', 'fall', 'winter']) await shot(weddingSeasonPin(s), 1000, 1500, `pins/wedding-guest-${s}.jpg`, 'jpeg');
   console.log(`wrote ${Object.keys(SE.SEASONS).length + Object.keys(COLOR_GUIDES).length + 9} Pinterest images`);
+}
+if (only !== 'icons') {
+  await shot(necklacePin(), 1000, 1500, 'pins/necklace-length-visualizer.jpg', 'jpeg');
+  await shot(hatPin(), 1000, 1500, 'pins/hat-size-calculator.jpg', 'jpeg');
+  await shot(glovePin(), 1000, 1500, 'pins/glove-size-calculator.jpg', 'jpeg');
+  await shot(carePin(), 1000, 1500, 'pins/laundry-symbols.jpg', 'jpeg');
+  await shot(skirtPin(), 1000, 1500, 'pins/circle-skirt-calculator.jpg', 'jpeg');
+  console.log('wrote 5 tool Pinterest images');
 }
 await browser.close();

@@ -55,7 +55,8 @@ npm run validate    # titles, descriptions, canonicals, JSON-LD, FAQ match, link
 npm run check       # all three
 npm run preview     # http://localhost:4321/
 node scripts/e2e.mjs [shots-dir]   # Playwright at 390 px: no overflow, no console errors, tools respond, links restore
-npm run images      # re-render favicon, icons, og.png and the 26 Pinterest images (after brand, palette or guide changes)
+npm run images      # re-render favicon, icons, og.png and every Pinterest image (after brand, palette or guide changes)
+node scripts/images.mjs tool-pins   # re-render only the necklace, hat, glove, laundry and circle skirt pins
 ```
 
 ## Layout
