@@ -300,3 +300,9 @@ ul.chips{list-style:none;padding:0;margin:12px 0}
 .pin figcaption b{font:600 1.25rem/1.25 var(--serif);color:var(--text)}
 .pin figcaption span{font-size:.95rem;color:var(--text-2)}
 @media (min-width:760px){.pin{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:center;max-width:960px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px}.pin figcaption{margin:0}.pin figcaption b{font-size:clamp(1.4rem,2.4vw,1.9rem)}}
+.foot-social{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.figure--fluid{width:100%;max-width:280px;height:auto;display:block;margin:0 auto}
+.figure--tall{max-width:320px}
+tr.is-match th,tr.is-match td{background:var(--warn-bg);font-weight:600}
+.split>div:first-child:has(>.figure--fluid){width:min(100%,300px);margin:0 auto}
+@media (min-width:760px){.split>div:first-child:has(>.figure--fluid){width:clamp(220px,30%,320px);margin:0;flex:none}}

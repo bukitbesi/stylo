@@ -53,6 +53,23 @@ const interactions = {
     await p.waitForFunction(() => /Your Photo/.test(document.querySelector('[data-result]').textContent), null, { timeout: 5000 });
     return /p=[0-9A-F]{6}\.\d+/.test(p.url());
   },
+  '/tools/hat-size-calculator/': async (p) => {
+    await p.fill('#hs-v', '59');
+    const a = /US fitted hat size 7 ⅜/.test(await p.textContent('[data-result]'));
+    await p.selectOption('#hs-s', 'us');
+    return a && (await p.inputValue('#hs-v')) === '7.375' && /v=7.375/.test(p.url());
+  },
+  '/tools/glove-size-calculator/': async (p) => {
+    await p.fill('#gs-c', '22.9'); await p.fill('#gs-l', '19.2');
+    const a = /glove size 9/.test(await p.textContent('[data-result]'));
+    await p.selectOption('#gs-u', 'in');
+    return a && (await p.inputValue('#gs-c')) === '9' && /glove size 9/.test(await p.textContent('[data-result]'));
+  },
+  '/tools/necklace-length-visualizer/': async (p) => {
+    await p.fill('#nl-l', '16 17 30');
+    const t = await p.textContent('[data-result]');
+    return /30 in \(76 cm\): Opera/.test(t) && /overlap and tangle/.test(t) && /l=16_17_30/.test(p.url());
+  },
   '/tools/ring-size-converter/': async (p) => {
     await p.fill('#rs-v', '8');
     const a = /EU\/ISO 57/.test(await p.textContent('[data-result]'));

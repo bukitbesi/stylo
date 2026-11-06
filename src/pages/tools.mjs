@@ -43,6 +43,12 @@ const PCore = require('../lib/pant-core.js');
 const PB = require('../ui/pant-break.js');
 const PropCore = require('../lib/proportion-core.js');
 const PropUI = require('../ui/body-proportion.js');
+const HatCore = require('../lib/hat-core.js');
+const HatUI = require('../ui/hat-size.js');
+const GloveCore = require('../lib/glove-core.js');
+const GloveUI = require('../ui/glove-size.js');
+const NeckCore = require('../lib/necklace-core.js');
+const NeckUI = require('../ui/necklace-length.js');
 
 const PUBLISHED = '2026-11-01';
 const MODIFIED = site.dateModified;
@@ -1053,6 +1059,141 @@ ${cards(TOOLS)}
   };
 }
 
-export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), selfieAnalysis(), wardrobeColors(), packingList(), dressCode(), dressDesigner(), weddingDress(), promDress(), weddingGuest(), bridesmaidPalette(), faceShape(), pantBreak(), bodyProportion(), toolsIndex()];
+// ---------- Hat Size Calculator ----------
+function hatSize() {
+  const h57 = HatCore.convert('cm', 57), h54 = HatCore.convert('cm', 54), h59 = HatCore.convert('cm', 59), us7 = HatCore.convert('us', 7);
+  const faq = [
+    ['What hat size is 57 cm?', `A 57 cm head is a US fitted hat size ${h57.usLabel} and EU size ${h57.eu}, about ${h57.inchLabel} inches around. US sizes are the head circumference divided by π, in inches.`],
+    ['How do I measure my head for a hat?', `${HatCore.FACTS.measure}. Keep the tape level and snug, not tight, and measure twice. Enter the result in centimeters or inches.`],
+    ['How do I convert head circumference to a US hat size?', `Divide the circumference in centimeters by 8 (more exactly by 2.54 × π = 7.98) and round to the nearest eighth. For example, 54 cm ÷ 7.98 = 6.77, a US ${h54.usLabel}; 59 cm is a US ${h59.usLabel}.`],
+    ['What size is a US 7 hat in cm?', `A US 7 hat fits a head about ${us7.cm} cm (${us7.inchLabel} in) around, which is EU size ${us7.eu}. Each eighth of a US size adds about 1 cm of circumference.`],
+    ['What if I am between hat sizes?', 'Choose the larger size: a hat that is slightly big can be snugged with a sizing strip inside the band, but one that is too small cannot be stretched much, especially straw.'],
+    ['Why are UK hat sizes not shown?', 'Some published charts list UK sizes one eighth smaller than US sizes, while others list them the same. Rather than guess, the calculator gives US fitted sizes and centimeters, which every hat maker can work from.'],
+    ['Do baseball caps use the same sizes?', 'Fitted caps use the same US fitted sizes, so the calculator applies directly. Stretch-fit and S/M/L caps use each brand\'s own ranges in centimeters, so compare your measurement with the brand\'s chart.']
+  ];
+  const body = `<p class="eyebrow">Free hat size tool</p>
+<h1>Hat Size Calculator: Head Circumference to US and EU Sizes</h1>
+<p class="answer">A 57 cm head is a US fitted hat size ${h57.usLabel} and EU size ${h57.eu}; a 54 cm head is a US ${h54.usLabel}. The US size is your head circumference divided by π in inches, which is almost exactly centimeters ÷ 8. Enter your measurement or a US size below.</p>
+${verifiedLine(HatCore.FACTS.verified)}
+${toolShell('hat-size', 'Hat size calculator', HatUI.controls(HatUI.DEFAULT), HatUI.result(HatUI.DEFAULT))}
+<h2>How the hat size calculator works</h2>
+${steps([
+    `<b>Measure:</b> ${esc(HatCore.FACTS.measure)}.`,
+    `<b>US fitted size:</b> ${esc(HatCore.FACTS.us)}.`,
+    `<b>EU and metric:</b> ${esc(HatCore.FACTS.eu)}, rounded to the nearest centimeter.`,
+    `<b>UK left out:</b> ${esc(HatCore.FACTS.uk)}`])}
+<h2>Hat size chart</h2>
+${table('US fitted hat sizes with head circumference', ['US fitted size', 'Circumference (cm)', 'Circumference (in)', 'EU size'],
+    HatCore.table().map((r) => [esc(r.usLabel), r.cm, esc(r.inchLabel), r.eu]))}
+${callout('Hat sizes vary by brand, style and material. Use this as a starting point and check the maker\'s own chart, especially for stretch-fit caps and S/M/L sizing.')}
+${sources([
+    ['Hat size (Wikipedia)', 'https://en.wikipedia.org/wiki/Hat_size', 'US size = head diameter in inches; circumference in cm ÷ 8'],
+    ['Hat size calculator (Omni Calculator)', 'https://www.omnicalculator.com/everyday-life/hat-size', 'US and UK fitted sizes from circumference'],
+    ['Hard hat and headwear size chart (Bullard)', 'https://eu.bullard.com/?p=5462', '54 cm = 21¼ in = US 6¾'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('hat-size')}`;
+  return {
+    path: '/tools/hat-size-calculator/', type: 'tool', title: 'Hat Size Calculator: Head Size to US and EU Hat Sizes', crumb: 'Hat Size Calculator',
+    crumbs: [['Tools', '/tools/']],
+    description: `Convert head circumference to US fitted and EU hat sizes: 57 cm = US ${h57.usLabel}, 54 cm = US ${h54.usLabel}. How to measure, a full size chart and fit tips.`,
+    bundle: 'hat-size', faq, body, datePublished: '2026-11-05', dateModified: MODIFIED,
+    app: { name: tool('hat-size').name, description: tool('hat-size').blurb, features: ['Head circumference in cm or inches to US fitted size', 'US size to circumference', 'EU / metric size', 'Size chart US 6½ to 8'] },
+    about: { '@type': 'Thing', name: 'Hat size' },
+    llms: `Hat Size Calculator: ${HatCore.FACTS.us}. ${HatCore.FACTS.eu}. 57 cm = US ${h57.usLabel} (EU ${h57.eu}); 54 cm = US ${h54.usLabel}; 59 cm = US ${h59.usLabel}; US 7 = ${us7.cm} cm. UK sizes omitted (charts disagree).`
+  };
+}
+
+// ---------- Glove Size Calculator ----------
+function gloveSize() {
+  const t = GloveCore.table(), s8 = t.find((x) => x.size === 8), s7 = t.find((x) => x.size === 7), s9 = t.find((x) => x.size === 9);
+  const faq = [
+    ['How do I find my glove size?', `Measure around your dominant hand just below the knuckles, thumb excluded. In the EN ISO 21420 system the glove size is close to that measurement in inches: ${s8.circ / 10} cm (${s8.inches} in) is size 8, ${s9.circ / 10} cm is size 9.`],
+    ['What glove size is a 20 cm hand?', `A hand about 20 cm around is glove size 8, whose standard circumference is ${s8.circ} mm and hand length ${s8.len} mm.`],
+    ['How do I measure hand length for gloves?', `${GloveCore.FACTS.length}. Size 7 is ${s7.len} mm long, size 8 ${s8.len} mm and size 9 ${s9.len} mm.`],
+    ['What if my circumference and length give different sizes?', 'Gloves are sized first by circumference. If your hand length points to a different size, try both, or look for a model cut with longer or shorter fingers.'],
+    ['What are EN ISO 21420 glove sizes?', `EN ISO 21420 (which replaced EN 420) sets hand sizes 6 to 11 by hand circumference and length, from ${t[0].circ} mm around for size 6 to ${t[t.length - 1].circ} mm for size 11, about one inch per size. Work, ski and many fashion glove makers use it.`],
+    ['Why are S, M and L glove sizes not shown?', 'Brands map letter sizes to different numbers; one chart calls size 9 a large, another a medium. Compare your number size or your centimeters with the brand\'s chart instead.'],
+    ['Which hand should I measure?', 'Measure your dominant hand (right if you are right-handed), which is usually slightly larger, and measure at the end of the day.']
+  ];
+  const body = `<p class="eyebrow">Free glove size tool</p>
+<h1>Glove Size Calculator: Find Your Glove Size From Hand Size</h1>
+<p class="answer">A hand ${s8.circ / 10} cm (${s8.inches} in) around the palm is glove size 8 in the EN ISO 21420 standard, and each size up adds about 2.5 cm (1 in), from size 6 (${t[0].circ / 10} cm) to size 11 (${t[t.length - 1].circ / 10} cm). Enter your hand circumference and length below.</p>
+${verifiedLine(GloveCore.FACTS.verified)}
+${toolShell('glove-size', 'Glove size calculator', GloveUI.controls(GloveUI.DEFAULT), GloveUI.result(GloveUI.DEFAULT))}
+<h2>How the glove size calculator works</h2>
+${steps([
+    `<b>Circumference:</b> ${esc(GloveCore.FACTS.circumference)}.`,
+    `<b>Length (optional):</b> ${esc(GloveCore.FACTS.length)}.`,
+    `<b>Size:</b> the nearest of the ${esc(GloveCore.FACTS.standard)}; your length is checked against the same table.`,
+    `<b>Letter sizes left out:</b> ${esc(GloveCore.FACTS.letters)}`])}
+<h2>Glove size chart</h2>
+${table('EN ISO 21420 glove sizes', ['Size', 'Hand circumference', 'Hand length'], t.map((r) => [r.size, `${r.circ} mm (${r.inches} in)`, `${r.len} mm`]))}
+${callout('Fit varies by glove model, material and lining. Leather stretches a little with wear, while ski and work gloves are cut roomier; check the maker\'s own chart.')}
+${sources([
+    ['EN ISO 21420 glove size guide (Ejendals TEGERA)', 'https://www.ejendals.com/pt/tegera-safety-gloves/gloves-size-guide/', 'sizes 6 to 11: circumference and hand length'],
+    ['Glove size chart (Showa)', 'https://mruk.de/out/pictures/ddmedia/Showa%20Size%20Chart.pdf', '152, 178, 203 and 229 mm for sizes 6 to 9'],
+    ['EN ISO 21420:2020 general requirements (Wenaas)', 'https://www.wenaas.com/en/en-iso-21420-general-requirements-and-test-methods'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('glove-size')}`;
+  return {
+    path: '/tools/glove-size-calculator/', type: 'tool', title: 'Glove Size Calculator: Find Your Glove Size', crumb: 'Glove Size Calculator',
+    crumbs: [['Tools', '/tools/']],
+    description: `Find your glove size from hand circumference and length with the EN ISO 21420 standard: ${s8.circ / 10} cm around = size 8. How to measure plus a full size chart.`,
+    bundle: 'glove-size', faq, body, datePublished: '2026-11-05', dateModified: MODIFIED,
+    app: { name: tool('glove-size').name, description: tool('glove-size').blurb, features: ['Hand circumference in cm or inches', 'Optional hand length check', 'EN ISO 21420 sizes 6 to 11', 'Size chart'] },
+    about: { '@type': 'Thing', name: 'Glove size' },
+    llms: `Glove Size Calculator: ${GloveCore.FACTS.standard}. ${t.map((r) => `size ${r.size} = ${r.circ} mm around, ${r.len} mm long`).join('; ')}. Letter sizes omitted (brands differ).`
+  };
+}
+
+// ---------- Necklace Length Visualizer ----------
+function necklaceLength() {
+  const c = (x) => NeckCore.classify(x), n16 = c(16), n18 = c(18), n22 = c(22), n30 = c(30), n36 = c(36);
+  const faq = [
+    ['What is the most popular necklace length?', `Princess length, about 18 in (${n18.cm} cm). ${n18.type.where} It suits almost any neckline, which is why most pendants are sold on 18 in chains.`],
+    ['Where does a 16 inch necklace fall?', `A 16 in (${n16.cm} cm) necklace is a choker length. ${n16.type.where} On a neck larger than about 14 in (36 cm) it sits closer to the neck.`],
+    ['Where does a 22 inch necklace fall?', `A 22 in (${n22.cm} cm) necklace is a matinee length. ${n22.type.where} It works well over crew necks and high necklines.`],
+    ['What are the standard necklace lengths?', `${NeckCore.FACTS.ranges}. ${NeckCore.FACTS.conflict}`],
+    ['How far apart should layered necklaces be?', 'About 2 in (5 cm) apart, such as 16, 18 and 20 in, so each chain shows and they do not tangle. Some stylists space them 2 to 4 in apart for a more open look.'],
+    ['What is an opera length necklace?', `Opera length starts at 28 in (71 cm). ${n30.type.where} A 36 in chain doubled wears as an 18 in princess, so long chains can be worn two ways.`],
+    ['Which necklace length suits my neckline?', 'Chokers and collars suit open necklines such as off-shoulder and strapless; princess suits almost anything; matinee and opera lengths sit well over crew necks, turtlenecks and high necklines.']
+  ];
+  const body = `<p class="eyebrow">Free necklace length tool</p>
+<h1>Necklace Length Visualizer: See Where Every Length Falls</h1>
+<p class="answer">An 18 in (${n18.cm} cm) necklace is princess length and falls on the collarbone; 16 in is a choker at the base of the neck, 22 in a matinee on the upper chest and 30 in an opera at the bust. Enter one or more lengths to see them drawn on the body and check a layered stack.</p>
+${verifiedLine(NeckCore.FACTS.verified)}
+${toolShell('necklace-length', 'Necklace length visualizer', NeckUI.controls(NeckUI.DEFAULT), NeckUI.result(NeckUI.DEFAULT))}
+<h2>How the necklace length visualizer works</h2>
+${steps([
+    '<b>Enter your lengths</b> in inches or centimeters: one necklace, or up to six for a layered stack.',
+    `<b>Each length is named</b> with the ranges jewelry guides agree on: ${esc(NeckCore.FACTS.ranges)}.`,
+    `<b>Disputed lengths are flagged:</b> ${esc(NeckCore.FACTS.conflict)}`,
+    '<b>Layering check:</b> chains less than about 2 in (5 cm) apart are flagged because they overlap and tangle.'])}
+<h2>Necklace length chart</h2>
+${table('Standard necklace lengths and where they fall', ['Length', 'Range', 'Where it falls', 'Best with'],
+    NeckCore.TYPES.map((t) => [esc(t.name), esc(t.range), esc(t.where), esc(t.best)]))}
+${callout(esc(NeckCore.FACTS.neck) + ' Pendants add their own drop below the chain.')}
+${sources([
+    ['Necklace length chart (Blue Nile)', 'https://www.bluenile.com/blog/fashion/necklace-length-chart', 'choker, princess, matinee, opera and rope'],
+    ['Necklace lengths guide (Clean Origin)', 'https://cleanorigin.com/blog/necklace-lengths-guide'],
+    ['Standard necklace and bracelet lengths (Beadaholique)', 'https://www.beadaholique.com/standard-necklace-and-bracelet-lengths', 'opera 28–32 in'],
+    ['Necklace layering guide (With Clarity)', 'https://withclarity.com/blogs/jewelry/necklace-layering-guide', 'about 2 in between layers'],
+    ['SimplyStylo methodology', '/methodology/']])}
+${faqBlock(faq)}
+${relatedBlock('necklace-length')}`;
+  return {
+    path: '/tools/necklace-length-visualizer/', type: 'tool', title: 'Necklace Length Visualizer: Where Each Length Falls', crumb: 'Necklace Length Visualizer',
+    crumbs: [['Tools', '/tools/']],
+    description: 'See where any necklace length falls: 16 in choker, 18 in princess, 22 in matinee, 30 in opera. Layer up to six chains and get a spacing check.',
+    bundle: 'necklace-length', faq, body, datePublished: '2026-11-05', dateModified: MODIFIED,
+    app: { name: tool('necklace-length').name, description: tool('necklace-length').blurb, features: ['Necklace drawn on the body', 'Standard length names', 'Up to six layered chains', 'Inches and centimeters', 'Layering spacing check'] },
+    about: { '@type': 'Thing', name: 'Necklace length' },
+    llms: `Necklace Length Visualizer: ${NeckCore.FACTS.ranges}. 16 in = choker (base of neck); 18 in (${n18.cm} cm) = princess (collarbone); 22 in = matinee (upper chest); 30 in = opera (bust); 36 in doubled = ${n36.doubled.inches} in ${n36.doubled.type.name.toLowerCase()}. ${NeckCore.FACTS.conflict} Layer about 2 in apart.`
+  };
+}
+
+export default () => [colorCombination(), sizeConverter(), colorAnalysis(), capsule(), outfitGenerator(), bodyShape(), photoPalette(), ringSize(), costPerWear(), selfieAnalysis(), wardrobeColors(), packingList(), dressCode(), dressDesigner(), weddingDress(), promDress(), weddingGuest(), bridesmaidPalette(), faceShape(), pantBreak(), bodyProportion(), hatSize(), gloveSize(), necklaceLength(), toolsIndex()];
 export { icon };
 
